@@ -2,11 +2,9 @@
 
 // load all the things we need
 var LocalStrategy       = require('passport-local').Strategy;
-var FacebookStrategy    = require('passport-facebook').Strategy;
-var TwitterStrategy     = require('passport-twitter').Strategy;
-var GoogleStrategy      = require('passport-google-oauth').OAuth2Strategy;
-//var TokenStrategy       = require('passport-token-auth').Strategy;
-var BearerStrategy      = require('passport-http-bearer').Strategy;
+//var FacebookStrategy    = require('passport-facebook').Strategy;
+//var TwitterStrategy     = require('passport-twitter').Strategy;
+//var GoogleStrategy      = require('passport-google-oauth').OAuth2Strategy;
 
 // load up the user model
 var User            = require('../models/user');
@@ -115,15 +113,6 @@ module.exports = function(passport) {
     },
     function(req, email, password, done) { // callback with email and password from our form
         console.log(email,password,done);
-       /* var tuser= {
-            '_id':'asdf8943298532asnfdjhhk4345034534nbasfhkadsf',
-            'id':email,
-            'done':done,
-            'req':req
-
-        }
-        return done(null,tuser);
-        */
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
         User.findOne({ 'local.email' :  email }, function(err, user) {
@@ -149,7 +138,7 @@ module.exports = function(passport) {
     // =========================================================================
     // FACEBOOK ================================================================
     // =========================================================================
-    passport.use(new FacebookStrategy({
+   /* passport.use(new FacebookStrategy({
 
         // pull in our app id and secret from our auth.js file
         clientID        : configAuth.facebookAuth.clientID,
@@ -198,12 +187,12 @@ module.exports = function(passport) {
         });
 
     }));
-
+*/
 
     // =========================================================================
     // TWITTER =================================================================
     // =========================================================================
-    passport.use(new TwitterStrategy({
+   /* passport.use(new TwitterStrategy({
 
         consumerKey     : configAuth.twitterAuth.consumerKey,
         consumerSecret  : configAuth.twitterAuth.consumerSecret,
@@ -248,12 +237,12 @@ module.exports = function(passport) {
     });
 
     }));
-
+*/
 
     // =========================================================================
     // GOOGLE ==================================================================
     // =========================================================================
-    passport.use(new GoogleStrategy({
+    /*passport.use(new GoogleStrategy({
 
         clientID        : configAuth.googleAuth.clientID,
         clientSecret    : configAuth.googleAuth.clientSecret,
@@ -295,7 +284,7 @@ module.exports = function(passport) {
             });
         });
 
-    }));
+    }));*/
 
 
 
