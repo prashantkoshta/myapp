@@ -3,9 +3,6 @@
   "version": "0.0.0",
   "description": "This sample example.",
   "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "dependencies": {
     "bcrypt-nodejs": "latest",
     "body-parser": "~1.13.2",
@@ -18,7 +15,7 @@
     "file-stream-rotator": "~0.0.6",
     "jsonwebtoken": "^5.4.0",
     "method-override": "~1.0.0",
-    "mongoose": "^3.8.36",
+    "mongoose": "^3.0.7",
     "morgan": "~1.6.1",
     "passport": "~0.1.17",
     "passport-facebook": "~1.0.2",
