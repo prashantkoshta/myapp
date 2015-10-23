@@ -1,6 +1,11 @@
 {
   "name": "myapp",
   "version": "0.0.0",
+  "description": "This sample example.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "bcrypt-nodejs": "latest",
     "body-parser": "~1.13.2",
