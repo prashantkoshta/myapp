@@ -8,18 +8,16 @@ var port     = process.env.PORT || 8080;
 var mongoose = require('mongoose');
 var passport = require('passport');
 var flash    = require('connect-flash');
-var jwt      = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
 
-var configDB = require('./config/database.js');
+var config = require('./config/config.js');
 
 // configuration ===============================================================\
-mongoose.connect(configDB.url); // connect to our database
-console.log(configDB.url);
+mongoose.connect(config.url); // connect to our database
 require('./config/passport')(passport); // pass passport for configuration
 
 // set up our express application
@@ -32,7 +30,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport
-app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+app.use(session({ secret: config.sessionSecret})); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
