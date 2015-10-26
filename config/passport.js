@@ -3,7 +3,7 @@
 // load all the things we need
 var LocalStrategy       = require('passport-local').Strategy;
 var FacebookStrategy    = require('passport-facebook').Strategy;
-var TwitterStrategy     = require('passport-twitter').Strategy;
+//var TwitterStrategy     = require('passport-twitter').Strategy;
 var GoogleStrategy      = require('passport-google-oauth').OAuth2Strategy;
 
 // load up the user model
@@ -192,7 +192,7 @@ module.exports = function(passport) {
     // =========================================================================
     // TWITTER =================================================================
     // =========================================================================
-   passport.use(new TwitterStrategy({
+   /*passport.use(new TwitterStrategy({
 
         consumerKey     : configAuth.twitterAuth.consumerKey,
         consumerSecret  : configAuth.twitterAuth.consumerSecret,
@@ -236,7 +236,7 @@ module.exports = function(passport) {
 
     });
 
-    }));
+    }));*/
 
 
     // =========================================================================
