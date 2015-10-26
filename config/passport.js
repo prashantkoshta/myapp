@@ -138,7 +138,7 @@ module.exports = function(passport) {
     // =========================================================================
     // FACEBOOK ================================================================
     // =========================================================================
-   /* passport.use(new FacebookStrategy({
+   passport.use(new FacebookStrategy({
 
         // pull in our app id and secret from our auth.js file
         clientID        : configAuth.facebookAuth.clientID,
@@ -187,12 +187,12 @@ module.exports = function(passport) {
         });
 
     }));
-*/
+
 
     // =========================================================================
     // TWITTER =================================================================
     // =========================================================================
-   /* passport.use(new TwitterStrategy({
+   passport.use(new TwitterStrategy({
 
         consumerKey     : configAuth.twitterAuth.consumerKey,
         consumerSecret  : configAuth.twitterAuth.consumerSecret,
@@ -237,12 +237,12 @@ module.exports = function(passport) {
     });
 
     }));
-*/
+
 
     // =========================================================================
     // GOOGLE ==================================================================
     // =========================================================================
-    /*passport.use(new GoogleStrategy({
+    passport.use(new GoogleStrategy({
 
         clientID        : configAuth.googleAuth.clientID,
         clientSecret    : configAuth.googleAuth.clientSecret,
@@ -284,7 +284,7 @@ module.exports = function(passport) {
             });
         });
 
-    }));*/
+    }));
 
 
 
