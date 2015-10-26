@@ -13,9 +13,8 @@ var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
-
-var config = require('./config/config.js');
-
+var config       = require('./config/config.js');
+console.log(app.get('env'), config.url);
 // configuration ===============================================================\
 mongoose.connect(config.url); // connect to our database
 require('./config/passport')(passport); // pass passport for configuration
