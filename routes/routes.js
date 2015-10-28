@@ -98,7 +98,7 @@ module.exports = function(app, passport) {
     // TWITTER ROUTES ======================
     // =====================================
     // route for twitter authentication and login
-   /* app.get('/auth/twitter', passport.authenticate('twitter'));
+   app.get('/auth/twitter', passport.authenticate('twitter'));
 
     // handle the callback after twitter has authenticated the user
     app.get('/auth/twitter/callback',
@@ -107,7 +107,7 @@ module.exports = function(app, passport) {
             failureRedirect : '/'
     }));
 
-*/
+
     // =====================================
     // GOOGLE ROUTES =======================
     // =====================================
