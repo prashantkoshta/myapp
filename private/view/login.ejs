@@ -1,0 +1,88 @@
+
+  
+      <h1>Hello World</h1>
+     
+        
+      <div class="row">
+      
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <h2>Login Here</h2>
+      </div>
+
+      
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+          <h4>Use other accounts</h4>
+          <p>You can also sign in using your Facebook Account or Google Account or Twitter Account.</p>
+          <ul class="list-unstyled">
+            <li> <a class="btn btn-lg btn-social btn-google">
+    <span class="fa fa-google"></span> Sign in with Google+
+  </a></li>
+   <li> <a class="btn btn-lg btn-social btn-facebook">
+    <span class="fa fa-facebook"></span> Sign in with Facebook
+  </a></li>
+   <li> <a class="btn btn-lg btn-social btn-twitter">
+    <span class="fa fa-twitter"></span> Sign in with Twitter
+  </a></li>
+          </ul>
+
+          <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span>Facebook</a>
+        <a href="/auth/twitter" class="btn btn-info"><span class="fa fa-twitter"></span>Twitter</a>
+        <a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span>Google</a>
+         
+           
+      </div>
+
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <h4>Use your account</h4>
+        <div class="alert alert-danger" role="alert" ng-show="loginAction.isInalidEmailId || loginAction.isInvalidPassword || loginAction.isInalidEmailId_Password">
+
+          <div ng-show="loginAction.isInalidEmailId">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Enter a valid email address
+          </div>
+
+          <div ng-show="loginAction.isInvalidPassword">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Enter a valid password
+          </div>
+
+          <div ng-show="loginAction.isInalidEmailId_Password">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Invalid userid and password
+          </div>
+
+        </div>
+      
+        <form method="post" action="/login" role="from" ng-submit="loginAction.submitLogin($event)" novalidate >
+		<!-- update this if server side error is appearing on page  loginAction.isInalidEmailId_Password=true-->
+		<!-- input type="hidden" ng-model="loginAction.isInalidEmailId_Password" ng-init="loginAction.isInalidEmailId_Password={loginError}"/ -->
+
+          <div class="form-group">
+            <input name="email" type="text" class="form-control" placeholder="Email" ng-model="loginAction.email" required>
+          </div>
+          <div class="form-group">
+            <input name="password" type="password" class="form-control" placeholder="Password" ng-model="loginAction.password" required>
+          </div>
+         <div class="checkbox">
+            <label><input type="checkbox"> Remember me</label>
+        </div>
+        <div>
+           <button type="submit" class="btn btn-primary">Login</button>  
+        </div>
+        <div>
+           <a href="#">Forgot Password</a>
+        </div>
+       
+       
+        </form> 
+      </div>
+
+      
+      
+         
+    </div>
+     
+ 
