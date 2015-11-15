@@ -1,9 +1,13 @@
 //config.js
 // Include all configuration variable
-
+//module.exports = require('../../localconfig.js');
 module.exports = {
     url : process.env.dburl,
     sessionSecret: process.env.sessionsecret,
+    staticPublicDir : process.env.staticpublicdir,
+    staticPrivateDir : process.env.staticprivatedir,
+    viewsDir : process.env.private,
+    staticPrivateContextPath : process.env.staticprivatecontextpath,
     'facebookAuth' : {
         'clientID'      : process.env.fb_clientid,
         'clientSecret'  : process.env.fb_clientsecret,
