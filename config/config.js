@@ -1,6 +1,8 @@
 //config.js
 // Include all configuration variable
 //module.exports = require('../../localconfig.js');
+
+
 module.exports = {
     url : process.env.dburl,
     sessionSecret: process.env.sessionsecret,
