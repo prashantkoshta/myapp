@@ -1,0 +1,31 @@
+﻿<!-- tabs -->
+<!--div class="workspace_tabs">
+	<div class="bs-example">
+		<ul class="nav nav-tabs">
+		  <li ng-repeat="item in tabList" class="tab-box-shadow" ng-class="showSelectedTab(item)"> 
+			<a data-toggle="tab" ng-click="setCurrentWorkspace(item)">{{item.desc}}</a> 
+			<span ng-click="closeWorkSpace($index)"><div class="tab-close-btn"></div></span>
+		 </li>
+		</ul>
+	</div>
+</div -->
+
+<div class="workspace_tabs">
+	<div class="bs-example">
+		<ul class="nav nav-tabs">
+		  <li ng-repeat="item in tabList" class="tab-box-shadow" ng-class="showSelectedTab(item)"> 
+			<a data-toggle="tab" ng-click="setCurrentWorkspace(item)">				
+				<span ng-show="!item.editMode" ng-dblclick="editCurrentWorkspace(item)">{{item.desc}}</span>
+				<span ng-show="item.editMode">
+					<input ng-model="item.desc" ng-blur="doneEditing($event,item)" 					
+					 ng-keypress="txtValidation($event,item)" maxlength="30"/>
+				</span><!-- ng-mouseleave="doneEditing($event,item)"  ng-pattern="/^[a-zA-Z0-9]*$/" -->
+			</a> 
+			<span ng-click="closeWorkSpace($index)"><div class="tab-close-btn"></div></span>
+		 </li>
+		</ul>
+	</div>
+</div>
+
+
+<!-- tabs -->

@@ -1,0 +1,27 @@
+﻿<div class="modal-body">
+  <div id="workspace_popup" >
+		<div class="workspace_header clearfix">
+		  <div class="wk_title pull-left">Please select a Workspace</div>
+		  <div class="pull-right popup_close_icon" ng-click="ok()"></div>
+		</div>
+		<div class="workspace_content clearfix">
+		<div class="content_box">
+		   <div class="content_title title_ws">Name of Workspace</div>
+		</div>
+		<div class="workspace_scroll">
+			<div class="content_box" ng-repeat="item in wsData">
+			   <div class="content_title" ng-click="selectWSItem(item)" >{{item.desc}}</div>
+			</div> 
+
+		</div> 
+		</div>
+		 <div class="workspace_content content_select clearfix">
+		   <div class="content_selected pull-left">
+				 <div class="selected_txt">{{popupSelectedWS.desc}}</div>
+		   </div>
+		   <div class="workspace_button pull-right">
+			   <button type="button" ng-click="openWorkSpace(popupSelectedWS)">OPEN</button>
+		   </div>
+		</div> 
+	</div>
+</div>

@@ -1,0 +1,129 @@
+﻿<!-- end nav bar -->
+<div class="workspace_tab">
+          <div class="clearfix bg_blue">
+            <ul class="nav nav-tabs bg_blue pull-left">
+              <li class="active left nav_table" ng-class="{active:isActiveFirst}"> <a data-toggle="tab" ng-click="showTable()"> <span class="nav_table item_icon"></span>
+                <div>TABLE</div>
+                </a> </li>
+              <li class="rg_border nav_matrix" ng-class="{active:isActiveSecond}"> <a data-toggle="tab" ng-click="showMatrix()"><span class="nav_matrix item_icon"></span> 
+                <div>MATRIX</div>
+                </a> </li>
+              <li class="lf_border width80 nav_save"><a ng-click="onSave()">
+                      <span class="item_icon"></span> 
+                <div class="text-center">SAVE</div>
+                </a> </li>
+              <li class="rg_border width80 clone nav_clone"> <a ng-click="onClone()">     <span class="item_icon"></span> 
+                <div class="text-center">CLONE</div>
+                </a> </li>
+              <li class="lf_border width102 nav_SUMMARY" ng-class={arrow_box:isSummarySelected} id="summary"> <a ng-click="showSummaryView()"> 
+              <span class="item_icon"></span>
+                <div class="text-center">SUMMARY VIEW</div>
+                </a> </li>
+              <li class="width113 nav_ADDITIONAL" ng-class={arrow_box:isConstraintsSelected}> <a ng-click="showAddConstraints()">  <span class="item_icon"></span>
+                <div class="text-center margin_tp">ADDITIONAL CONSTRAINTS</div>
+                </a> </li>
+              <li class="rg_border width120 nav_DELETE"> <a ng-click="onDeleteWorkSpace()"> <span class="item_icon"></span>
+                <div class="text-center">DELETE WORKSPACE</div>
+                </a> </li>
+            </ul>
+           <div class="pull-left">
+              <div class="show_div pull-left" id="slider"  ng-animate="'animate'" ng-show="isExapnd">
+                <div class="show_child1 pull-left" ng-class="{'enableShow_child1': selectedSeries=='no_series'}">
+                  <div class="Series_txt pull-left radio">
+                    <input id="no_series" type="radio" value="no_series" name="series" checked="boolSeries" ng-model="selectedSeries">
+                    <label for="no_series">NO SERIES</label>
+                  </div>
+                  <div class="clearfix">
+                    <div class="pull-left risk_text">RISK AVERSION</div>
+                    <input type="text" name="riskAversion" ng-model="riskAversionVal" ng-disabled="!isSelectedSeries('no_series')" numeric-only ng-change=onChangeRiskAvr(riskAversionVal)>
+                  </div>
+                </div>
+                <div class="show_child2 pull-left clearfix" ng-class="{'enableShow_child2': selectedSeries=='series'}">
+                  <div class="Series_txt pull-left radio">
+                    <input id="series" type="radio" value="series" name="series" ng-model="selectedSeries">
+                    <label for="series">SERIES</label>
+                  </div>
+                  <div class="chart_txt pull-left"> <span>CHART</span> </div>
+                  <div class="drpdown pull-left">
+                    <ul class="nav nav-pills">
+                      <li class="dropdown customdd"> <a data-toggle="dropdown" class="dropdown-toggle"> {{selectedChartName}} <b class="caret"></b></a>
+                        <ul class="dropdown-menu new_dropdown">
+                          <li ng-repeat="item in chartList"><a ng-click="getSelectedChartdd(item)">{{item}}</a></li>
+                          <div class="form-group clearfix" ng-click="$event.stopPropagation()">
+                              <input type="text" class="form-control txtInput" placeholder="Enter New Val" ng-model="newChartNm">
+                              <button class="btn btn-primary btn_drpdown pull-right" ng-click="addNewChartName(newChartNm)">Add</button>
+                            </div>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="chart_txt pull-left"> <span>BENCHMARK</span> </div>
+                  <div class="drpdown pull-left">
+                    <ul class="nav nav-pills">
+                      <li class="dropdown customdd" > <a data-toggle="dropdown" class="dropdown-toggle"> {{selectedbenchmarkList}} <b class="caret"></b></a>
+                        <ul class="dropdown-menu new_dropdown">
+                          <li ng-repeat="item in benchmarkList" ><a ng-click="getSelectedBenchmarkdd(item)">{{item.name}}</a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="items pull-left">
+                <div ng-click="onRun()" class="items_child3 pull-left"> <span class="glyphicon glyphicon-triangle-right"></span>
+                  <div>RUN</div>
+                </div>
+                <div class="items_child4 pull-left" ng-click="onExpand()"> <span ng-show="!isExapnd" class="glyphicon glyphicon-triangle-right"></span>
+                  <span ng-show="isExapnd" class="glyphicon glyphicon-triangle-left"></span>
+                 </div>
+              </div>
+            </div>
+            <!-- button ng-click="resetNavBarView()">Reset</button -->
+       </div>
+       </div>
+
+<!-- end nav bar -->
+	   
+ 
+
+<!--
+<div class="row">
+    <div class="col-md-11 well weather-current">
+		<h1>Navigation</h1>
+		
+		<button class="btn btn-info" ng-click="showTable()">Table</button>
+		<button class="btn btn-info" ng-click="showMatrix()">Matrix</button>
+		<button class="btn btn-info" ng-click="onSave()">Save</button>
+		
+		<button class="btn btn-info" ng-click="onClone()">Clone</button>
+		<button class="btn btn-info" ng-click="showSummaryView()">Summery View</button>
+		<button class="btn btn-info" ng-click="showAddConstraints()">Additional Constraints</button>
+		<button class="btn btn-info" ng-click="onDeleteWorkSpace()">Delete Workspace</button>
+		
+		<div>
+			<input type="checkbox" boolSeries/>
+			<input type="text" ng-modal="" />
+			<div>
+				Chart: 
+				<select>
+					<option ng-repeat="item in chartList" />
+				</select>
+			<div>
+			
+			<div>
+				BenchMark: 
+				<select>
+					<option ng-repeat="item in benchmarkList" />
+				</select>
+			<div>
+		</div>
+		
+		
+		<button class="btn btn-info" ng-click="onRun()">Run</button>
+		<button class="btn btn-info" ng-click="onExpand()">Expand</button>
+		
+    </div>
+	
+	
+</div>
+-->

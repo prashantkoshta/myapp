@@ -1,0 +1,17 @@
+﻿<div class="PopoverWrapper" ng-style="{top: tipTop,left:tipLeft}">
+	<div class="arrow-up"></div>
+	<div class="popover-inner">
+		<div class="popover-input pull-left">
+				<div class="pull-left new_txt">New Value</div>
+			<div class="pull-right">
+				<input ng-blur="isValidCellValue()" type="text" ng-model="newCellValue" class="popover-textarea input_width">
+			</div>
+			<span class="popoverErrorInvalidValue pull-left" ng-show="isValid">Please enter decimal values only</span>
+		</div>
+		<div class="popover-input pull-left">
+			<textarea style="border: 1px solid #183163;" rows="4" cols="40" name="note" ng-model="newCellNoteValue" class="popover-textarea">Enter text here...</textarea>
+		</div>
+		<button type="button" class="pull-left btn btn-md popover-cancel" ng-click="onToolTipTableCancel()">Cancel</button>
+		<button type="button" class="btn btn-md popover-submit" ng-click="onToolTipTableOk()">Ok</button>
+	</div>
+</div>

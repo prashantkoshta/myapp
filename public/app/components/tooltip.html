@@ -1,0 +1,26 @@
+﻿<div class="PopoverWrapper" ng-style="{top: tipTop,left:tipLeft}">
+  <div class="arrow-up"></div>
+  <div class="popover-inner">
+	  <div class="popover-input pull-left">
+	     <div class="pull-left  new_txt">New Value</div>
+          <div class="pull-right">
+              
+		      <input type="text" ng-model="newCellValue" class="popover-textarea input_width">
+                    
+                    
+                                       <!--<span class="error" ng-show="myForm.input.$error">Number should be less than 1!</span>
+                                       <span class="error" ng-show="myForm.input.$error">
+                      Number should be greater than -1!</span>-->
+                
+                
+          </div>
+          <div class="pull-left">
+              <span ng-show="newCellValue > 1" class="red">Value should be less than 1</span>
+	          <span ng-show="newCellValue < -1" class="red">Value should be greater than -1</span>
+              <!--<span ng-show="newCellValue" class="red">Enter a valid number!</span>-->
+          </div>
+      </div>
+        <button type="button" class="pull-left btn btn-md popover-cancel" ng-click="onToolTipCancel()">Cancel</button>
+        <button type="button" class="btn btn-md popover-submit" ng-click="onToolTipOk()">Ok</button>
+  </div>
+</div>
