@@ -2,43 +2,65 @@
 
 // set up ======================================================================
 // get all the tools we need
-var express  = require('express');
-var app      = express();
-var port     = process.env.PORT || 8080;
-var mongoose = require('mongoose');
-var passport = require('passport');
-var flash    = require('connect-flash');
+var express             = require('express');
+var app                 = express();
+var port                = process.env.PORT || 8080;
+var mongoose            = require('mongoose');
+var passport            = require('passport');
+var flash               = require('connect-flash');
 
-var morgan       = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser   = require('body-parser');
-var session      = require('express-session');
-var config       = require('./config/config.js');
-var path         = require('path');
+var morgan          = require('morgan');
+var cookieParser    = require('cookie-parser');
+var bodyParser      = require('body-parser');
+var session         = require('express-session');
+var config          = require('./config/config.js');
+var path            = require('path');
+var privateRoutes   = require('./routes/privatestatic-routes');
 console.log(app.get('env'), config.url);
 // configuration ===============================================================\
 mongoose.connect(config.url); // connect to our database
 require('./config/passport')(passport); // pass passport for configuration
 
 // set up our express application
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, config.staticPublicDir)));
+//app.use(config.staticPrivateContextPath, ensureAuthenticated);
+app.use(config.staticPrivateContextPath, express.static(path.join(__dirname, config.staticPrivateDir), { maxAge: 100 }));
+
+// view engine
+/*
+app.engine('.html', require('ejs').__express);
+app.set('views', __dirname + config.viewsDir);
+app.set('view engine', 'html');
+*/
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.json()); // get information from html forms
 app.use(bodyParser.urlencoded({ extended: false }));
 
 
+app.set('views', __dirname + config.viewsDir);
 app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport
-app.use(session({ secret: config.sessionSecret})); // session secret
+app.use(session({ secret: config.sessionSecret, cookie: { maxAge: 60000 } })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
-// routes ======================================================================
-require('./routes/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
+app.use(function (req, res, next) {
+    //console.log('Time:', Date.now());
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate, max-age=0,');
+    // res.header('Expires', '-1');
+    //res.header('Pragma', 'no-cache');
+    next();
+});
+
+
+
+// routes ======================================================================
+app.use(config.staticPrivateContextPath, privateRoutes);
+require('./routes/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 // launch ======================================================================
 
 

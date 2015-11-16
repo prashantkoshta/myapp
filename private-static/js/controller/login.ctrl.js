@@ -3,8 +3,8 @@ app.controller('loginController', function($scope,$rootScope,validatorFactory,pu
 	var isValid = false;
 	console.log($rootScope.loginError);
 	$scope.loginAction = {
-		email : "aa@aa.com",
-		password : "aaaa",
+		email : "",
+		password : "",
 		// Falgs
 		isInalidEmailId : false,
 		isInvalidPassword : false,

@@ -9,6 +9,13 @@ module.exports = function(app, passport) {
     app.get('/', function(req, res) {
         res.render('index.ejs'); // load the index.ejs file
     });
+    
+    app.get('/view/:*', function (req, res) {
+        var name = req.params.name;
+        //console.log(">>>>>>",req.params,name,req.params[0]);
+        //console.log('/private/view/' +req.params[0]);
+        res.render('view/' + req.params[0]);
+    });
 
     // =====================================
     // LOGIN ===============================
@@ -16,7 +23,7 @@ module.exports = function(app, passport) {
     // show the login form
     app.get('/login', function(req, res) {
         // render the page and pass in any flash data if it exists
-        res.render('login.ejs', { message: req.flash('loginMessage') });
+        res.render('loginlogout.ejs', { message: req.flash('loginMessage') });
     });
 
     // process the login form
@@ -127,6 +134,8 @@ module.exports = function(app, passport) {
     // LOGOUT ==============================
     // =====================================
     app.get('/logout', function(req, res) {
+        req.session.destroy();
+        delete req.session;
         req.logout();
         res.redirect('/');
         res.end();
