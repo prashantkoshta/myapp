@@ -3,6 +3,7 @@
 <!--[if IE 7]>         <html lang="en" ng-app="publicMain" class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html lang="en" ng-app="publicMain" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html lang="en" ng-app="publicMain" class="no-js"> <!--<![endif]-->
+
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,7 +14,7 @@
     <!-- Bootstrap -->
     <link href="lib/css/bootstrap.min.css" rel="stylesheet">
     <link href="lib/css/bootstrap-social.css" rel="stylesheet">
-	  <link href="/resources/css/app-main.css" rel="stylesheet">
+	<link href="/resources/css/app-main.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -51,14 +52,16 @@
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins)-->
     <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script -->
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-  <script src="lib/js/jquery.min.js"></script>
-  <script src="lib/js/bootstrap.min.js"></script>
+	<script src="lib/js/jquery.min.js"></script>
+	<script src="lib/js/bootstrap.min.js"></script>
 	<script src="lib/js/angular.js"></script>
 	<script src="lib/js/angular-route.js"></script>
 	<script src="/resources/js/public-main.js"></script>
 	<script src="/resources/js/controller/login.ctrl.js"></script>
 	<script src="/resources/js/factory/validator.fctry.js"></script>
 	<script src="/resources/js/service/public.svc.js"></script>
+
+	 <% include ganalytictrackerid %>
 	
   </body>
 </html>
