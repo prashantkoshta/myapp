@@ -19,7 +19,7 @@ app.run(function($rootScope, $templateCache, $location, $window) {
       $templateCache.removeAll();
     });
 
-   /* $rootScope.$on('$routeChangeSuccess', function () {
-        $window.ga('send', 'pageview', $location.absUrl());
-    });*/
+   $rootScope.$on('$routeChangeSuccess', function () {
+        $window.ga('send', 'pageview', { page: $location.path() });
+    });
 });
