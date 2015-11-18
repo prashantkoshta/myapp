@@ -23,9 +23,9 @@ app.run(function($rootScope, $templateCache, $location, $window) {
       $templateCache.removeAll();
     });
 
-    $rootScope.$on('$routeChangeSuccess', function () {
+    /*$rootScope.$on('$routeChangeSuccess', function () {
         $window.ga('send', 'pageview', $location.absUrl());
-    });
+    });*/
 
 });
 
