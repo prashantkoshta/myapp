@@ -14,8 +14,12 @@ config(['$routeProvider',
 		});
 }]);
 
-app.run(function($rootScope, $templateCache) {
+app.run(function($rootScope, $templateCache, $location, $window) {
    $rootScope.$on('$viewContentLoaded', function() {
       $templateCache.removeAll();
-   });
+    });
+
+    $rootScope.$on('$routeChangeSuccess', function () {
+        $window.ga.ga('send', 'pageview', $location.absUrl());
+    });
 });
