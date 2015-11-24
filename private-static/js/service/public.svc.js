@@ -1,19 +1,19 @@
 'use strict';
-app.factory('publicSvc', function($http,$q) {
-
+app.service('publicSvc', function($http,$q) {
+    
 	return {
-		"onLogin" : onLogin
+		"onFrogotSubmit" : onFrogotSubmit
 	}
 	
-	function onLogin(username,password){
-		var defer = $q.defer();
-		$http.get(url,data).success(function(response){
+	function onFrogotSubmit(email){
+        var defer = $q.defer();
+        var url = "/auth/forgot"+"/"+email;
+		$http.get(url).success(function(response){
 			defer.resolve(response);
 		}).error(function(err){
 			defer.reject(err);
 		});
 		return defer.promise;
 	}
-	
 	
 });

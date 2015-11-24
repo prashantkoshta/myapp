@@ -22,6 +22,7 @@ var userSchema = mongoose.Schema({
         sec_question_2 : String,
         sec_answer_2   : String,
         passcode       : Number
+		
     },
     facebook         : {
         id           : String,

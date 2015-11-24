@@ -127,6 +127,7 @@ module.exports = function(passport) {
                 return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
 
             // all is well, return successful user
+			req.session["userid"] = user.local.email;
             return done(null, user);
         });
 

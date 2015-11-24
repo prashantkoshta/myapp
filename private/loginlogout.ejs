@@ -3,17 +3,22 @@
 <!--[if IE 7]>         <html lang="en" ng-app="publicMain" class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html lang="en" ng-app="publicMain" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html lang="en" ng-app="publicMain" class="no-js"> <!--<![endif]-->
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Bootstrap 101 Template</title>
 
-    <!-- Bootstrap -->
+  <head>
+	<!-- Add Meta tag -->
+	<% include metatag/SearchMetaTag %>
+	<!-- End Meta tag -->
+
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>My Info</title>
+
+	<!-- Add include css files -->
+	<!-- Bootstrap -->
     <link href="lib/css/bootstrap.min.css" rel="stylesheet">
     <link href="lib/css/bootstrap-social.css" rel="stylesheet">
-	  <link href="/resources/css/app-main.css" rel="stylesheet">
+	<link href="/resources/css/app-main.css" rel="stylesheet">
+	<!--- End Include css files -->
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -22,33 +27,29 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body>
 
-    <% if (message.length>0) { %>
-       <input type="hidden" ng-model="loginError" ng-init="loginError = true" />
-    <% } else { %>
-        <input type="hidden" ng-model="loginError" ng-init="loginError = false" /> 
+  <body>
+	<!-- Page level error -->
+	
+	 <% if (typeof message!=undefined) { %>
+       <input type="hidden" ng-model="loginError" ng-init="loginError = {'error':<%= message.error%>,'msg':'<%= message.msg%>'}" />
     <% } %>
 
-  
 	<!-- start public header -->
 	<div ng-include="'/view/:public-header'"></div>
 	<!-- end public header -->
    
-
+    <!-- start container -->
     <div class="container">
-      
-
-    <ng-view></ng-view>
-	
-
+	    <ng-view></ng-view>
 	</div>
+	<!-- end container -->
     
 	<!-- start public footer -->
 	<div ng-include="'/view/:public-footer'"></div>
 	<!-- end public footer -->
     
-
+	<!-- Inlcude JS files -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins)-->
     <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script -->
     <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -61,8 +62,12 @@
 	<script src="/resources/js/factory/validator.fctry.js"></script>
 	<script src="/resources/js/service/public.svc.js"></script>
 
+	<!-- Add google analytic code here -->
 	<% include ganalytictrackerid %>
+	<!-- End google analytic code here -->
+
+	<!-- Add google adsense -->
 	<% include gadsense %>
-	
+	<!-- End google adsense -->
   </body>
 </html>

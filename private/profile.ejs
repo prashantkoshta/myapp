@@ -1,67 +1,56 @@
-<!-- views/profile.ejs -->
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html lang="en" ng-app="privateMain" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html lang="en" ng-app="privateMain" class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html lang="en" ng-app="privateMain" class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html lang="en" ng-app="privateMain" class="no-js"> <!--<![endif]-->
+  <% include template/htmldoctype %>
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="refresh" content="50000; URL=/">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Add Meta tag -->
+	<% include template/search-meta-tag %>
+	<!-- End Meta tag -->
+
+
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Bootstrap 101 Template</title>
+    <title>My Info</title>
 
-    <!-- Bootstrap -->
-    <link href="lib/css/bootstrap.min.css" rel="stylesheet">
-    <link href="lib/css/bootstrap-social.css" rel="stylesheet">
-    <link href="/resources/css/app-main.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+	<!-- Add include css files -->
+	<% include template/common-css.ejs %>
   </head>
-  <body>
 
+  <body ng-app="privateMain" ng-controller="privateMainController">
+	
+	<% if(typeof message != "undefined") {	%>
+	<input type="hidden" ng-model="pageError" ng-init ='setInitPageValue(
+		{"error" : "<%= message.error %>","errorType":"<%= message.errorType %>","description":"<%= message.description %>"})' />
+	<% } %>
+    
+    
+    
+
+	<!-- start public header -->
+	<div ng-include="'/view/:private-header'"></div>
+	<!-- end public header -->
    
-
- 
+	 <!-- start container -->
+	 <div class="container">
+		<ui-view></ui-view>
+	</div>
+	<!-- end container -->
     
-
+	<!-- start public footer -->
+	<div ng-include="'/view/:private-footer'"></div>
+	<!-- end public footer -->
     
-    <!-- start public header -->
-    <div ng-include="'/view/:private-header'"></div>
-    <!-- end public header -->
-       
-
-    <div class="container">
-    
-    <h1><span class="fa fa-anchor"></span> Profile Page</h1>  
-
-    <ng-view></ng-view>
-    
-
-    </div>
-    
-    <!-- start public footer -->
-    <div ng-include="'/view/:private-footer'"></div>
-    <!-- end public footer -->
-    
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins)-->
-    <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script -->
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="lib/js/jquery.min.js"></script>
-    <script src="lib/js/bootstrap.min.js"></script>
-    <script src="lib/js/angular.js"></script>
-    <script src="lib/js/angular-route.js"></script>
-    <script src="/resources/js/private-main.js"></script>    
-
+	<!-- Inlcude JS files -->
+    <% include template/common-js.ejs %>
+	<!-- -->
+	<script src="/resources/js/private-main.js"></script>
+	<script src="/resources/js/controller/account.ctrl.js"></script>
+	<script src="/resources/js/factory/validator.fctry.js"></script>
+	<script src="/resources/js/service/main.svc.js"></script>
+	
+	
+	<!-- Add google analytic code here -->
 	<% include ganalytictrackerid %>
-	<% include gadsense %>
+	<!-- End google analytic code here -->
 
+	<!-- Add google adsense -->
+	<% include gadsense %>
+	<!-- End google adsense -->
   </body>
 </html>

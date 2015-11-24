@@ -1,4 +1,7 @@
-var AdminTask = require('../controller/admin');
+var adminTask = require('../controller/admin');
+// load up the user model
+var User = require('../models/user');
+var url  = require('url');
 
 // app/routes.js
 module.exports = function(app, passport) {
@@ -16,6 +19,51 @@ module.exports = function(app, passport) {
         //console.log('/private/view/' +req.params[0]);
         res.render('view/' + req.params[0]);
     });
+    
+    // =====================================
+    // FORGOT Password =====================
+    // =====================================
+    app.get('/auth/forgot/:email', function (req, res) {
+        // render the page and pas,s in any flash data if it exists
+        //res.render('index.ejs', { message: { 'error': true, 'errorType': "loginError", "description": req.flash('loginMessage') } });
+		adminTask.isEmailExist(req.params.email,function(a){
+			if(!a){
+				req.flash('forgotMessage',"No emailid found.")
+				res.json({ 'error': true, 'errorType': "forgotError", "description": req.flash('forgotMessage')});
+				return;
+			}else{
+				adminTask.resetPassword(req.params.email,req,function(b,user){
+					if(b)
+						res.json({ 'error': false, 'errorType': "", "description": "done" });
+						return;
+				});
+			}
+		});
+		        
+    });
+	
+	// =====================================
+    // Change Password =====================
+    // =====================================
+	app.post('/auth/changepassword', function (req, res) {
+        // render the page and pas,s in any flash data if it exists
+        //res.render('index.ejs', { message: { 'error': true, 'errorType': "loginError", "description": req.flash('loginMessage') } });
+		 //var url_parts = url.parse(req.url, true);
+         //var query = url_parts.query;
+		adminTask.changePassword(req.session["userid"],req.body.oPwd,req.body.nPwd,function(a){
+			if(!a){
+				req.flash('passwordMessage',"Incorrect password.")
+				res.json({ 'error': true, 'errorType': "passwordError", "description": req.flash('passwordMessage')});
+				return;
+			}else{
+				res.json({ 'error': false, 'errorType': "", "description": "done" });
+			}
+		});
+		        
+    });
+	
+    // we are checking to see if the user trying to login already exists
+    
 
     // =====================================
     // LOGIN ===============================
@@ -23,7 +71,7 @@ module.exports = function(app, passport) {
     // show the login form
     app.get('/login', function(req, res) {
         // render the page and pass in any flash data if it exists
-        res.render('loginlogout.ejs', { message: req.flash('loginMessage') });
+        res.render('index.ejs', { message:{'error':true,'errorType':"loginError","description":req.flash('loginMessage')}});
     });
 
     // process the login form
@@ -143,7 +191,7 @@ module.exports = function(app, passport) {
 
     // Admin Page
     app.get('/admin', function(req, res) {
-        var arUsers = AdminTask.getAllUsers(req,res);
+        var arUsers = adminTask.getAllUsers(req,res);
 
         /*res.render('profile.ejs', {
             user : req.user // get the user out of session and pass to template

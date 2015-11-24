@@ -8,6 +8,7 @@ var port                = process.env.PORT || 8080;
 var mongoose            = require('mongoose');
 var passport            = require('passport');
 var flash               = require('connect-flash');
+var favicon             = require('serve-favicon');
 
 var morgan          = require('morgan');
 var cookieParser    = require('cookie-parser');
@@ -25,6 +26,8 @@ require('./config/passport')(passport); // pass passport for configuration
 app.use(express.static(path.join(__dirname, config.staticPublicDir)));
 //app.use(config.staticPrivateContextPath, ensureAuthenticated);
 app.use(config.staticPrivateContextPath, express.static(path.join(__dirname, config.staticPrivateDir), { maxAge: 100 }));
+
+app.use(favicon(__dirname + '/'+ config.staticPublicDir + '/favicon.ico'));
 
 // view engine
 /*
@@ -96,8 +99,6 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
-
 
 app.listen(port);
 console.log('The magic happens on port ' + port);

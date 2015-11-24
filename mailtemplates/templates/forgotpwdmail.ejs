@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title><%= appName%></title>
+	<style>
+		body {
+		  padding: 50px;
+		  font: 14px Helvetica, Arial, sans-serif;
+		  background: #a89d21;
+		}
+		h2, p{
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<h2>
+		Password Changed for <%= appName %>
+	</h2>
+	<p>
+		Hi <span style="color: #001ca8;font-size: 1.5em;font-style: bold;"><%= member.firstName %> <%= member.lastName%></span>,
+		<br>Your new password is:<span style="color: #a80001;font-size: 1.5em;font-style: bold;"><%= member.password%></span>
+	</p>
+	<p>
+		Click here to login: <a href="<%= pageUrl%>">Login</a>.
+	</p>
+</body>
+</html>
