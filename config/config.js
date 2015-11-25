@@ -10,6 +10,7 @@ module.exports = {
     staticPrivateContextPath : process.env.staticprivatecontextpath,
     sendMail: process.env.sendmail,
     sendMailAuth: process.env.sendmailauth,
+    uploadDir : process.env.uploaddir,
     'facebookAuth' : {
         'clientID'      : process.env.fb_clientid,
         'clientSecret'  : process.env.fb_clientsecret,

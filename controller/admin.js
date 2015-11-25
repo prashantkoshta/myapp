@@ -11,9 +11,6 @@ module.exports = (function() {
 			if (err)
 				return -1;
 			console.log(users.length);
-			//console.log(users[0],users[0].local.email);
-			//return users;
-			console.log(">>",users);
 			res.render('admin.ejs',{result:users});
 		});
 	}
@@ -46,12 +43,11 @@ module.exports = (function() {
 				if (!user) {
 				   return callback(false,user);;
 				}
-								
 				var password = getRandomPwd(10,'qwertyuiopasdfg@!hjklzxcv#%bnmQWERTYUIO$PASDFGHJKLZXCVBNM12345*?67890');
 				console.log("Password",password);
 				var newUser = new User();
-				
-				User.update({"local.email": aEmail}, {"$set": { "local.password" : newUser.generateHash(password)}}, { upsert: false},function (err, result) {
+				var encryptedPwd = newUser.generatePassword( user.local.hash,password); 
+				User.update({"local.email": aEmail}, {"$set": {"local.password" : encryptedPwd}}, { upsert: false},function (err, result) {
 					if (err)
 						throw err;
 					
@@ -87,7 +83,7 @@ module.exports = (function() {
 					 return callback(false,null);
 				 
 				var newUser = new User();
-				User.update({"local.email": aEmail}, {"$set": { "local.password" : newUser.generateHash(nPassword)}}, { upsert: false},function (err, result) {
+				User.update({"local.email": aEmail}, {"$set": { "local.password" : newUser.generatePassword(user.local.hash,nPassword)}}, { upsert: false},function (err, result) {
 					if (err)
 						throw err;
 					return callback(true,user);
