@@ -13,6 +13,8 @@ module.exports = function(app, passport) {
         res.render('index.ejs'); // load the index.ejs file
     });
     
+   
+    
     app.get('/view/:*', function (req, res) {
         var name = req.params.name;
         //console.log(">>>>>>",req.params,name,req.params[0]);
@@ -201,12 +203,8 @@ module.exports = function(app, passport) {
 
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
-    console.log("isLoggedIn");
-    // if user is authenticated in the session, carry on 
     if (req.isAuthenticated())
         return next();
-
-    // if they aren't redirect them to the home page
     res.redirect('/');
     res.end();
 }

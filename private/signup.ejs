@@ -1,69 +1,96 @@
-<!-- views/signup.ejs -->
-<!doctype html>
-<html>
-<head>
-    <title>Node Authentication</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
-    <style>
-        body        { padding-top:80px; }
-    </style>
-</head>
-<body>
-<div class="container">
-
-<div class="col-sm-6 col-sm-offset-3">
-
-    <h1><span class="fa fa-sign-in"></span> Signup</h1>
-
-    <!-- show any messages that come back with authentication -->
-    <% if (message.length > 0) { %>
-        <div class="alert alert-danger"><%= message %></div>
-    <% } %>
-
-    <!-- LOGIN FORM -->
-    <form action="/signup" method="post">
-        <div class="form-group">
-            <label>Email</label>
-            <input type="text" class="form-control" name="email">
-        </div>
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" class="form-control" name="password">
-        </div>
+  <% include template/htmldoctype %>
+  <head>
+	<!-- Add Meta tag -->
+	<% include template/search-meta-tag %>
+	<!-- End Meta tag -->
 
 
-        <div class="form-group">
-            <label>First Name</label>
-            <input type="text" class="form-control" name="firstname">
-        </div>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>My Info</title>
 
-        <div class="form-group">
-            <label>Middle Name</label>
-            <input type="password" class="form-control" name="middlename">
-        </div>
+	<!-- Add include css files -->
+	<% include template/common-css.ejs %>
+  </head>
 
-        <div class="form-group">
-            <label>Last Name</label>
-            <input type="password" class="form-control" name="lastname">
-        </div>
+  <body ng-app="publicMain" ng-controller="publicMainController">
+	
+	<% if(typeof message != "undefined") {	%>
+	<input type="hidden" ng-model="pageError" ng-init ='setInitPageValue(
+		{"error" : "<%= message.error %>","errorType":"<%= message.errorType %>","description":"<%= message.description %>"})' />
+	<% } %>
 
+	<!-- start public header -->
+	<div ng-include="'/view/:public-header'"></div>
+	<!-- end public header -->
+   
+  <!-- start container -->
+  <div class="container">
+		<div class="col-sm-6">
+	
+			    <h1><span class="fa fa-sign-in"></span> Signup</h1>
+			
+			    <!-- show any messages that come back with authentication -->
+			    <% if (message.length > 0) { %>
+			        <div class="alert alert-danger"><%= message %></div>
+			    <% } %>
+			
+			    <!-- LOGIN FORM -->
+			    <form action="/signup" method="post">
+			        <div class="form-group">
+			            <label>Email</label>
+			            <input type="text" class="form-control" name="email" placeholder="Enter Emailid" maxlength="80">
+			        </div>
+			        <div class="form-group">
+			            <label>Password</label>
+			            <input type="password" class="form-control" name="password" placeholder="Enter Password" maxlength="32">
+			        </div>
+			
+			        <div class="form-group">
+			            <label>First Name</label>
+			            <input type="text" class="form-control" name="firstname"  placeholder="Enter First Name" maxlength="32">
+			        </div>
+			
+			        <div class="form-group">
+			            <label>Middle Name</label>
+			            <input type="text" class="form-control" name="middlename"  placeholder="Enter Middle Name" maxlength="32">
+			        </div>
+			
+			        <div class="form-group">
+			            <label>Last Name</label>
+			            <input type="text" class="form-control" name="lastname"  placeholder="Enter Last Name" maxlength="32">
+			        </div>
+			
+			        <button type="submit" class="btn btn-warning btn-lg">Signup</button>
+			    </form>
+			
+			    <hr>
+			
+			    <p>Already have an account? <a href="/login">Login</a></p>
+			    <p>Or go <a href="/">home</a>.</p>
+			
+			</div>
 
+	</div>
+	<!-- end container -->
+    
+	<!-- start public footer -->
+	<div ng-include="'/view/:public-footer'"></div>
+	<!-- end public footer -->
+    
+	<!-- Inlcude JS files -->
+  <% include template/common-js.ejs %>
+	<!-- -->
+	<script src="/resources/js/public-main.js"></script>
+	<script src="/resources/js/controller/login.ctrl.js"></script>
+	<script src="/resources/js/factory/validator.fctry.js"></script>
+	<script src="/resources/js/service/public.svc.js"></script>
 
-        <button type="submit" class="btn btn-warning btn-lg">Signup</button>
-    </form>
+	<!-- Add google analytic code here -->
+	<% include ganalytictrackerid %>
+	<!-- End google analytic code here -->
 
-    <hr>
-
-    <p>Already have an account? <a href="/login">Login</a></p>
-    <p>Or go <a href="/">home</a>.</p>
-
-</div>
-
-</div>
-
-<% include ganalytictrackerid %>
-<% include gadsense %>
-  
-</body>
+	<!-- Add google adsense -->
+	<% include gadsense %>
+	<!-- End google adsense -->
+  </body>
 </html>

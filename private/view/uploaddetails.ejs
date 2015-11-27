@@ -1,0 +1,56 @@
+<div class="row">
+
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <h1>List of builds</h1>
+  </div>
+  
+  <!-- div>{{data}}</div -->
+  
+  <div>
+    <button type="button" class="btn btn-primary">Publish</button>
+  </div>
+  
+  
+  <div class="table-responsive">	
+  <table class="table">
+    <thead>
+      <tr>
+      	<th><input type="checkbox"  ng-click="onCheckedAll($event)"/></th>
+        <th>Build<br/>Date</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>App. Version</th>
+        <th>Build. Version</th>
+        <th>OS Type</th>
+        <th>Created By</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in data">
+      	<th><input type="checkbox" ng-model="item.selected"/></th>
+        <th>{{item.builddate | getDateFormat}}</th>
+        <th>{{item.buildname}}</th>
+        <th>{{item.description}}</th>
+        <th>{{item.appversion}}</th>
+        <th>{{item.buildnum}}</th>
+        <th>{{item.filename | getFileType}}</th>
+        <th>{{item.createdby}}</th>
+        <th><a href="buildapp/gateway/downloadfile/{{item.filename}}"><span class="glyphicon glyphicon-download"></span></a></th>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  
+  
+  
+  
+  
+  <div>
+    <button type="button" class="btn btn-primary" ng-click="deleteBuilds()">Delete</button>
+  </div>
+
+  
+</div>
+     
+ 

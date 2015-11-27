@@ -17,12 +17,20 @@ var session         = require('express-session');
 var config          = require('./config/config.js');
 var path            = require('path');
 var privateRoutes   = require('./routes/privatestatic-routes');
+var busboy 			= require('connect-busboy');
 console.log(app.get('env'), config.url);
 // configuration ===============================================================\
 mongoose.connect(config.url); // connect to our database
 require('./config/passport')(passport); // pass passport for configuration
 
+
+//upload file path 
+console.log(config.uploadDir);
+config.uploadFilePath = path.join(__dirname, config.uploadDir); //__dirname+"/"+config.uploadDir;
+console.log(config.uploadFilePath);
+
 // set up our express application
+app.use(busboy());
 app.use(express.static(path.join(__dirname, config.staticPublicDir)));
 //app.use(config.staticPrivateContextPath, ensureAuthenticated);
 app.use(config.staticPrivateContextPath, express.static(path.join(__dirname, config.staticPrivateDir), { maxAge: 100 }));
@@ -37,7 +45,8 @@ app.set('view engine', 'html');
 */
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
-app.use(bodyParser.json()); // get information from html forms
+app.use(bodyParser.json({ limit: '1mb' })); // get information from html forms 
+app.use(bodyParser.raw());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 
@@ -60,10 +69,10 @@ app.use(function (req, res, next) {
 });
 
 
-
 // routes ======================================================================
 app.use(config.staticPrivateContextPath, privateRoutes);
 require('./routes/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+app.use("/buildapp/gateway",require('./routes/build-routes.js'))
 // launch ======================================================================
 
 

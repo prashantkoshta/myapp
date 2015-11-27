@@ -10,16 +10,16 @@
 	  <span class="icon-bar"></span>
 	</button>
 
-	<a class="navbar-brand" href="#">Brand  </a>
+	<a class="navbar-brand" href="#" ng-click="setGA({'event':'event','eventType':'HOME_CLICK','msg':'HOME_CLICK'})">Brand  </a>
   </div>
 
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	<ul class="nav navbar-nav">
-	  <li><a ui-sref="home">Home <span class="sr-only">(current)</span></a></li>
-    <li><a ui-sref="review">Review</a></li>
-	  <li><a ui-sref="aboutus">About Us</a></li>
-	  <li><a ui-sref="loginview">Login</a></li>
+	  <li><a ui-sref="home" ng-click="setGA({'event':'event','eventType':'HOME_CLICK','msg':'HOME_CLICK'})">Home <span class="sr-only">(current)</span></a></li>
+      <li><a ui-sref="review" ng-click="setGA({'event':'event','eventType':'NAV_REVIEW_CLICK','msg':'NAV_REVIEW_CLICK'})">Review</a></li>
+	  <li><a ui-sref="aboutus" ng-click="setGA({'event':'event','eventType':'NAV_ABOUTUS_CLICK','msg':'NAV_ABOUTUS_CLICK'})">About Us</a></li>
+	  <li><a ui-sref="loginview" ng-click="setGA({'event':'event','eventType':'NAV_LOGIN_CLICK','msg':'NAV_LOGIN_CLICK'})">Login</a></li>
 	</ul>
 	
 	

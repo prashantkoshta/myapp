@@ -20,4 +20,8 @@ app.factory('validatorFactory', function() {
 		if(strPwd === "" || strPwd.lenght<4) return false;
 		return true;
 	}
+	
+	
+	
+	
 });

@@ -10,6 +10,8 @@
 
 	<!-- Add include css files -->
 	<% include template/common-css.ejs %>
+	<link rel="stylesheet" type="text/css" href="lib/css/ui-grid.min.css">
+    
   </head>
 
   <body ng-app="privateMain" ng-controller="privateMainController">
@@ -40,9 +42,12 @@
     <% include template/common-js.ejs %>
 	<!-- -->
 	<script src="/resources/js/private-main.js"></script>
+	<script src="/resources/js/components/custom-directive.js"></script>
 	<script src="/resources/js/controller/account.ctrl.js"></script>
 	<script src="/resources/js/factory/validator.fctry.js"></script>
 	<script src="/resources/js/service/main.svc.js"></script>
+	<script src="/resources/js/service/multipartform.js"></script>
+	<script src="/resources/js/controller/build.ctrl.js"></script>
 	
 	
 	<!-- Add google analytic code here -->

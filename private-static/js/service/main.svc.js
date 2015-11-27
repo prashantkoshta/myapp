@@ -1,8 +1,36 @@
 'use strict';
 app.service('mainSvc', function($http,$q) {
-    
-	return {
-		"changePassword" : changePassword
+	function getBuildDetails(){
+		var defer = $q.defer();
+        var url = "/buildapp/gateway/getDetails";
+		$http.get(url).success(function(response){
+			defer.resolve(response);
+		}).error(function(err){
+			defer.reject(err);
+		});
+		return defer.promise;
+	}
+	
+	function delBuild(ar){
+		var defer = $q.defer();
+        var url = "/buildapp/gateway/deleteBuildInfo";
+		$http.post(url,ar).success(function(response){
+			defer.resolve(response);
+		}).error(function(err){
+			defer.reject(err);
+		});
+		return defer.promise;
+	}
+	
+	function saveBuildData(data){
+		var defer = $q.defer();
+        var url = "/buildapp/gateway/saveBuildInfo";
+		$http.post(url,data).success(function(response){
+			defer.resolve(response);
+		}).error(function(err){
+			defer.reject(err);
+		});
+		return defer.promise;
 	}
 	
 	function changePassword(oPwd,nPwd){
@@ -16,5 +44,13 @@ app.service('mainSvc', function($http,$q) {
 		});
 		return defer.promise;
 	}
+	
+	return {
+		"changePassword" : changePassword,
+		"getBuildDetails" : getBuildDetails,
+		"delBuild" : delBuild,
+		"saveBuildData" : saveBuildData
+		
+	};
 	
 });

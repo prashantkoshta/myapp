@@ -3,7 +3,9 @@
 var app = angular.module('privateMain', ['ui.router'])
 .config(['$stateProvider','$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
         
-        $urlRouterProvider.otherwise("/profile");
+       //$urlRouterProvider.otherwise("/profile");
+	   $urlRouterProvider.otherwise("/buildapp/gateway");
+	
         
         $stateProvider.state("chpwd", {
             url: "/changepassword",
@@ -21,12 +23,24 @@ var app = angular.module('privateMain', ['ui.router'])
             templateUrl: "view/:passwordchanged",
             cache: false
         })
-		.state("home", {
+		/*.state("home", {
             url: "/profile",
+            cache: false
+        })*/
+        .state("home",{
+        	url: "/profile",
+            templateUrl: "view/:uploaddetails",
+            controller: "buildController",
             cache: false
         })
         .state("review", {
             url: "/profile",
+            cache: false
+        })
+        .state("upload", {
+        	url: "/upload",
+            templateUrl: "view/:upload",
+            controller: "buildController",
             cache: false
         });
       
