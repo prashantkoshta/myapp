@@ -47,7 +47,7 @@ module.exports = function(app, passport) {
 	// =====================================
     // Change Password =====================
     // =====================================
-	app.post('/auth/changepassword', function (req, res) {
+	app.post('/auth/changepassword', isLoggedIn, function (req, res) {
         // render the page and pas,s in any flash data if it exists
         //res.render('index.ejs', { message: { 'error': true, 'errorType': "loginError", "description": req.flash('loginMessage') } });
 		 //var url_parts = url.parse(req.url, true);
