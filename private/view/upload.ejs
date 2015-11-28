@@ -51,8 +51,8 @@
 	 
 	 <div class="form-group col-sm-8"> 
    		<div class="col-sm-offset-4 col-sm-8">
-		   <button type="submit" class="btn btn-primary">Submit</button>
-	    	<a ui-sref="home">Cancel</a>
+		   <button type="submit" class="btn btn-primary" ng-click="setGA({'event':'event','eventType':'UPLOAD_PAGE_FILE_SUBMIT_CLICK','msg':'UPLOAD_PAGE_FILE_SUBMIT_CLICK'})">Submit</button>
+	    	<a ui-sref="home" ng-click="setGA({'event':'event','eventType':'UPLOAD_PAGE_FILE_HOME_CLICK','msg':'UPLOAD_PAGE_FILE_HOME_CLICK'})">Cancel</a>
 	    </div>
 	  </div>
 	</form>

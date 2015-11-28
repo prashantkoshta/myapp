@@ -60,13 +60,13 @@
 			            <input type="text" class="form-control" name="lastname"  placeholder="Enter Last Name" maxlength="32">
 			        </div>
 			
-			        <button type="submit" class="btn btn-warning btn-lg">Signup</button>
+			        <button type="submit" class="btn btn-warning btn-lg" ng-click="setGA({'event':'event','eventType':'SIGNUP_PAGE_SIGNUP_SUBMIT_CLICK','msg':'SIGNUP_PAGE_SIGNUP_SUBMIT_CLICK'})">Signup</button>
 			    </form>
 			
 			    <hr>
 			
-			    <p>Already have an account? <a href="/login">Login</a></p>
-			    <p>Or go <a href="/">home</a>.</p>
+			    <p>Already have an account? <a href="/login" ng-click="setGA({'event':'event','eventType':'SIGNUP_PAGE_LOGIN_CLICK','msg':'SIGNUP_PAGE_LOGIN_CLICK'})">Login</a></p>
+			    <p>Or go <a href="/" ng-click="setGA({'event':'event','eventType':'SIGNUP_PAGE_HOME_CLICK','msg':'SIGNUP_PAGE_HOME_CLICK'})">home</a>.</p>
 			
 			</div>
 

@@ -44,6 +44,7 @@ app.run(function ($rootScope, $templateCache, $location, $window) {
     });
     
     $rootScope.$on('$routeChangeSuccess', function () {
+    	// Google Analytic Controller
         console.log($location.path());
         console.log($location.url());
         $window.ga('send', 'pageview', { page: $location.path()});
@@ -57,7 +58,7 @@ app.controller('publicMainController', function ($scope, $rootScope, $window) {
     }
     
     
-    // Google Analytic COntroller
+    // Google Analytic Controller
     $rootScope.setGA = function(analyticObject){
     	//{'type':'event','eventType':'eventType','msg':''}
     	if (!$window.ga) return;

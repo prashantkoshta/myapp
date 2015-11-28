@@ -7,7 +7,7 @@
   <!-- div>{{data}}</div -->
   
   <div>
-    <button type="button" class="btn btn-primary">Publish</button>
+    <button type="button" class="btn btn-primary"  ng-click="setGA({'event':'event','eventType':'UPLOADDETAILS_PAGE_PUBLISH_BTN_CLICK','msg':'UPLOADDETAILS_PAGE_PUBLISH_BTN_CLICK'})">Publish</button>
   </div>
   
   
@@ -47,7 +47,7 @@
   
   
   <div>
-    <button type="button" class="btn btn-primary" ng-click="deleteBuilds()">Delete</button>
+    <button type="button" class="btn btn-primary" ng-click="deleteBuilds();setGA({'event':'event','eventType':'UPLOADDETAILS_PAGE_DELETE_BTN_CLICK','msg':'UPLOADDETAILS_PAGE_DELETE_BTN_CLICK'})">Delete</button>
   </div>
 
   

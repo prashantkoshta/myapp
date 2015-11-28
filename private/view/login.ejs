@@ -10,9 +10,9 @@
           <h4>Use other accounts</h4>
           <p>You can also sign in using your Facebook Account or Google Account or Twitter Account.</p>
           <ul class="list-unstyled">
-            <li><a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span>Facebook</a></li>
-            <li><a href="/auth/twitter" class="btn btn-info"><span class="fa fa-twitter"></span>Twitter</a></li>
-            <li><a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span>Google</a></li>
+            <li><a href="/auth/facebook" class="btn btn-primary" ng-click="setGA({'event':'event','eventType':'FACBOOK_LOGIN_CLICK','msg':'FACBOOK_LOGIN_CLICK'})"><span class="fa fa-facebook"></span>Facebook</a></li>
+            <li><a href="/auth/twitter" class="btn btn-info" ng-click="setGA({'event':'event','eventType':'TWITTER_LOGIN_CLICK','msg':'TWITTER_LOGIN_CLICK'})"><span class="fa fa-twitter"></span>Twitter</a></li>
+            <li><a href="/auth/google" class="btn btn-danger" ng-click="setGA({'event':'event','eventType':'GOOGLE_LOGIN_CLICK','msg':'GOOGLE_LOGIN_CLICK'})"><span class="fa fa-google-plus"></span>Google</a></li>
           </ul>
         
            
@@ -56,13 +56,13 @@
             <label><input type="checkbox"> Remember me</label>
         </div>
         <div>
-           <button type="submit" class="btn btn-primary">Login</button>  
+           <button type="submit" class="btn btn-primary"  ng-click="setGA({'event':'event','eventType':'LOGIN_PAGE_PAGE_SUBMIT_CLICK','msg':'LOGIN_PAGE_PAGE_SUBMIT_CLICK'})">Login</button>  
         </div>
         <div>
-           <a href="#/forgotpassword">Forgot Password</a>
+           <a href="#/forgotpassword" ng-click="setGA({'event':'event','eventType':'LOGIN_PAGE_PAGE_FORGOT_CLICK','msg':'LOGIN_PAGE_PAGE_FORGOT_CLICK'})">Forgot Password</a>
         </div>
          <div>
-            <p>Need an account? <a href="/signup">Signup</a></p>
+            <p>Need an account? <a href="/signup" ng-click="setGA({'event':'event','eventType':'LOGIN_PAGE_PAGE_SIGNUP_CLICK','msg':'LOGIN_PAGE_PAGE_SIGNUP_CLICK'})">Signup</a></p>
          </div>
        
         </form> 

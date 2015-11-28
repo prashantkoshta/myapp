@@ -61,4 +61,12 @@ app.controller('privateMainController', function ($scope, $rootScope, $window) {
     $scope.setInitPageValue = function (obj){
         $rootScope.pageError = obj;
     }
+    
+    
+    // Google Analytic Controller
+    $rootScope.setGA = function(analyticObject){
+    	//{'type':'event','eventType':'eventType','msg':''}
+    	if (!$window.ga) return;
+        	$window.ga('send', analyticObject.event, analyticObject.eventType,analyticObject.msg);
+    }
 });
