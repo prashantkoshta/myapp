@@ -1,7 +1,7 @@
 //config.js
 // Include all configuration variable
-module.exports = require('../../localconfig.js');
-/*module.exports = {
+//module.exports = require('../../localconfig.js');
+module.exports = {
     url : process.env.dburl,
     sessionSecret: process.env.sessionsecret,
     staticPublicDir : process.env.staticpublicdir,
@@ -27,4 +27,4 @@ module.exports = require('../../localconfig.js');
         'clientSecret'  : process.env.gg_clientsecret,
         'callbackURL'   : process.env.ssocallbackurl + '/auth/google/callback'
     }
-};*/
+};
