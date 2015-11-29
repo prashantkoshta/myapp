@@ -13,6 +13,7 @@
     "ejs": "~2.3.4",
     "email-templates": "^2.0.1",
     "express": "~4.13.1",
+    "express-nocaptcha": "^1.1.1",
     "express-session": "~1.0.0",
     "file-stream-rotator": "~0.0.6",
     "fs-extra": "^0.26.2",

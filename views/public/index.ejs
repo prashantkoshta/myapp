@@ -1,19 +1,17 @@
-  <% include template/htmldoctype %>
+  <% include ../template/htmldoctype %>
   <head>
 	<!-- Add Meta tag -->
-	<% include template/search-meta-tag %>
+	<% include ../template/search-meta-tag %>
 	<!-- End Meta tag -->
 
 
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>My Info</title>
-
 	<!-- Add include css files -->
-	<% include template/common-css.ejs %>
+	<% include ../template/common-css.ejs %>
   </head>
 
   <body ng-app="publicMain" ng-controller="publicMainController">
-	
 	<% if(typeof message != "undefined") {	%>
 	<input type="hidden" ng-model="pageError" ng-init ='setInitPageValue(
 		{"error" : "<%= message.error %>","errorType":"<%= message.errorType %>","description":"<%= message.description %>"})' />
@@ -37,19 +35,19 @@
 	<!-- end public footer -->
     
 	<!-- Inlcude JS files -->
-  <% include template/common-js.ejs %>
+  <% include ../template/common-js.ejs %>
 	<!-- -->
-	<script src="/resources/js/public-main.js"></script>
-	<script src="/resources/js/controller/login.ctrl.js"></script>
-	<script src="/resources/js/factory/validator.fctry.js"></script>
-	<script src="/resources/js/service/public.svc.js"></script>
+	<script src="/js/public-main.js"></script>
+	<script src="/js/controller/login.ctrl.js"></script>
+	<script src="/js/factory/validator.fctry.js"></script>
+	<script src="/js/service/public.svc.js"></script>
 
 	<!-- Add google analytic code here -->
-	<% include ganalytictrackerid %>
+	<% include ../template/ganalytictrackerid %>
 	<!-- End google analytic code here -->
 
 	<!-- Add google adsense -->
-	<% include gadsense %>
+	<% include ../template/gadsense %>
 	<!-- End google adsense -->
   </body>
 </html>

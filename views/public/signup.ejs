@@ -1,0 +1,117 @@
+  <% include ../template/htmldoctype %>
+  <head>
+	<!-- Add Meta tag -->
+	<% include ../template/search-meta-tag %>
+	<!-- End Meta tag -->
+
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Signup: My Info</title>
+
+	<!-- Add include css files -->
+	<% include ../template/common-css.ejs %>
+  </head>
+
+  <body ng-app="publicMain" ng-controller="publicMainController">
+	
+	<% if(typeof message != "undefined") {	%>
+	<input type="hidden" ng-model="pageError" ng-init ='setInitPageValue(
+		{"error" : "<%= message.error %>","errorType":"<%= message.errorType %>","description":"<%= message.description %>"})' />
+	<% } %>
+
+	<!-- start public header -->
+	<div ng-include="'/view/:public-signup-header'"></div>
+	<!-- end public header -->
+    <!-- start container -->
+  <div class="container" ng-controller="loginController">
+		<div class="col-sm-6">
+	
+			    <h1><span class="fa fa-sign-in"></span> Signup</h1>
+			
+			    <!-- show any messages that come back with authentication -->
+			    <% if (message.length > 0) { %>
+			    	<div class="alert alert-danger" role="alert">
+				      <div>
+				        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				        <span class="sr-only">Error:</span>
+				        <%= message %>
+				      </div>
+				    </div>
+			        
+			    <% } %>
+			    
+			    <div class="alert alert-danger" role="alert" ng-repeat="item in signupAction.signupFormErrorList">
+			      <div>
+			        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+			        <span class="sr-only">Error:</span>
+			        {{item.msg}}
+			      </div>
+			    </div>
+			
+			    <!-- LOGIN FORM -->
+			    <form method="post" action="/signup" ng-submit="signupAction.submitSignup($event)" novalidate>
+			        <div class="form-group">
+			            <label>Email</label>
+			            <input type="text" class="form-control" name="email" ng-model="signupAction.email" placeholder="Enter Emailid" maxlength="80">
+			        </div>
+			        <div class="form-group">
+			            <label>Password</label>
+			            <input type="password" class="form-control" name="password" ng-model="signupAction.password" placeholder="Enter Password" maxlength="32">
+			        </div>
+			
+			        <div class="form-group">
+			            <label>First Name</label>
+			            <input type="text" class="form-control" name="firstname" ng-model="signupAction.firstname"  placeholder="Enter First Name" maxlength="32">
+			        </div>
+			
+			        <div class="form-group">
+			            <label>Middle Name</label>
+			            <input type="text" class="form-control" name="middlename" ng-model="signupAction.middlename"  placeholder="Enter Middle Name" maxlength="32">
+			        </div>
+			
+			        <div class="form-group">
+			            <label>Last Name</label>
+			            <input type="text" class="form-control" name="lastname" ng-model="signupAction.lastname"  placeholder="Enter Last Name" maxlength="32">
+			        </div>
+			        
+			        <div class="form-group">
+			        	<div class="g-recaptcha" data-sitekey="6LdYARITAAAAABevqE8wXD0_BYcJiudt9bxElAZF"></div>
+			        <div>
+			        
+			        <div class="form-group">
+					        <button type="submit" class="btn btn-warning btn-lg" ng-click="setGA({'event':'event','eventType':'SIGNUP_PAGE_SIGNUP_SUBMIT_CLICK','msg':'SIGNUP_PAGE_SIGNUP_SUBMIT_CLICK'})">Signup</button>
+					</div>
+			    </form>
+			
+			    <hr>
+			
+			    <p>Already have an account? <a href="/#/loginview" ng-click="setGA({'event':'event','eventType':'SIGNUP_PAGE_LOGIN_CLICK','msg':'SIGNUP_PAGE_LOGIN_CLICK'})">Login</a></p>
+			    <p>Or go <a href="/" ng-click="setGA({'event':'event','eventType':'SIGNUP_PAGE_HOME_CLICK','msg':'SIGNUP_PAGE_HOME_CLICK'})">home</a>.</p>
+			
+			</div>
+
+	</div>
+	<!-- end container -->
+    
+	<!-- start public footer -->
+	<div ng-include="'/view/:public-footer'"></div>
+	<!-- end public footer -->
+    
+	<!-- Inlcude JS files -->
+    <% include ../template/common-js.ejs %>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+	<!-- -->
+	<script src="/js/public-main.js"></script>
+	<script src="/js/controller/login.ctrl.js"></script>
+	<script src="/js/factory/validator.fctry.js"></script>
+	<script src="/js/service/public.svc.js"></script>
+
+	<!-- Add google analytic code here -->
+	<% include ../template/ganalytictrackerid %>
+	<!-- End google analytic code here -->
+
+	<!-- Add google adsense -->
+	<% include ../template/gadsense %>
+	<!-- End google adsense -->
+  </body>
+</html>

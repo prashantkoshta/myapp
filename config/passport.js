@@ -11,13 +11,14 @@ var User            = require('../models/user');
 
 // load the auth variables
 var configAuth = require('./config');
+var errorMap = require('./errormap');
 
 
 
 // expose this function to our app using module.exports
 module.exports = function(passport) {
 
-
+		console.log(errorMap.getError("0003"));
     // =========================================================================
     // passport session setup ==================================================
     // =========================================================================
@@ -59,14 +60,16 @@ module.exports = function(passport) {
 
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
-       User.findOne({ 'local.email' :  email }, function(err, user) {
+       console.log('req.validnocaptcha :',req.validnocaptcha);
+       if(!req.validnocaptcha) { return done(null, false, req.flash('signupMessage', errorMap.getError("0001")));} 	
+       User.findOne({ 'local.email' : email},{'local.email':1,'local.password':1,'local.hash':1,'local.firstname':1,'local.middlename':1,'local.lastname':1,'role':1}, function(err, user) {
             // if there are any errors, return the error
             if (err)
                 return done(err);
 
             // check to see if theres already a user with that email
             if (user) {
-                return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                return done(null, false, req.flash('signupMessage', errorMap.getError("0002")));
             } else {
 
                 // if there is no user with that email
@@ -76,11 +79,12 @@ module.exports = function(passport) {
             	var encryptedPwd = newUser.generatePassword(hash,password);
                 // set the user's local credentials
                 newUser.local.email    = email;
-                newUser.local.firstname = req.param('firstname');
-                newUser.local.middlename = req.param('middlename');
-                newUser.local.lastname = req.param('lastname');
+                newUser.local.firstname = req.body.firstname;
+                newUser.local.middlename = req.body.middlename;
+                newUser.local.lastname = req.body.lastname;
                 newUser.local.hash = hash;
                 newUser.local.password = encryptedPwd;
+                newUser.role.push("user");
 
                 // save the user
                 newUser.save(function(err) {
@@ -122,11 +126,11 @@ module.exports = function(passport) {
 
             // if no user is found, return the message
             if (!user)
-                return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+                return done(null, false, req.flash('loginMessage', errorMap.getError("0003"))); // req.flash is the way to set flashdata using connect-flash
 
             // if the user is found but the password is wrong
             if (!user.validPassword(password))
-                return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+                return done(null, false, req.flash('loginMessage', errorMap.getError("0004"))); // create the loginMessage and save it to session as flashdata
 
             // all is well, return successful user
 			req.session["userid"] = user.local.email;
@@ -149,7 +153,6 @@ module.exports = function(passport) {
     },
      // facebook will send back the token and profile
     function(token, refreshToken, profile, done) {
-
         // asynchronous
         process.nextTick(function() {
 
@@ -167,18 +170,17 @@ module.exports = function(passport) {
                 } else {
                     // if there is no user found with that facebook id, create them
                     var newUser            = new User();
-
                     // set all of the facebook information in our user model
                     newUser.facebook.id    = profile.id; // set the users facebook id                   
                     newUser.facebook.token = token; // we will save the token that facebook provides to the user                    
                     newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName; // look at the passport user profile to see how names are returned
-                    newUser.facebook.email = 'test@abc.com';//profile.emails[0].value; // facebook can return multiple emails so we'll take the first
-
-                    // save our user to the database
+                    newUser.facebook.email = profile.emails[0].value;
+					//profile.emails[0].value; // facebook can return multiple emails so we'll take the first
+                    newUser.role.push("user");
+					// save our user to the database
                     newUser.save(function(err) {
                         if (err)
                             throw err;
-
                         // if successful, return the new user
                         return done(null, newUser);
                     });
@@ -194,11 +196,9 @@ module.exports = function(passport) {
     // TWITTER =================================================================
     // =========================================================================
    passport.use(new TwitterStrategy({
-
         consumerKey     : configAuth.twitterAuth.consumerKey,
         consumerSecret  : configAuth.twitterAuth.consumerSecret,
         callbackURL     : configAuth.twitterAuth.callbackURL
-
     },
     function(token, tokenSecret, profile, done) {
 
@@ -225,7 +225,7 @@ module.exports = function(passport) {
                     newUser.twitter.token       = token;
                     newUser.twitter.username    = profile.username;
                     newUser.twitter.displayName = profile.displayName;
-
+					newUser.role.push("user");
                     // save our user into the database
                     newUser.save(function(err) {
                         if (err)
@@ -274,7 +274,7 @@ module.exports = function(passport) {
                     newUser.google.token = token;
                     newUser.google.name  = profile.displayName;
                     newUser.google.email = profile.emails[0].value; // pull the first email
-
+					newUser.role.push("user");
                     // save the user
                     newUser.save(function(err) {
                         if (err)

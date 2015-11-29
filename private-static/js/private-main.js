@@ -9,18 +9,18 @@ var app = angular.module('privateMain', ['ui.router'])
         
         $stateProvider.state("chpwd", {
             url: "/changepassword",
-            templateUrl: "view/:changepassword",
+            templateUrl: "secureview/:changepassword",
             controller: "accountController",
             cache: false
         }) 
         .state("aboutus", {
             url: "/aboutus",
-            templateUrl: "view/:aboutus",
+            templateUrl: "secureview/:aboutus",
             cache: false
         })
 		.state("pwdChanged", {
             url: "/passwordchanged",
-            templateUrl: "view/:passwordchanged",
+            templateUrl: "secureview/:passwordchanged",
             cache: false
         })
 		/*.state("home", {
@@ -29,7 +29,7 @@ var app = angular.module('privateMain', ['ui.router'])
         })*/
         .state("home",{
         	url: "/profile",
-            templateUrl: "view/:uploaddetails",
+            templateUrl: "secureview/:uploaddetails",
             controller: "buildController",
             cache: false
         })
@@ -39,7 +39,7 @@ var app = angular.module('privateMain', ['ui.router'])
         })
         .state("upload", {
         	url: "/upload",
-            templateUrl: "view/:upload",
+            templateUrl: "secureview/:upload",
             controller: "buildController",
             cache: false
         });

@@ -7,10 +7,8 @@ var url 			= require('url');
 module.exports = (function() {
 	function getAllUsers(req,res){
 		User.find(function(err, users) {
-			// if there are any errors, return the error before anything else
 			if (err)
 				return -1;
-			console.log(users.length);
 			res.render('admin.ejs',{result:users});
 		});
 	}
@@ -43,7 +41,7 @@ module.exports = (function() {
 				if (!user) {
 				   return callback(false,user);;
 				}
-				var password = getRandomPwd(10,'qwertyuiopasdfg@!hjklzxcv#%bnmQWERTYUIO$PASDFGHJKLZXCVBNM12345*?67890');
+				var password = getRandomPwd(5,'qwertyuiopasdfg@!hjklzxcv#%bnmQWERTYUIO$PASDFGHJKLZXCVBNM12345*?67890');
 				console.log("Password",password);
 				var newUser = new User();
 				var encryptedPwd = newUser.generatePassword( user.local.hash,password); 

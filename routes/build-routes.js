@@ -9,7 +9,7 @@ var path = require('path'); //used for file path
 var fs = require('fs'); //File System - for file manipulation
 var config = require('../config/config');
 /* GET users listing. */
-router.get('/',isLoggedIn, function(req, res, next) {
+router.get('/',isLoggedIn,function(req, res, next) {
 	console.log("here...");
 	next();
 });

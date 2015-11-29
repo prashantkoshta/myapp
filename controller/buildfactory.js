@@ -17,7 +17,7 @@ module.exports = (function() {
 			    return callback(false,null);  
 			}
 			return callback(true,buildlist);
-		});
+		}).sort({'builddate': -1});
 	}
 	
 	function addBuildDetails (arBuild,callback){
