@@ -23,18 +23,14 @@ console.log(app.get('env'), config.url);
 mongoose.connect(config.url); // connect to our database
 require('./config/passport')(passport); // pass passport for configuration
 
-
 //upload file path 
-console.log(config.uploadDir);
 config.uploadFilePath = path.join(__dirname, config.uploadDir); //__dirname+"/"+config.uploadDir;
-console.log(config.uploadFilePath);
+
 
 // set up our express application
 app.use(busboy());
+app.use(express.static(path.join(__dirname, config.staticPrivateDir), { maxAge: 100 }));
 app.use(express.static(path.join(__dirname, config.staticPublicDir)));
-//app.use(config.staticPrivateContextPath, ensureAuthenticated);
-app.use(config.staticPrivateContextPath, express.static(path.join(__dirname, config.staticPrivateDir), { maxAge: 100 }));
-
 app.use(favicon(__dirname + '/'+ config.staticPublicDir + '/favicon.ico'));
 
 // view engine
@@ -48,13 +44,13 @@ app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.json({ limit: '1mb' })); // get information from html forms 
 app.use(bodyParser.raw());
 app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use(require('express-nocaptcha')({secret: config.recaptchasecretkey}));
 
 app.set('views', __dirname + config.viewsDir);
 app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport
-app.use(session({ secret: config.sessionSecret, cookie: { maxAge: 60000 } })); // session secret
+app.use(session({ secret: config.sessionSecret, cookie: { maxAge: 50000 } })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
@@ -62,7 +58,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 app.use(function (req, res, next) {
     //console.log('Time:', Date.now());
-    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate, max-age=0,');
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate, max-age=50000,');
     // res.header('Expires', '-1');
     //res.header('Pragma', 'no-cache');
     next();
