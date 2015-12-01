@@ -17,8 +17,6 @@ var errorMap = require('./errormap');
 
 // expose this function to our app using module.exports
 module.exports = function(passport) {
-
-		console.log(errorMap.getError("0003"));
     // =========================================================================
     // passport session setup ==================================================
     // =========================================================================
