@@ -30,6 +30,7 @@
     "passport-local": "~0.1.6",
     "passport-token-auth": "^0.1.2",
     "passport-twitter": "~1.0.2",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "node-gcm": "^0.13.0"
   }
 }
