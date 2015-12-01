@@ -1,5 +1,17 @@
 'use strict';
 app.service('mainSvc', function($http,$q) {
+	
+	function publishBuildDetails(){
+		var defer = $q.defer();
+        	var url = "/buildapp/gateway/publishBuildInfo";
+		$http.get(url).success(function(response){
+			defer.resolve(response);
+		}).error(function(err){
+			defer.reject(err);
+		});
+		return defer.promise;
+	}
+	
 	function getBuildDetails(){
 		var defer = $q.defer();
         var url = "/buildapp/gateway/getDetails";
