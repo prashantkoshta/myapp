@@ -7,7 +7,7 @@ var AppGCM  = function(){
   
 };
 
-AppGCM.prototype.pushNotification = function(req, res, next) {
+AppGCM.prototype.pushNotification = function() {
 
   //Add your mobile device registration tokens here
   var regTokens = [config.serverAPIKey-gcm];
