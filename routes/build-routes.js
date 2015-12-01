@@ -47,4 +47,8 @@ router.post('/deleteBuildInfo',AppRule.isLoggedIn,function(req, res) {
 	});
 });
 
+router.get('/publishBuildInfo',AppRule.isLoggedIn, function(req, res) {
+	res.json({ 'error': true, 'errorType': "", "data": null});
+});
+
 module.exports = router;
