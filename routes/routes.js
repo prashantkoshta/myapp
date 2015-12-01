@@ -1,8 +1,9 @@
+// Main routes for login authentication and signup
 var adminTask = require('../controller/admin');
 var User = require('../models/user');
 var url  = require('url');
 var AppRule = require('../config/apprule-engine');
-// app/routes.js
+
 module.exports = function(app, passport) {
 
     // =====================================
@@ -48,14 +49,12 @@ module.exports = function(app, passport) {
 		        
     });
 	
-	// =====================================
+    // =====================================
     // Change Password =====================
     // =====================================
 	app.post('/auth/changepassword', AppRule.isLoggedIn, function (req, res) {
         // render the page and pas,s in any flash data if it exists
         //res.render('index.ejs', { message: { 'error': true, 'errorType': "loginError", "description": req.flash('loginMessage') } });
-		 //var url_parts = url.parse(req.url, true);
-         //var query = url_parts.query;
 		adminTask.changePassword(req.session["userid"],req.body.oPwd,req.body.nPwd,function(a){
 			if(!a){
 				req.flash('passwordMessage',"Incorrect password.")
@@ -68,20 +67,16 @@ module.exports = function(app, passport) {
 		        
     });
 	
-    // we are checking to see if the user trying to login already exists
     
-
     // =====================================
     // LOGIN ===============================
     // =====================================
     // show the login form
     app.get('/login', function(req, res) {
-        // render the page and pass in any flash data if it exists
         res.render('public/index.ejs', { message:{'error':true,'errorType':"loginError","description":req.flash('loginMessage')}});
     });
 
     // process the login form
-    // app.post('/login', do all our passport stuff here);
     app.post('/login', passport.authenticate('local-login', {
         successRedirect : '/profile', // redirect to the secure profile section
         failureRedirect : '/login', // redirect back to the signup page if there is an error
@@ -194,13 +189,4 @@ module.exports = function(app, passport) {
         res.end();
     });
 
-    // Admin Page
-    app.get('/admin', function(req, res) {
-        var arUsers = adminTask.getAllUsers(req,res);
-        /*res.render('profile.ejs', {
-            user : req.user // get the user out of session and pass to template
-        });*/
-    });
-	
-	
 };
