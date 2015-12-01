@@ -29,7 +29,7 @@ config.uploadFilePath = path.join(__dirname, config.uploadDir); //__dirname+"/"+
 
 // set up our express application
 app.use(busboy());
-app.use(express.static(path.join(__dirname, config.staticPrivateDir), { maxAge: 100 }));
+app.use(express.static(path.join(__dirname, config.staticPrivateDir), {expires: new Date(Date.now() + 60 * 10000),maxAge: 60*10000 }));
 app.use(express.static(path.join(__dirname, config.staticPublicDir)));
 app.use(favicon(__dirname + '/'+ config.staticPublicDir + '/favicon.ico'));
 
