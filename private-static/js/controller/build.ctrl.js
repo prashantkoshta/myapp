@@ -1,7 +1,6 @@
 'use strict';
 app.controller('buildController', function($scope,$rootScope, $state, validatorFactory,mainSvc,multipartFormSvc,ngTableParams) {
     var isPwdServerError = false;
-	//var data = [{"_id":"565b37c2d19b269821d415bb","description":"sd","createdby":"pra  Kos","filename":"New Text Document_2015112911386890.zip","buildnum":"adsf","appversion":"asd","buildname":"A","builddate":"2015-11-29T17:37:06.897Z","__v":0},{"_id":"5659b61dae4de2902822f526","description":"- Change\r\n- How to Do","createdby":"pra  Kos","filename":"New Text Document_2015112881241381.zip","buildnum":"BV1","appversion":"a1","buildname":"Ape","builddate":"2015-11-28T14:11:41.388Z","__v":0},{"_id":"5659b53fc17c07bc1b3ec619","description":"- Added Program Feature","createdby":"pra  Kos","filename":"New Text Document_201511288859144.zip","buildnum":"3.4","appversion":"1.0.1","buildname":"New Build 1","builddate":"2015-11-28T14:07:59.149Z","__v":0},{"_id":"5658b211ce61760c0bd11d02","description":"asdf","createdby":"pra  Kos","filename":"2 - Copy_2015112713439941.zip","buildnum":"asdf","appversion":"sadf","buildname":"adf","builddate":"2015-11-27T19:42:09.949Z","__v":0}];
 	$scope.tableConfigParam;
     if (typeof $rootScope.pageError!== "undefined" 
         && $rootScope.pageError !== null
@@ -11,6 +10,20 @@ app.controller('buildController', function($scope,$rootScope, $state, validatorF
         && $rootScope.pageError.errorType === "passwordError" ) {
         isPwdServerError = true;
     }
+	
+	
+	$scope.doPublish = function () {
+	        mainSvc.publishBuildDetails().then(
+	            function (response) {
+	            	 
+	            },
+	            function (err) {
+	                console.log("Error >>>", err); 
+	            }
+	        );
+    	};
+	
+	
 	
 	$scope.getDetails = function () {
         mainSvc.getBuildDetails().then(
