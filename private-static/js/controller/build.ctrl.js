@@ -98,7 +98,7 @@ app.controller('buildController', function($scope,$rootScope, $state, validatorF
 		$scope.uploadFormErrorList = []
 		if($scope.uploadForm.name.trim() === "" || $scope.uploadForm.description.trim() === ""
 			|| $scope.uploadForm.appversion.trim() === "" || $scope.uploadForm.buildversion.trim() === "" 
-			|| $scope.uploadForm.file === undefined || $scope.uploadForm.file === null){
+			|| $scope.uploadForm.file === undefined || $scope.uploadForm.file === null || $scope.uploadForm.file === ""){
 			$scope.uploadFormErrorList.push({error:"",msg:"Field Should not be empty."});
 			return false;
 		}
