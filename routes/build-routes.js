@@ -7,6 +7,7 @@ var buildcontroller  = require('../controller/buildfactory');
 var config = require('../config/config');
 var AppRule = require('../config/apprule-engine');
 var AppGcm = require('../config/app-gcm');
+var buildProject = require('../config/build-project');
 /* GET users listing. */
 router.get('/',AppRule.isLoggedIn,function(req, res, next) {
 	next();
@@ -44,6 +45,13 @@ router.post('/deleteBuildInfo',AppRule.isLoggedIn,function(req, res) {
 
 router.get('/publishBuildInfo',AppRule.isLoggedIn, function(req, res) {
 	AppGcm.pushNotification();
+	res.json({ 'error': true, 'errorType': "", "data": null});
+});
+
+router.get('/buildProjectAndDeploy',AppRule.canAccessServiceOnlyAdmin , function(req, res) {
+	buildProject.buildNow(function(arg){
+		console.log(arg);
+	});
 	res.json({ 'error': true, 'errorType': "", "data": null});
 });
 
