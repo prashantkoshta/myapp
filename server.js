@@ -30,7 +30,7 @@ config.uploadFilePath = path.join(__dirname, config.uploadDir); //__dirname+"/"+
 // set up our express application
 app.use(busboy());
 app.use(express.static(path.join(__dirname, config.staticPrivateDir), {expires: new Date(Date.now() + 60 * 10000),maxAge: 60*10000 }));
-app.use(express.static(path.join(__dirname, config.staticPublicDir)));
+app.use(express.static(path.join(__dirname, config.staticPublicDir), {expires: new Date(Date.now() + 60 * 10000),maxAge: 60*10000 }));
 app.use(favicon(__dirname + '/'+ config.staticPublicDir + '/favicon.ico'));
 
 // view engine
@@ -50,7 +50,7 @@ app.set('views', __dirname + config.viewsDir);
 app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport
-app.use(session({ secret: config.sessionSecret, cookie: { maxAge: 50000 } })); // session secret
+app.use(session({ secret: config.sessionSecret, cookie: {expires: new Date(Date.now() + 60 * 10000),maxAge: 60*10000 } })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
@@ -58,7 +58,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 app.use(function (req, res, next) {
     //console.log('Time:', Date.now());
-    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate, max-age=50000,');
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate, max-age=600000');
     // res.header('Expires', '-1');
     //res.header('Pragma', 'no-cache');
     next();
