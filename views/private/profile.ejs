@@ -11,7 +11,7 @@
 
 	<!-- Add include css files -->
 	<% include ../template/common-css.ejs %>
-	<link rel="stylesheet" type="text/css" href="lib/css/ui-grid.min.css">
+	<link rel="stylesheet" type="text/css" href="/lib/css/ng-table.css">
     
   </head>
 
@@ -26,7 +26,8 @@
     
 
 	<!-- start public header -->
-	<div ng-include="'/secureview/:private-header'"></div>
+	<% include ./private-header %>
+	<!-- div ng-include="'/secureview/:private-header'"></div -->
 	<!-- end public header -->
    
 	 <!-- start container -->
@@ -36,11 +37,15 @@
 	<!-- end container -->
     
 	<!-- start public footer -->
-	<div ng-include="'/secureview/:private-footer'"></div>
+	<!-- div ng-include="'/secureview/:private-footer'"></div -->
+	
+	<% include ./private-footer %>
+	
 	<!-- end public footer -->
     
 	<!-- Inlcude JS files -->
     <% include ../template/common-js.ejs %>
+	<script src="/lib/js/ng-table.js"></script>
 	<!-- -->
 	<script src="/js/private-main.js"></script>
 	<script src="/js/components/custom-directive.js"></script>

@@ -16,15 +16,19 @@
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	<ul class="nav navbar-nav">
 	  <li><a ui-sref="home" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_HOME_CLICK','msg':'PRIVATE_NAV_HOME_CLICK'})">Build Details<span class="sr-only">(current)</span></a></li>
-	  <li><a ui-sref="upload" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_UPLOAD_CLICK','msg':'PRIVATE_NAV_UPLOAD_CLICK'})">Upload</a></li>
+	  <% if( arRole.indexOf("user") > -1 || arRole.indexOf("admin") > -1){ %>
+		<li><a ui-sref="upload" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_UPLOAD_CLICK','msg':'PRIVATE_NAV_UPLOAD_CLICK'})">Upload</a></li>
+	  <% } %>
 	  <li><a ui-sref="aboutus" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_ABOUTUS_CLICK','msg':'PRIVATE_NAV_ABOUTUS_CLICK'})">About Us</a></li>
 	  <li><a ui-sref="chpwd" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_CHANGEPASSWORD_CLICK','msg':'PRIVATE_NAV_CHANGEPASSWORD_CLICK'})">Change Password</a></li>
 	  <li><a href="/logout" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_LOGOUT_CLICK','msg':'PRIVATE_NAV_LOGOUT_CLICK'})">Logout</a></li>
-	  
+	  <% if( arRole.indexOf("admin") > -1){ %>
+	  <li><a href="/admincontrol/gateway/admindashboard" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_ADMIN_CLICK','msg':'PRIVATE_NAV_ADMIN_CLICK'})">Admin</a></li>
+	  <% } %>
 	</ul>
-	
-	
   </div><!-- /.navbar-collapse -->
+  
+  
 </div><!-- /.container-fluid -->
 </nav>
 </header>

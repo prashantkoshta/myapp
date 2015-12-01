@@ -20,7 +20,7 @@
 	<% } %>
 
 	<!-- start public header -->
-	<div ng-include="'/view/:public-signup-header'"></div>
+	<% include ./public-signup-header %>
 	<!-- end public header -->
     <!-- start container -->
   <div class="container" ng-controller="loginController">
@@ -94,7 +94,7 @@
 	<!-- end container -->
     
 	<!-- start public footer -->
-	<div ng-include="'/view/:public-footer'"></div>
+	<% include ./public-footer %>
 	<!-- end public footer -->
     
 	<!-- Inlcude JS files -->

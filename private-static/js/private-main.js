@@ -1,6 +1,6 @@
 'use strict';
 // Declare app level module which depends on views, and components
-var app = angular.module('privateMain', ['ui.router'])
+var app = angular.module('privateMain', ['ui.router','ngTable'])
 .config(['$stateProvider','$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
         
        //$urlRouterProvider.otherwise("/profile");
@@ -48,7 +48,7 @@ var app = angular.module('privateMain', ['ui.router'])
 
 app.run(function ($rootScope, $templateCache, $location, $window) {
     $rootScope.$on('$viewContentLoaded', function () {
-        $templateCache.removeAll();
+        //$templateCache.removeAll();
     });
     
     $rootScope.$on('$routeChangeSuccess', function () {

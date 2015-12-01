@@ -1,8 +1,7 @@
 var adminTask = require('../controller/admin');
-// load up the user model
 var User = require('../models/user');
 var url  = require('url');
-
+var AppRule = require('../config/apprule-engine');
 // app/routes.js
 module.exports = function(app, passport) {
 
@@ -20,7 +19,7 @@ module.exports = function(app, passport) {
         res.render('public/' + req.params[0]);
     });
     
-    app.get('/secureview/:*',isLoggedIn,function (req, res) {
+    app.get('/secureview/:*',AppRule.isLoggedIn,function (req, res) {
         var name = req.params.name;
         res.render('private/' + req.params[0]);
     });
@@ -52,7 +51,7 @@ module.exports = function(app, passport) {
 	// =====================================
     // Change Password =====================
     // =====================================
-	app.post('/auth/changepassword', isLoggedIn, function (req, res) {
+	app.post('/auth/changepassword', AppRule.isLoggedIn, function (req, res) {
         // render the page and pas,s in any flash data if it exists
         //res.render('index.ejs', { message: { 'error': true, 'errorType': "loginError", "description": req.flash('loginMessage') } });
 		 //var url_parts = url.parse(req.url, true);
@@ -118,7 +117,6 @@ module.exports = function(app, passport) {
     app.get('/signup', function(req, res) {
         // render the page and pass in any flash data if it exists
         res.render('public/signup.ejs', { message: req.flash('signupMessage') });
-
     });
 
     // process the signup form
@@ -135,9 +133,9 @@ module.exports = function(app, passport) {
     // =====================================
     // we will want this protected so you have to be logged in to visit
     // we will use route middleware to verify this (the isLoggedIn function)
-    app.get('/profile', isLoggedIn, function(req, res) {
+    app.get('/profile', AppRule.isLoggedIn, function(req, res) {
         res.render('private/profile.ejs', {
-            user : req.user // get the user out of session and pass to template
+            arRole : req.user.role // get the user out of session and pass to template
         });
     });
 
@@ -199,17 +197,10 @@ module.exports = function(app, passport) {
     // Admin Page
     app.get('/admin', function(req, res) {
         var arUsers = adminTask.getAllUsers(req,res);
-
         /*res.render('profile.ejs', {
             user : req.user // get the user out of session and pass to template
         });*/
     });
+	
+	
 };
-
-// route middleware to make sure a user is logged in
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated())
-        return next();
-    res.redirect('/');
-    res.end();
-}

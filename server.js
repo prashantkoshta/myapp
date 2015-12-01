@@ -68,7 +68,8 @@ app.use(function (req, res, next) {
 // routes ======================================================================
 app.use(config.staticPrivateContextPath, privateRoutes);
 require('./routes/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
-app.use("/buildapp/gateway",require('./routes/build-routes.js'))
+app.use("/buildapp/gateway",require('./routes/build-routes.js'));
+app.use("/admincontrol/gateway",require('./routes/adminroutes.js'))
 // launch ======================================================================
 
 

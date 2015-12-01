@@ -9,7 +9,23 @@
     <button type="button" class="btn btn-primary" ng-click="setGA({'event':'event','eventType':'UPLOADDETAILS_PAGE_PUBLISH_BTN_CLICK','msg':'UPLOADDETAILS_PAGE_PUBLISH_BTN_CLICK'})">Publish</button>
   </div>
   
-  <div class="table-responsive">	
+  <div class="table-responsive">
+	<table ng-table="tableConfigParam" class="table table-condensed table-bordered table-striped">
+		<tr ng-repeat="item in $data">
+			<td><input type="checkbox" ng-model="item.selected"/></td>
+			<td data-title="'Build Date'" filter="{builddate:'text'}" sortable="'builddate'">{{item.builddate | getDateFormat}}</td>
+			<td data-title="'Name'" filter="{buildname:'text'}" sortable="'buildname'">{{item.buildname}}</td>
+			<td data-title="'Description'" filter="{description:'text'}" sortable="'description'">{{item.description}}</td>
+			<td data-title="'App. Version'" filter="{appversion:'text'}" sortable="'appversion'">{{item.appversion}}</td>
+			<td data-title="'Build Version'" filter="{buildnum:'text'}" sortable="'buildnum'">{{item.buildnum}}</td>
+			<td data-title="'OS Type'" filter="{filename:'text'}" sortable="'filename'">{{item.filename | getFileType}}</td>
+			<td data-title="'Created By'" filter="{createdby:'text'}" sortable="'createdby'">{{item.createdby}}</td>
+			<td><a href="buildapp/gateway/downloadfile/{{item.filename}}" ng-click="setGA({'event':'event','eventType':'UPLOADDETAILS_PAGE_DOWNLOAD_CLICK','msg':'UPLOADDETAILS_PAGE_DOWNLOAD_CLICK'})"><span class="glyphicon glyphicon-download"></span></a></td>
+	  </tr>
+	</table>
+  </div>
+  
+  <!-- div class="table-responsive">	
 	  <table class="table">
 	    <thead>
 	      <tr>
@@ -38,21 +54,13 @@
 	      </tr>
 	    </tbody>
 	  </table>
-  </div>
+  </div -->
   
   <div>
     <button type="button" class="btn btn-primary" ng-click="deleteBuilds();setGA({'event':'event','eventType':'UPLOADDETAILS_PAGE_DELETE_BTN_CLICK','msg':'UPLOADDETAILS_PAGE_DELETE_BTN_CLICK'})">Delete</button>
   </div>
 
-  <div  class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-4">
-    <ul class="pagination pagination-lg pagination-md pagination-sm">
-	  <li><a href="#">1</a></li>
-	  <li><a href="#">2</a></li>
-	  <li><a href="#">3</a></li>
-	  <li><a class="disabled" href="#">4</a></li>
-	  <li><a href="#">5</a></li>
-	</ul>
-  </div>
+  
   
 </div>
 

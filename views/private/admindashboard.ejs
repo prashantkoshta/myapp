@@ -1,0 +1,100 @@
+  <% include ../template/htmldoctype %>
+  <head>
+	<!-- Add Meta tag -->
+	<% include ../template/search-meta-tag %>
+	<meta http-equiv="refresh" content="600;URL=/logout"> 
+	<!-- End Meta tag -->
+
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Admin Dash Board: My Info</title>
+
+	<!-- Add include css files -->
+	<% include ../template/common-css.ejs %>
+	<link rel="stylesheet" type="text/css" href="lib/css/ui-grid.min.css">
+    
+  </head>
+
+  <body ng-app="adminMain"  ng-controller="adminController">
+	
+	<% if(typeof message != "undefined") {	%>
+	<input type="hidden" ng-model="pageError" ng-init ='setInitPageValue(
+		{"error" : "<%= message.error %>","errorType":"<%= message.errorType %>","description":"<%= message.description %>"})' />
+	<% } %>
+    
+    
+    
+
+	<!-- start public header -->
+	<% include ./private-header %>
+	<!-- div ng-include="'/secureview/:private-header'"></div -->
+	<!-- end public header -->
+   
+	 <!-- start container -->
+	 <div class="container">
+		
+		<div class="row">
+			<h1>Admin Dash Board</h1>
+			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+				<ul>
+					<li ng-repeat="item in collection">{{item}}</li>			
+				</ul>
+			</div>
+			<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+				<div class="table-responsive">	
+				  <table class="table">
+					<thead>
+					  <tr>
+						<th><input type="checkbox"  ng-click="onCheckedAll($event)"/></th>
+						<th>Build<br/>Date</th>
+						<th>Name</th>
+						<th>Description</th>
+						<th>App. Version</th>
+						<th>Build. Version</th>
+						<th>OS Type</th>
+						<th>Created By</th>
+						<th></th>
+					  </tr>
+					</thead>
+					<tbody>
+					  <!--tr ng-repeat="item in data">
+						<th><input type="checkbox" ng-model="item.selected"/></th>
+						<th>{{item.builddate | getDateFormat}}</th>
+						<th>{{item.buildname}}</th>
+						<th>{{item.description}}</th>
+						<th>{{item.appversion}}</th>
+						<th>{{item.buildnum}}</th>
+						<th>{{item.filename | getFileType}}</th>
+						<th>{{item.createdby}}</th>
+						<th><a href="buildapp/gateway/downloadfile/{{item.filename}}" ng-click="setGA({'event':'event','eventType':'UPLOADDETAILS_PAGE_DOWNLOAD_CLICK','msg':'UPLOADDETAILS_PAGE_DOWNLOAD_CLICK'})"><span class="glyphicon glyphicon-download"></span></a></th>
+					  </tr!-->
+					</tbody>
+				  </table>
+			  </div>
+			</div>
+		</div>
+	</div>
+	<!-- end container -->
+    
+	<!-- start public footer -->
+	<!-- div ng-include="'/secureview/:private-footer'"></div -->
+	
+	<% include ./private-footer %>
+	
+	<!-- end public footer -->
+    
+	<!-- Inlcude JS files -->
+    <% include ../template/common-js.ejs %>
+	<!-- -->
+	<script src="/js/controller/admin.ctrl.js"></script>
+	
+	
+	<!-- Add google analytic code here -->
+	<% include ../template/ganalytictrackerid %>
+	<!-- End google analytic code here -->
+
+	<!-- Add google adsense -->
+	<% include ../template/gadsense %>
+	<!-- End google adsense -->
+  </body>
+</html>
