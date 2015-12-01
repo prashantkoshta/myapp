@@ -11,7 +11,17 @@ app.controller('buildController', function($scope,$rootScope, $state, validatorF
         isPwdServerError = true;
     }
 	
-	
+	$scope.doAutoBuild = function () {
+	        mainSvc.autoBuildProject().then(
+	            function (response) {
+	            	 
+	            },
+	            function (err) {
+	                console.log("Error >>>", err); 
+	            }
+	        );
+    	};
+    	
 	$scope.doPublish = function () {
 	        mainSvc.publishBuildDetails().then(
 	            function (response) {
