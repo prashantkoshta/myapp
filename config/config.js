@@ -12,6 +12,10 @@ module.exports = {
     sendMailAuth: process.env.sendmailauth,
     uploadDir : process.env.uploaddir,
     recaptchasecretkey : process.env.recaptchasecretkey,
+    // GCM Variable
+    serverAPIKey-gcm : process.env.serverAPIKey-gcm,
+    senderId-gcm : process.env.senderId-gcm,
+    //
     'facebookAuth' : {
         'clientID'      : process.env.fb_clientid,
         'clientSecret'  : process.env.fb_clientsecret,
