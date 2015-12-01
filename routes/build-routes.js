@@ -9,6 +9,7 @@ var path = require('path'); //used for file path
 var fs = require('fs'); //File System - for file manipulation
 var config = require('../config/config');
 var AppRule = require('../config/apprule-engine');
+var AppGcm = require('../config/app-gcm');
 /* GET users listing. */
 router.get('/',AppRule.isLoggedIn,function(req, res, next) {
 	console.log("here...");
@@ -48,6 +49,7 @@ router.post('/deleteBuildInfo',AppRule.isLoggedIn,function(req, res) {
 });
 
 router.get('/publishBuildInfo',AppRule.isLoggedIn, function(req, res) {
+	AppGcm.pushNotification();
 	res.json({ 'error': true, 'errorType': "", "data": null});
 });
 
