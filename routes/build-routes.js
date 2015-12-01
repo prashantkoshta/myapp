@@ -4,20 +4,15 @@
 var express = require('express');
 var router = express.Router();
 var buildcontroller  = require('../controller/buildfactory');
-var busboy = require('connect-busboy'); //middleware for form/file upload
-var path = require('path'); //used for file path
-var fs = require('fs'); //File System - for file manipulation
 var config = require('../config/config');
 var AppRule = require('../config/apprule-engine');
 var AppGcm = require('../config/app-gcm');
 /* GET users listing. */
 router.get('/',AppRule.isLoggedIn,function(req, res, next) {
-	console.log("here...");
 	next();
 });
 
 router.post('/',AppRule.isLoggedIn,function(req, res, next) {
-	console.log("here...post");
 	next();
 });
 
@@ -32,7 +27,6 @@ router.get('/getDetails',AppRule.isLoggedIn,function(req, res, next) {
 });
 
 router.get('/downloadfile/:filename', AppRule.isLoggedIn,function (req, res) {
-	console.log(req.params.filename);
 	res.download(config.uploadFilePath+"/"+req.params.filename); 
 });
 
