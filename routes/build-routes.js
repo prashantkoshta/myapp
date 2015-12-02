@@ -48,11 +48,11 @@ router.get('/publishBuildInfo',AppRule.isLoggedIn, function(req, res) {
 	res.json({ 'error': true, 'errorType': "", "data": null});
 });
 
-router.get('/buildProjectAndDeploy',AppRule.canAccessServiceOnlyAdmin , function(req, res) {
+router.get('/buildProjectAndDeploy', AppRule.isLoggedIn , function(req, res) {
+	res.json({ 'error': true, 'errorType': "", "data": null});
 	buildProject.buildNow(function(arg){
 		console.log(arg);
 	});
-	res.json({ 'error': true, 'errorType': "", "data": null});
 });
 
 module.exports = router;
