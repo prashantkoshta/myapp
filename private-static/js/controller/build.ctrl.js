@@ -20,7 +20,7 @@ app.controller('buildController', function($scope,$rootScope, $state, validatorF
 		//$('#messages').append('<p>' + message.text + '</p>');
 	});
 	
-	$scop.pushData = function (){
+	$scope.pushData = function (){
 		mainSvc.pushMessageData().then(
 	            function (response) {
 	            	 console.log(response);
