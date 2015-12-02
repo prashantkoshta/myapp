@@ -8,7 +8,8 @@ wget http://dl.google.com/android/android-sdk_r24.4.1-linux.tgz
 tar -xvzf android-sdk_r24.4.1-linux.tgz
 export PATH=$PATH:/tmp/devtool/android-sdk-linux/tools
 export PATH=$PATH:/tmp/devtool/android-sdk-linux/platforms
-export ANDROID_SDK_HOME=$PATH:/tmp/devtool/android-sdk-linux
+export ANDROID_HOME =/tmp/devtool/android-sdk-linux
+android update sdk --no-ui
 cd /tmp
 mkdir dev_tmp
 cd dev_tmp
