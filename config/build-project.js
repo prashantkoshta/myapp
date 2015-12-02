@@ -10,7 +10,8 @@ BuildProject.prototype.buildNow = function(callback) {
 		//console.log(ls.id);
 		process.kill(ls.pid);
 	}
-	ls = spawn('cmd.exe', ['/c', 'build-batch.bat']);
+	//ls = spawn('cmd.exe', ['/c', 'buildbatch.bat']);
+	ls = spawn('bash', ['/app', 'buildbatch.bat']);
 	ls.stdout.on('data', function (data) {
 		//console.log('stdout: ' + data);
 		callback({"mode":"stdout", "error":false,"data":data.toString('utf8')});
