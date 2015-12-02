@@ -77,8 +77,6 @@ app.post('/message', function(req, res) {
     res.send(200);
 });
 
-bayeux.attach(app);
-
 // routes ======================================================================
 app.use(config.staticPrivateContextPath, privateRoutes);
 require('./routes/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
@@ -121,4 +119,5 @@ app.use(function(err, req, res, next) {
 });
 
 app.listen(port);
+bayeux.attach(app);
 console.log('The magic happens on port ' + port);
