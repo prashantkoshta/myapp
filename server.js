@@ -9,6 +9,7 @@ var mongoose            = require('mongoose');
 var passport            = require('passport');
 var flash               = require('connect-flash');
 var favicon             = require('serve-favicon');
+var http                = require('http');
 
 var morgan          = require('morgan');
 var cookieParser    = require('cookie-parser');
@@ -118,6 +119,6 @@ app.use(function(err, req, res, next) {
   });
 });
 
-app.listen(port);
-bayeux.attach(app);
+var server = app.listen(port);
+bayeux.attach(server);
 console.log('The magic happens on port ' + port);
