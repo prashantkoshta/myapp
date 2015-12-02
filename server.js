@@ -75,7 +75,7 @@ app.use(function (req, res, next) {
 
 app.post('/message', function(req, res) {
    // bayeux.getClient().publish('/channel-1', { text: req.body.message });
-   fayeConf.puslish('/channel-1', { msg: "I found now"});
+   fayeConf.pulishMessage('/channel-1', { msg: "I found now"});
    //bayeux.getClient().publish('/channel-1', { msg: "I found now"});
     console.log('broadcast message:' + req.body.message);
     res.send(200);
