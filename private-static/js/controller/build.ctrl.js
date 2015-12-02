@@ -1,5 +1,5 @@
 'use strict';
-app.controller('buildController', function($scope,$rootScope, $state, validatorFactory,mainSvc,multipartFormSvc,ngTableParams) {
+app.controller('buildController', function($scope,$rootScope, $state, validatorFactory,mainSvc,multipartFormSvc,ngTableParams,svcFaye) {
     var isPwdServerError = false;
 	$scope.tableConfigParam;
     if (typeof $rootScope.pageError!== "undefined" 
@@ -11,24 +11,13 @@ app.controller('buildController', function($scope,$rootScope, $state, validatorF
         isPwdServerError = true;
     }
         $scope.messageData = ""
-        var client = new Faye.Client('/faye',{
-				timeout: 20
-	});
-	
-	client.subscribe('/channel', function(message) {
-		$scope.messageData = $scope.messageData + message.text;
-		//$('#messages').append('<p>' + message.text + '</p>');
+       
+	svcFaye.subscribe("/channel-2", function(message){
+			$scope.messageData = $scope.messageData + message.text;
 	});
 	
 	$scope.pushData = function (){
-		mainSvc.pushMessageData().then(
-	            function (response) {
-	            	 console.log(response);
-	            },
-	            function (err) {
-	                console.log("Error >>>", err); 
-	            }
-	        );
+		svcFaye.publish("/channel-1", {msg: "hello"})
 	}
 	
 	$scope.doAutoBuild = function () {
