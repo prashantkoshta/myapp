@@ -3,7 +3,7 @@ var fayeBayeux = function fayeBayeux(){
     //defining a var instead of this (works for variable & function) will create a private definition
     var bayeux = new faye.NodeAdapter({
 			    mount: '/faye',
-			    timeout: 45
+			    timeout: 600000000000
 	});
 	
     this.getBayeux = function(){
