@@ -10,9 +10,9 @@ var AppGCM  = function(){
 AppGCM.prototype.pushNotification = function() {
 
   //Add your mobile device registration tokens here
-  var regTokens = [config.serverAPIKey-gcm];
+  var regTokens = [config.serverAPIKey_gcm];
   //Replace your developer API key with GCM enabled here
-  var sender = new gcm.Sender(config.senderId-gcm);
+  var sender = new gcm.Sender(config.senderId_gcm);
   var message = new gcm.Message(); 
 
   message.addData('hello', 'world');
