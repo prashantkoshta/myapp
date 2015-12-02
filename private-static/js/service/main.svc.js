@@ -6,7 +6,7 @@ app.service('mainSvc', function($http,$q) {
 		var defer = $q.defer();
         	var url = "/message";
         	var data = {message: 'Client 1:'};
-		$http.post(url,).success(function(response){
+		$http.post(url,data).success(function(response){
 			defer.resolve(response);
 		}).error(function(err){
 			defer.reject(err);
