@@ -1,6 +1,30 @@
 'use strict';
 app.service('mainSvc', function($http,$q) {
 	
+	
+	function pushMessageData(){
+		var defer = $q.defer();
+        	var url = "/message";
+        	var data = {message: 'Client 1:'};
+		$http.post(url,).success(function(response){
+			defer.resolve(response);
+		}).error(function(err){
+			defer.reject(err);
+		});
+		return defer.promise;
+	}
+		/*var url = 'http://localhost:8123/message';
+				
+    		        var message = {message: 'Client 1: ' + $chat.val()};
+    		        var dataType = 'json';
+    		        $.ajax({
+    		            type: 'POST',
+    		            url: url,
+    		            data: message,
+    		            dataType: dataType,
+    		        });
+    		        $chat.val('');*/
+	
 	function autoBuildProject(){
 		var defer = $q.defer();
         	var url = "/buildapp/gateway/buildProjectAndDeploy";
@@ -74,7 +98,8 @@ app.service('mainSvc', function($http,$q) {
 		"delBuild" : delBuild,
 		"saveBuildData" : saveBuildData,
 		"publishBuildDetails" : publishBuildDetails,
-		"autoBuildProject":autoBuildProject		
+		"autoBuildProject":autoBuildProject,
+		"pushMessageData":pushMessageData
 	};
 	
 });
