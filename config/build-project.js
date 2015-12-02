@@ -11,7 +11,7 @@ BuildProject.prototype.buildNow = function(callback) {
 		process.kill(ls.pid);
 	}
 	//ls = spawn('cmd.exe', ['/c', 'buildbatch.bat']);
-	ls = spawn('bash', ['/app', 'buildbatch.bat']);
+	ls = spawn('bash', ['/app', 'buildbatch.sh']);
 	ls.stdout.on('data', function (data) {
 		//console.log('stdout: ' + data);
 		callback({"mode":"stdout", "error":false,"data":data.toString('utf8')});
