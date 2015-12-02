@@ -4,6 +4,7 @@
 var express             = require('express');
 var app                 = express();
 var port                = process.env.PORT || 8080;
+var faye                = require('faye');
 var mongoose            = require('mongoose');
 var passport            = require('passport');
 var flash               = require('connect-flash');
@@ -17,6 +18,13 @@ var config          = require('./config/config.js');
 var path            = require('path');
 var privateRoutes   = require('./routes/privatestatic-routes');
 var busboy 			= require('connect-busboy');
+
+
+var bayeux = new faye.NodeAdapter({
+    mount: '/faye',
+    timeout: 45
+});
+
 console.log(app.get('env'), config.url);
 // configuration ===============================================================\
 mongoose.connect(config.url); // connect to our database
@@ -63,6 +71,13 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.post('/message', function(req, res) {
+    bayeux.getClient().publish('/channel', { text: req.body.message });
+    console.log('broadcast message:' + req.body.message);
+    res.send(200);
+});
+
+bayeux.attach(app);
 
 // routes ======================================================================
 app.use(config.staticPrivateContextPath, privateRoutes);
