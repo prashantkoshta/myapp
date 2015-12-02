@@ -72,8 +72,9 @@ app.service('mainSvc', function($http,$q) {
 		"changePassword" : changePassword,
 		"getBuildDetails" : getBuildDetails,
 		"delBuild" : delBuild,
-		"saveBuildData" : saveBuildData
-		
+		"saveBuildData" : saveBuildData,
+		"publishBuildDetails" : publishBuildDetails,
+		"autoBuildProject":autoBuildProject		
 	};
 	
 });
