@@ -12,7 +12,7 @@ app.controller('buildController', function($scope,$rootScope, $state, validatorF
     }
         $scope.messageData = ""
        
-	svcFaye.subscribe("/channel-2", function(message){
+	svcFaye.subscribe("/channel-1", function(message){
 			$scope.messageData = $scope.messageData + message.text;
 	});
 	
