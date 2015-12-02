@@ -44,8 +44,9 @@ router.post('/deleteBuildInfo',AppRule.isLoggedIn,function(req, res) {
 });
 
 router.get('/publishBuildInfo',AppRule.isLoggedIn, function(req, res) {
-	AppGcm.pushNotification();
-	res.json({ 'error': true, 'errorType': "", "data": null});
+	AppGcm.pushNotification(function(result){
+		res.json({"data": result});
+	});
 });
 
 router.get('/buildProjectAndDeploy', AppRule.isLoggedIn , function(req, res) {
