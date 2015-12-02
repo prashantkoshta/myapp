@@ -8,7 +8,7 @@ AppRule.prototype.canAccessService = function(req, res, next) {
 	var arRole = req.user.role;
 	var access = true;
 	if(arRole.indexOf("user") > -1 && req.url === "/saveBuildInfo"){
-		access = false;
+		access = true;
 	}
     if (access)
         return next();
