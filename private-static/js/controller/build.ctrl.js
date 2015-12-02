@@ -16,7 +16,7 @@ app.controller('buildController', function($scope,$rootScope, $state, validatorF
 	});
 	
 	client.subscribe('/channel', function(message) {
-		$scope.messageData+ = message.text;
+		$scope.messageData = $scope.messageData + message.text;
 		//$('#messages').append('<p>' + message.text + '</p>');
 	});
 	
