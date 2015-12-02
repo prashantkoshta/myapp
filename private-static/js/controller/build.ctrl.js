@@ -13,7 +13,7 @@ app.controller('buildController', function($scope,$rootScope, $state, validatorF
         $scope.messageData = ""
        
 	svcFaye.subscribe("/channel-1", function(message){
-			$scope.messageData = $scope.messageData + message.msg;
+			$scope.messageData =  message.msg;
 	});
 	
 	$scope.pushData = function (){
