@@ -10,6 +10,26 @@ app.controller('buildController', function($scope,$rootScope, $state, validatorF
         && $rootScope.pageError.errorType === "passwordError" ) {
         isPwdServerError = true;
     }
+        $scope.messageData = ""
+        var client = new Faye.Client('/faye',{
+				timeout: 20
+	});
+	
+	client.subscribe('/channel', function(message) {
+		$scope.messageData+ = message.text;
+		//$('#messages').append('<p>' + message.text + '</p>');
+	});
+	
+	$scop.pushData = function (){
+		mainSvc.pushMessageData().then(
+	            function (response) {
+	            	 console.log(response);
+	            },
+	            function (err) {
+	                console.log("Error >>>", err); 
+	            }
+	        );
+	}
 	
 	$scope.doAutoBuild = function () {
 	        mainSvc.autoBuildProject().then(
