@@ -73,7 +73,7 @@ app.use(function (req, res, next) {
 });
 
 app.post('/message', function(req, res) {
-    bayeux.getClient().publish('/channel', { text: req.body.message });
+    bayeux.getClient().publish('/channel-1', { text: req.body.message });
     console.log('broadcast message:' + req.body.message);
     res.send(200);
 });
