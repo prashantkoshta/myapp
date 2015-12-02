@@ -7,7 +7,7 @@ var AppGCM  = function(){
   
 };
 
-AppGCM.prototype.pushNotification = function() {
+AppGCM.prototype.pushNotification = function(callback) {
 
   //Add your mobile device registration tokens here
   var regTokens = [config.serverAPIKey_gcm];
@@ -22,8 +22,10 @@ AppGCM.prototype.pushNotification = function() {
   
   sender.send(message, regTokens, function (err, response) {
     if(err) {
+      callback(err);
       console.error(err);
     } else {
+      callback(response);
       console.log(response);
     }
   });
