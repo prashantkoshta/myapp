@@ -7,7 +7,7 @@ var AppRule = function(){ };
 AppRule.prototype.canAccessService = function(req, res, next) {
 	var arRole = req.user.role;
 	var access = true;
-	if(arRole.indexOf("user") > -1 && req.url === "/saveBuildInfo"){
+	if((arRole.indexOf("user") > -1 || arRole.indexOf("admin") >-1) && req.url === "/saveBuildInfo"){
 		access = true;
 	}
     if (access)
@@ -19,7 +19,7 @@ AppRule.prototype.canAccessService = function(req, res, next) {
 AppRule.prototype.canAccessServiceOnlyAdmin = function(req, res, next) {
 	var arRole = req.user.role;
 	var access = true;
-	if(arRole.indexOf("admin") > -1 && req.url === "/saveBuildInfo"){
+	if((arRole.indexOf("user") > -1 || arRole.indexOf("admin") >-1) && req.url === "/buildProjectAndDeploy"){
 		access = false;
 	}
     if (access)
