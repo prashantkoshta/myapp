@@ -16,15 +16,16 @@ var cookieParser    = require('cookie-parser');
 var bodyParser      = require('body-parser');
 var session         = require('express-session');
 var config          = require('./config/config.js');
+var fayeConf          = require('./config/faye-conf.js');
 var path            = require('path');
 var privateRoutes   = require('./routes/privatestatic-routes');
 var busboy 			= require('connect-busboy');
 
 
-var bayeux = new faye.NodeAdapter({
+/*var bayeux = new faye.NodeAdapter({
     mount: '/faye',
     timeout: 45
-});
+});*/
 
 console.log(app.get('env'), config.url);
 // configuration ===============================================================\
@@ -74,7 +75,8 @@ app.use(function (req, res, next) {
 
 app.post('/message', function(req, res) {
    // bayeux.getClient().publish('/channel-1', { text: req.body.message });
-   bayeux.getClient().publish('/channel-1', { msg: "I found now"});
+   fayeConf.puslish('/channel-1', { msg: "I found now"});
+   //bayeux.getClient().publish('/channel-1', { msg: "I found now"});
     console.log('broadcast message:' + req.body.message);
     res.send(200);
 });
@@ -121,5 +123,6 @@ app.use(function(err, req, res, next) {
 });
 
 var server = app.listen(port);
-bayeux.attach(server);
+fayeConf.getBayeux().attach(server);
+//bayeux.attach(server);
 console.log('The magic happens on port ' + port);
