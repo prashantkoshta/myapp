@@ -16,6 +16,7 @@ BuildProject.prototype.buildNow = function(callback) {
 	ls.stdout.on('data', function (data) {
 		//console.log('stdout: ' + data);
 		fayeConf.pulishMessage('/channel-1', { msg: {"mode":"stdout", "error":false,"data":data.toString('utf8')}});
+		ls.stdin.write('y');
 		callback({"mode":"stdout", "error":false,"data":data.toString('utf8')});
 	});
 
