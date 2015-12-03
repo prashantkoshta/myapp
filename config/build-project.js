@@ -15,13 +15,13 @@ BuildProject.prototype.buildNow = function(callback) {
 	ls = spawn('bash', ['buildbatch.sh']);
 	ls.stdout.on('data', function (data) {
 		//console.log('stdout: ' + data);
-		fayeConf.pulishMessage('/channel-1', { msg: {"mode":"stdout", "error":false,"data":data.toString('utf8')});
+		fayeConf.pulishMessage('/channel-1', { msg: {"mode":"stdout", "error":false,"data":data.toString('utf8')}});
 		callback({"mode":"stdout", "error":false,"data":data.toString('utf8')});
 	});
 
 	ls.stderr.on('data', function (data) {
 		//console.log('stderr: ' + data);
-	        fayeConf.pulishMessage('/channel-1', { msg: {"mode":"stderr", "error":true,"data":data.toString('utf8')});
+	        fayeConf.pulishMessage('/channel-1', { msg: {"mode":"stderr", "error":true,"data":data.toString('utf8')}});
 		callback({"mode":"stderr", "error":true,"data":data.toString('utf8')});
 	});
 	
