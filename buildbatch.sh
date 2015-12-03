@@ -14,3 +14,4 @@ cd /tmp
 mkdir dev_tmp
 cd dev_tmp
 git clone https://github.com/codepath/android_hello_world
+echo "#######SUCCESSFULL-COMPLETED-BUILD-TOKEN######"
