@@ -2,12 +2,13 @@
 var path = require('path'); //used for file path
 var fs = require('fs'); //File System - for file manipulation
 var BuildInfo = require('../models/buildinfo');
+var buildObj = require('./config/build-project');
 var config = require('../config/config');
 var UPLOAD_FILE_SIZE = 1 * 1024 * 1024;
 var ALLOWD_FILE_TYPE = ".zip,.txt,.apk,.ipa";
 
 module.exports = (function() {
-	
+
 	function getBuildInfo(callback){
 		BuildInfo.find(function(err, buildlist) {
 			if(err){
@@ -124,11 +125,19 @@ module.exports = (function() {
 		return callback(true,"",null);
 	}
 	
+	function buildProject(req,res,callback){
+		buildObj.buildNow(function(arg){
+			console.log(arg);
+		});
+	}
+
+	
 	return({
 		getBuildInfo : getBuildInfo,
 		saveBuildInfo : saveBuildInfo,
 		delBuildInfo : delBuildInfo,
 		getTimeStamp : getTimeStamp,
-		onFileUpload : onFileUpload
+		onFileUpload : onFileUpload,
+		buildProject : buildProject
 	});
 })();
