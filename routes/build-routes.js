@@ -51,8 +51,8 @@ router.get('/publishBuildInfo',AppRule.isLoggedIn, function(req, res) {
 
 router.get('/buildProjectAndDeploy', AppRule.isLoggedIn , function(req, res) {
 	res.json({ 'error': true, 'errorType': "", "data": null});
-	buildProject.buildNow(function(arg){
-		console.log(arg);
+	buildcontroller.buildProject(req, res, function(errorFlag,erroType,result){
+		//	res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
 
