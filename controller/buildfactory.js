@@ -131,7 +131,7 @@ module.exports = (function() {
 			fayeConf.pulishMessage('/channel-1', { msg: {"mode":"callback check", "error":false,"data":"I am done thanks."}});
 			//console.log(arg);
 			if(arg.mode === "exit" && arg.data === true){
-				var fromData = new fromData();
+				var fromData = new Object();
 				fromData.builddate = new Date();
 				fromData.buildname = "auto uplodaed test";
 				fromData.ostype = ".zip";
