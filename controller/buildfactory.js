@@ -2,8 +2,8 @@
 var path = require('path'); //used for file path
 var fs = require('fs'); //File System - for file manipulation
 var BuildInfo = require('../models/buildinfo');
-var buildObj = require('./config/build-project');
-var fayeConf = require('./config/faye-conf');
+var buildObj = require('../config/build-project');
+var fayeConf = require('../config/faye-conf');
 var config = require('../config/config');
 var UPLOAD_FILE_SIZE = 1 * 1024 * 1024;
 var ALLOWD_FILE_TYPE = ".zip,.txt,.apk,.ipa";
