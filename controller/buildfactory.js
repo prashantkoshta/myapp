@@ -3,6 +3,7 @@ var path = require('path'); //used for file path
 var fs = require('fs'); //File System - for file manipulation
 var BuildInfo = require('../models/buildinfo');
 var buildObj = require('./config/build-project');
+var fayeConf = require('./config/faye-conf.js');
 var config = require('../config/config');
 var UPLOAD_FILE_SIZE = 1 * 1024 * 1024;
 var ALLOWD_FILE_TYPE = ".zip,.txt,.apk,.ipa";
@@ -127,7 +128,28 @@ module.exports = (function() {
 	
 	function buildProject(req,res,callback){
 		buildObj.buildNow(function(arg){
-			console.log(arg);
+			fayeConf.pulishMessage('/channel-1', { msg: {"mode":"callback check", "error":false,"data":"I am done thanks."}});
+			//console.log(arg);
+			if(arg.mode === "exit" && arg.data === true){
+				var fromData = new fromData();
+				fromData.builddate = new Date();
+				fromData.buildname = "auto uplodaed test";
+				fromData.ostype = ".zip";
+				fromData.appversion = "av";
+				fromData.buildnum = "bv";
+				fromData.filename = "autoupload"+getTimeStamp()+".apk";
+				fromData.createdby = "test"; //req.session["userid"];
+				fromData.description = obj.description;
+				saveBuildInfo(fromData,function(bool){
+		        		if(bool){
+		        			//res.json({ 'error': false, 'errorType': "", "data": null });
+		        			callback(false,"",null);
+		        		}else{
+		        			//res.json({ 'error': true, 'errorType': "", "data": null });
+		        			callback(true,"",null);
+		        		}
+		        	});
+			}
 		});
 	}
 
