@@ -7,7 +7,7 @@ var AppGCM  = function(){
   
 };
 
-AppGCM.prototype.pushNotification = function(callback) {
+AppGCM.prototype.pushNotification = function(data,callback) {
 
   //Add your mobile device registration tokens here
   var regTokens = [config.serverAPIKey_gcm];
@@ -15,10 +15,10 @@ AppGCM.prototype.pushNotification = function(callback) {
   var sender = new gcm.Sender(config.senderId_gcm);
   var message = new gcm.Message(); 
 
-  message.addData('hello', 'world');
-  message.addNotification('title', 'Hello');
+  message.addData(data);
+  message.addNotification('title', 'BuildInfo');
   message.addNotification('icon', 'ic_launcher');
-  message.addNotification('body', 'World');
+  message.addNotification('body', 'New Build Added.');
   
   sender.send(message, regTokens, function (err, response) {
     if(err) {
