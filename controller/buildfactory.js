@@ -11,6 +11,27 @@ var ALLOWD_FILE_TYPE = ".zip,.txt,.apk,.ipa";
 
 module.exports = (function() {
 
+	function getBuildInfoForPublish(id,callback){
+		BuildInfo.findOne({"_id":id}, function(err, obj) {
+			if(err){
+		                throw err;
+			}
+			if(!buildlist) {
+			    return callback(false,"",null);  
+			}
+			
+			var data = {
+				"Title" : obj.buildname,
+				"CreatedBy" : obj.createdby,
+				"URL" : config.baseURLPath + "/downloadfile/:"+obj.filename,
+				"APP_V " : obj.appversion,
+				"BNO" : buildnum 
+			};
+			
+			return callback(true,"",data);
+		});
+	}
+	
 	function getBuildInfo(callback){
 		BuildInfo.find(function(err, buildlist) {
 			if(err){
@@ -210,6 +231,7 @@ module.exports = (function() {
 		onFileUpload : onFileUpload,
 		buildProject : buildProject,
 		subscribeForBuildInfo : subscribeForBuildInfo,
-		unsubscribeForBuildInfo : unsubscribeForBuildInfo
+		unsubscribeForBuildInfo : unsubscribeForBuildInfo,
+		getBuildInfoForPublish :getBuildInfoForPublish
 	});
 })();
