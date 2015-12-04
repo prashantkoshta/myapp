@@ -42,8 +42,8 @@ var userSchema = mongoose.Schema({
         email        : String,
         name         : String
     },
-    role : [String]
-
+    role : [String],
+    project : [String]
 });
 
 // methods ======================
