@@ -43,7 +43,8 @@ var userSchema = mongoose.Schema({
         name         : String
     },
     role : [String],
-    project : [String]
+    project : [String],
+    mobiletoken :String
 });
 
 // methods ======================
