@@ -55,4 +55,17 @@ router.get('/buildProjectAndDeploy',function(req, res) {
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
+
+router.get('/subscribe:mobiletoken', function (req, res) {
+	buildcontroller.subscribeForBuildInfo(req, res, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
+router.get('/unsubscribe', function (req, res) {
+	buildcontroller.unsubscribeForBuildInfo(req, res, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
 module.exports = router;
