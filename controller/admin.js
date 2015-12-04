@@ -2,6 +2,7 @@
 var User            = require('../models/user');
 var mail 			= require('../config/mail');
 var CustomMail 		= require('../config/custommail');
+var config 		= require('../config/config');
 var url 			= require('url');
 
 module.exports = (function() {
@@ -19,7 +20,7 @@ module.exports = (function() {
 	}
 
 	function getLoginUrl(req) {
-	   return req.protocol+"://"+req.get('host')+ "/#/loginview";
+	   return config.baseURLPath+"/#/loginview";
 	}
 	
 	function isEmailExist(email,callback){
