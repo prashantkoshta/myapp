@@ -12,9 +12,23 @@ ProjectFactory.prototype.getProjectList = function(req,res,callback){
   			}
   			return callback(true,"",list);
   		}).sort({'projectname': -1});
-}
+};
 
+ProjectFactory.prototype.createProject = function(req,res,callback){
+      var newProjectDocument = new ProjectDocument();
+      newProjectDocument.projectname ="TEmp";
+      newProjectDocument.git = {
+        "url" : "test",
+        "username" : "",
+        "password" : ""
+      }
+  		newProjectDocument.save(function(err, obj) {
+  			if(err){
+                  throw err;
+  			}
+  			return callback(true,"",obj);
+  		});
 
-
+};
 
 module.exports = ProjectFactory;
