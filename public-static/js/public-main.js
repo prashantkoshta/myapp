@@ -29,6 +29,7 @@ var app = angular.module('publicMain', ['ui.router'])
         })
  		.state("home", {
             url: "/",
+			 templateUrl: "view/:home",
             cache: false
         })
         .state("review", {
@@ -51,19 +52,18 @@ app.run(function ($rootScope, $templateCache, $location, $window) {
     });
 });
 
-app.controller('publicMainController', function ($scope, $rootScope, $window) {
+app.controller('publicMainController', function ($scope, $rootScope, $window,$state) {
     $rootScope.pageError;
     $scope.setInitPageValue = function (obj){
         $rootScope.pageError = obj;
     }
-    
-    
-    // Google Analytic Controller
+	
+	// Google Analytic Controller
     $rootScope.setGA = function(analyticObject){
     	//{'type':'event','eventType':'eventType','msg':''}
     	if (!$window.ga) return;
         	$window.ga('send', analyticObject.event, analyticObject.eventType,analyticObject.msg);
     }
     
-    
+	$state.go("home");
 });

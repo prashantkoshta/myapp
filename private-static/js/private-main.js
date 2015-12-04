@@ -18,6 +18,12 @@ var app = angular.module('privateMain', ['ui.router','ngTable','faye'])
             templateUrl: "secureview/:aboutus",
             cache: false
         })
+		.state("autobuild", {
+            url: "/autobuild",
+            templateUrl: "secureview/:autobuild",
+			controller: "buildController",
+            cache: false
+        })
 		.state("pwdChanged", {
             url: "/passwordchanged",
             templateUrl: "secureview/:passwordchanged",
@@ -56,7 +62,7 @@ app.run(function ($rootScope, $templateCache, $location, $window) {
     });
 });
 
-app.controller('privateMainController', function ($scope, $rootScope, $window) {
+app.controller('privateMainController', function ($scope, $rootScope, $window ,$state) {
     $rootScope.pageError;
     $scope.setInitPageValue = function (obj){
         $rootScope.pageError = obj;
@@ -69,4 +75,6 @@ app.controller('privateMainController', function ($scope, $rootScope, $window) {
     	if (!$window.ga) return;
         	$window.ga('send', analyticObject.event, analyticObject.eventType,analyticObject.msg);
     }
+	
+	$state.go("home");
 });

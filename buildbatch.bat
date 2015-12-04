@@ -2,5 +2,7 @@
 @REM rd source /S /Q
 @REM mkdir source
 @REM npm install
-git clone https://github.com/prashantkoshta/myapp
-node server.js
+echo test1
+echo test2
+npm install
+echo #######SUCCESSFULL-COMPLETED-BUILD-TOKEN######

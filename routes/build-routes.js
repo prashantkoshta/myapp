@@ -49,11 +49,10 @@ router.get('/publishBuildInfo',AppRule.isLoggedIn, function(req, res) {
 	});
 });
 
-router.get('/buildProjectAndDeploy', AppRule.isLoggedIn , function(req, res) {
-	res.json({ 'error': true, 'errorType': "", "data": null});
-	buildcontroller.buildProject(req, res, function(errorFlag,erroType,result){
-		//	res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+router.get('/buildProjectAndDeploy',function(req, res) {
+	buildcontroller.buildProject(null,function(errorFlag,erroType,result){
+		console.log("Whats up");
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
-
 module.exports = router;

@@ -9,7 +9,7 @@
 	  <span class="icon-bar"></span>
 	  <span class="icon-bar"></span>
 	</button>
-	<a class="navbar-brand" ui-sref="home" ng-click="setGA({'event':'event','eventType':'PRIVATE_HOME_CLICK','msg':'PRIVATE_HOME_CLICK'})">Brand</a>
+	<a class="navbar-brand" ui-sref="home" ng-click="setGA({'event':'event','eventType':'PRIVATE_HOME_CLICK','msg':'PRIVATE_HOME_CLICK'})">Build Tool </a>
   </div>
 
   <!-- Collect the nav links, forms, and other content for toggling -->
@@ -19,6 +19,7 @@
 	  <% if( arRole.indexOf("user") > -1 || arRole.indexOf("admin") > -1){ %>
 		<li><a ui-sref="upload" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_UPLOAD_CLICK','msg':'PRIVATE_NAV_UPLOAD_CLICK'})">Upload</a></li>
 	  <% } %>
+	  <li><a ui-sref="autobuild" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_BUILDNOW_CLICK','msg':'PRIVATE_NAV_BUILDNOW_CLICK'})">Build Now</a></li>
 	  <li><a ui-sref="aboutus" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_ABOUTUS_CLICK','msg':'PRIVATE_NAV_ABOUTUS_CLICK'})">About Us</a></li>
 	  <li><a ui-sref="chpwd" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_CHANGEPASSWORD_CLICK','msg':'PRIVATE_NAV_CHANGEPASSWORD_CLICK'})">Change Password</a></li>
 	  <li><a href="/logout" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_LOGOUT_CLICK','msg':'PRIVATE_NAV_LOGOUT_CLICK'})">Logout</a></li>
