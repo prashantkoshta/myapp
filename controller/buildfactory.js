@@ -5,6 +5,7 @@ var BuildInfo = require('../models/buildinfo');
 var buildObj = require('../config/build-project');
 var fayeConf = require('../config/faye-conf');
 var config = require('../config/config');
+var User = require('../models/user');
 var UPLOAD_FILE_SIZE = 1 * 1024 * 1024;
 var ALLOWD_FILE_TYPE = ".zip,.txt,.apk,.ipa";
 
@@ -155,6 +156,50 @@ module.exports = (function() {
 			}
 		});
 	}
+	
+	function subscribeForBuildInfo(req,res,callback){
+		//	callback(true,"fileSizeError",nul
+		var email = req.user.local.email;
+		var mtoken = req.params.mobiletoken;
+		User.findOne({'local.email' : email },function(err, buildlist) {
+			if(err){
+                		throw err;
+			}
+			if(!buildlist) {
+			    return callback(false,"Invalid",null);  
+			}
+		
+			User.update({"local.email": email}, {"$set": { "mobiletoken" : mtoken}, { upsert: false},function (err, result) {
+				if (err)
+					throw err;
+				return callback(true,"Done",null);  
+			});
+			
+			return callback(false,"",null);
+		});
+	}
+	
+	function unsubscribeForBuildInfo(req,res,callback){
+		var email = req.user.local.email;
+		var mtoken = req.params.mobiletoken;
+		User.findOne({'local.email' : email },function(err, buildlist) {
+			if(err){
+                		throw err;
+			}
+			if(!buildlist) {
+			    return callback(false,"Invalid",null);  
+			}
+		
+			User.update({"local.email": email}, {"$set": { "mobiletoken" : null}, { upsert: false},function (err, result) {
+				if (err)
+					throw err;
+				return callback(true,"Done",null);  
+			});
+			
+			return callback(false,"",null);
+		});
+	}
+	
 
 	
 	return({
@@ -163,6 +208,8 @@ module.exports = (function() {
 		delBuildInfo : delBuildInfo,
 		getTimeStamp : getTimeStamp,
 		onFileUpload : onFileUpload,
-		buildProject : buildProject
+		buildProject : buildProject,
+		subscribeForBuildInfo : subscribeForBuildInfo,
+		unsubscribeForBuildInfo : unsubscribeForBuildInfo
 	});
 })();
