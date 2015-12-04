@@ -3,6 +3,7 @@
 //module.exports = require('../../localconfig.js');
 module.exports = {
     url : process.env.dburl,
+    baseURLPath : process.env.baseurlpath,
     sessionSecret: process.env.sessionsecret,
     staticPublicDir : process.env.staticpublicdir,
     staticPrivateDir : process.env.staticprivatedir,
