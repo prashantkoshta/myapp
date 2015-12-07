@@ -4,6 +4,7 @@ echo "1a. File listing"
 cd /tmp
 mkdir devtool
 cd devtool
+apt-get install wine
 wget http://dl.google.com/android/android-sdk_r24.4.1-linux.tgz
 tar -xvzf android-sdk_r24.4.1-linux.tgz
 export PATH=$PATH:/tmp/devtool/android-sdk-linux/tools
@@ -15,5 +16,6 @@ mkdir dev_tmp
 cd dev_tmp
 git clone https://github.com/codepath/android_hello_world
 cd /tmp/dev_tmp
+wine gradlew.bat
 bash gradlew
 echo #######SUCCESSFULL-COMPLETED-BUILD-TOKEN######
