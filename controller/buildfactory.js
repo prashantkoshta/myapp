@@ -12,26 +12,36 @@ var UPLOAD_FILE_SIZE = 1 * 1024 * 1024;
 var ALLOWD_FILE_TYPE = ".zip,.txt,.apk,.ipa";
 
 module.exports = (function() {
-
-	function getBuildInfoForPublish(id,callback){
-		BuildInfo.findOne({"_id":id}, function(err, obj) {
-			if(err){
-		                throw err;
-			}
-			if(!buildlist) {
+	function getBuildInfoForPublish(req,res,callback){
+		var data = req.body;
+		for(var j =0;j<data.builds.length;j++){
+			data.builds[j] = mongoose.Types.ObjectId(data.builds[j]);
+		}
+		Projects.findOne({"projectname":data.projectname},function(e,proj){
+			if(e) throw e;
+			if(!proj) {
 			    return callback(false,"",null);  
 			}
 			
-			var data = {
-				"Title" : obj.buildname,
-				"CreatedBy" : obj.createdby,
-				"URL" : config.baseURLPath + "/downloadfile/:"+obj.filename,
-				"APP_V " : obj.appversion,
-				"BNO" : buildnum 
-			};
-			
-			return callback(true,"",data);
-		});
+			BuildInfo.findOne({"_id":data.builds[0]}, function(err, obj) {
+				if(err) throw err;
+				
+				if(!obj) {
+				    return callback(false,"",null);  
+				}
+				
+				var data = {
+					"ProjectName" : proj.projectname,
+					"Title" : obj.buildname,
+					"CreatedBy" : obj.createdby,
+					"URL" : config.baseURLPath + "/downloadfile/:"+obj.filename,
+					"APP_V " : obj.appversion,
+					"BNO" : buildnum 
+				};
+				return callback(true,"",data);
+			});
+		})
+		
 	}
 	
 	function getBuildInfo(callback){
