@@ -6,6 +6,8 @@ var buildObj = require('../config/build-project');
 var fayeConf = require('../config/faye-conf');
 var config = require('../config/config');
 var User = require('../models/user');
+var Projects = require('../models/projects');
+var mongoose = require('mongoose');
 var UPLOAD_FILE_SIZE = 1 * 1024 * 1024;
 var ALLOWD_FILE_TYPE = ".zip,.txt,.apk,.ipa";
 
@@ -64,13 +66,13 @@ module.exports = (function() {
 		objBuild.filename = obj.filename;//"aa.apk";
 		objBuild.createdby = obj.createdby; //req.session["userid"];
 		objBuild.description = obj.description;
-		objBuild.save(function(err) {
+		objBuild.save(function(err,build) {
             if (err){
                 throw err;
-            }
-            return callback(true);
+            }		
+            return callback(true,build);
         });
-		console.log(objBuild.builddate);
+		
 	}
 	
 	function onFileUpload(req,res,callback){
@@ -106,13 +108,14 @@ module.exports = (function() {
 			    		fromData["ostype"] = ext.substring(1,ext.length);
 			    		fromData["filename"] = newFileName;
 			    		fromData["createdby"] = req.user.local.firstname + "  "+ req.user.local.lastname;
-			         	saveBuildInfo(fromData,function(bool){
+						console.log("fromData:",fromData);
+			         	saveBuildInfo(fromData,function(bool,data){
 			        		if(bool){
 			        			//res.json({ 'error': false, 'errorType': "", "data": null });
-			        			callback(false,"",null);
+			        			callback(false,"",data);
 			        		}else{
 			        			//res.json({ 'error': true, 'errorType': "", "data": null });
-			        			callback(true,"",null);
+			        			callback(true,"",data);
 			        		}
 			        	});
 		        	}else{
@@ -148,34 +151,68 @@ module.exports = (function() {
 		return callback(true,"",null);
 	}
 	
-	function buildProject(afromData,callback){
-		buildObj.buildNow(function(arg){
-			//fayeConf.pulishMessage('/channel-1', { msg: {"mode":"callback check", "error":false,"data":"I am done thanks."}});
-			console.log("factory :",arg);
-			console.log("XXBefor IF XX I am done");
-			if(arg.mode === "close" && arg.data === true){
-				console.log("XXXX I am done");
-				var fromData = new Object();
-				fromData.builddate = new Date();
-				fromData.buildname = "auto uplodaed test";
-				fromData.ostype = ".zip";
-				fromData.appversion = "av";
-				fromData.buildnum = "bv";
-				fromData.filename = "autoupload"+getTimeStamp()+".apk";
-				fromData.createdby = "test"; //req.session["userid"];
-				fromData.description = "Test test";
-				saveBuildInfo(fromData,function(bool){
-		        		if(bool){
-		        			//res.json({ 'error': false, 'errorType': "", "data": null });
-							console.log("Added");
-		        			callback(false,"",null);
-		        		}else{
-		        			//res.json({ 'error': true, 'errorType': "", "data": null });
-		        			callback(true,"",null);
-		        		}
-		        	});
+	function buildProject(req, res ,callback){
+		var jsonData = req.body;
+		Projects.findOne({"projectname" :jsonData.projectname},function(err,proj){
+			if(err)throw err;
+			if(!proj) {
+			    return callback(true,"No Project Found",null);  
 			}
+			
+			var batchParamData = {
+				"giturl" : proj.git.url,
+				"tempdirname" : proj._id+getTimeStamp(),
+				"batchfilename" : proj.buildbatchfile,
+				"projectdirname" : proj.git.url.substring(proj.git.url.lastIndexOf("/")+1,proj.git.url.length),
+				"outputfilepath" : proj.buildlocation
+			}
+			/*
+			echo %giturl%
+			echo %tempdirname%
+			echo %batchfilename%
+			echo %projectdirname%
+			echo %outputfilepath%
+			*/
+			console.log(batchParamData);
+			
+				buildObj.buildNow(batchParamData, function(arg){
+				//fayeConf.pulishMessage('/channel-1', { msg: {"mode":"callback check", "error":false,"data":"I am done thanks."}});
+				//console.log("factory :",arg);
+				//console.log("XXBefor IF XX I am done");
+				if(arg.mode === "close" && arg.data === true){
+					console.log("XXXX I am done");
+					var fromData = new Object();
+					fromData.builddate = new Date();
+					fromData.buildname = "auto uplodaed test";
+					fromData.ostype = ".zip";
+					fromData.appversion = "av";
+					fromData.buildnum = "bv";
+					fromData.filename = "autoupload"+getTimeStamp()+".apk";
+					fromData.createdby = "test"; //req.session["userid"];
+					fromData.description = "Test test";
+					saveBuildInfo(fromData,function(bool,data){
+							if(bool){
+								//res.json({ 'error': false, 'errorType': "", "data": null });
+								console.log("Added");
+								callback(false,"",null);
+							}else{
+								//res.json({ 'error': true, 'errorType': "", "data": null });
+								callback(true,"",null);
+							}
+						});
+				}
+			});
+			
+			
+			
+			
+			
+			
 		});
+		
+		
+		
+		
 	}
 	
 	function subscribeForBuildInfo(req,res,callback){
@@ -189,13 +226,11 @@ module.exports = (function() {
 			if(!buildlist) {
 			    return callback(false,"Invalid",null);  
 			}
-		
-			User.update({"local.email": email}, {"$set": { "mobiletoken" : mtoken}, { upsert: false},function (err, result) {
+			/*User.update({"local.email": email}, {"$set": { "mobiletoken" : mtoken},{ upsert: false},function (err, result) {
 				if (err)
 					throw err;
 				return callback(true,"Done",null);  
-			});
-			
+			});*/
 			return callback(false,"",null);
 		});
 	}
@@ -211,11 +246,11 @@ module.exports = (function() {
 			    return callback(false,"Invalid",null);  
 			}
 		
-			User.update({"local.email": email}, {"$set": { "mobiletoken" : null}, { upsert: false},function (err, result) {
+			/*User.update({"local.email": email}, {"$set": { "mobiletoken" : null}, { upsert: false},function (err, result) {
 				if (err)
 					throw err;
 				return callback(true,"Done",null);  
-			});
+			});*/
 			
 			return callback(false,"",null);
 		});

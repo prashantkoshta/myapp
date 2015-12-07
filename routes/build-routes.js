@@ -8,6 +8,7 @@ var config = require('../config/config');
 var AppRule = require('../config/apprule-engine');
 var AppGcm = require('../config/app-gcm');
 var buildProject = require('../config/build-project');
+var ProjectFactory = require('../controller/project-factory');
 /* GET users listing. */
 router.get('/',AppRule.isLoggedIn,function(req, res, next) {
 	next();
@@ -55,9 +56,8 @@ router.get('/publishBuildInfo',AppRule.isLoggedIn, function(req, res) {
 	});
 });
 
-router.get('/buildProjectAndDeploy',function(req, res) {
-	buildcontroller.buildProject(null,function(errorFlag,erroType,result){
-		console.log("Whats up");
+router.post('/buildProjectAndDeploy',function(req, res) {
+	buildcontroller.buildProject(req, res,function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
@@ -70,6 +70,57 @@ router.get('/subscribe:mobiletoken', function (req, res) {
 
 router.get('/unsubscribe', function (req, res) {
 	buildcontroller.unsubscribeForBuildInfo(req, res, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
+router.get('/listOfProjects', function (req, res) {
+	var projFactory = new ProjectFactory();
+	projFactory.getProjectList(req, res, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
+router.post('/createProject', function (req, res) {
+	var projFactory = new ProjectFactory();
+	projFactory.createProject(req, res, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
+router.post('/deleteProject', function (req, res) {
+	var projFactory = new ProjectFactory();
+	projFactory.deleteProject(req, res, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
+router.post('/projectBuilds', function (req, res) {
+	var projFactory = new ProjectFactory();
+	projFactory.getBuildsByProjectId(req, res, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
+router.post('/addUserInProject', function (req, res) {
+	var projFactory = new ProjectFactory();
+	projFactory.addUserInProject(req, res, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
+
+router.post('/addBuildsInProject', function (req, res) {
+	var projFactory = new ProjectFactory();
+	projFactory.addBuildsInProject(req, res, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
+
+router.post('/deleteBuild', function (req, res) {
+	var projFactory = new ProjectFactory();
+	projFactory.deleteBuild(req, res, function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });

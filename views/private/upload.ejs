@@ -14,6 +14,12 @@
     
 	 <form class="form-horizontal" role="form" ng-submit="submitUploadform($event)">
 		  <div class="form-group col-sm-8">
+		    <label class="control-label col-sm-4" for="projects">Select Projects :</label>
+		    <div class="col-sm-8">
+		      <select id="projects" class="form-control" ng-model="selectedProject" ng-options="project.projectname for project in projects" ng-change="onProjectSelect(selectedProject)" />
+		    </div>
+		  </div>		  
+		  <div class="form-group col-sm-8">
 		    <label class="control-label col-sm-4" for="name">Name</label>
 		    <div class="col-sm-8">
 		      <input type="text" class="form-control" ng-model="uploadForm.name" id="name" placeholder="Enter build name">

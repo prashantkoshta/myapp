@@ -1,35 +1,11 @@
 'use strict';
-app.controller('buildController', function($scope,$rootScope, $state, validatorFactory,mainSvc,multipartFormSvc,ngTableParams,svcFaye) {
-    var isPwdServerError = false;
+app.controller('buildController', function($scope,$rootScope, $state, mainSvc,ngTableParams) {
+    
 	$scope.tableConfigParam;
-    if (typeof $rootScope.pageError!== "undefined" 
-        && $rootScope.pageError !== null
-        && typeof $rootScope.pageError.error !== "undefined"
-        && typeof $rootScope.pageError.errorType !== "undefined"
-        && $rootScope.pageError.error === "true"
-        && $rootScope.pageError.errorType === "passwordError" ) {
-        isPwdServerError = true;
-    }
-        $scope.messageData = ""
-       
-	svcFaye.subscribe("/channel-1", function(message){
-			$scope.messageData =  message.msg.mode+"|"+message.msg.error+"|"+message.msg.data;
-	});
+	$scope.messageData = ""
+	$scope.projects = []
+    $scope.selectedProject;
 	
-	$scope.pushData = function (){
-		svcFaye.publish("/channel-1", {msg: "hello"})
-	}
-	
-	$scope.doAutoBuild = function () {
-	        mainSvc.autoBuildProject().then(
-	            function (response) {
-	            	 
-	            },
-	            function (err) {
-	                console.log("Error >>>", err); 
-	            }
-	        );
-    	};
     	
 	$scope.doPublish = function () {
 	        mainSvc.publishBuildDetails().then(
@@ -45,7 +21,8 @@ app.controller('buildController', function($scope,$rootScope, $state, validatorF
 	
 	
 	$scope.getDetails = function () {
-        mainSvc.getBuildDetails().then(
+		var d = {"projectname" : $scope.selectedProject.projectname};
+        mainSvc.getBuildDetails(d).then(
             function (response) {
             	 $scope.buildList= response.data;
 				 $scope.tableConfigParam = new ngTableParams(
@@ -81,11 +58,12 @@ app.controller('buildController', function($scope,$rootScope, $state, validatorF
     	var arBuild = [];
     	angular.forEach($scope.buildList, function(value, key) {
 	  		  if(value["selected"]){
-	  			arBuild.push({"_id":value._id});
+	  			arBuild.push(value._id);
 	  		  }
 	  		
 	  	});
-        mainSvc.delBuild(arBuild).then(
+		var d = {"projectname" : $scope.selectedProject.projectname,"builds":arBuild};
+        mainSvc.delBuild(d).then(
             function (response) {
             	$scope.getDetails();
             },
@@ -94,70 +72,28 @@ app.controller('buildController', function($scope,$rootScope, $state, validatorF
             }
         );
     };
-    
-    $scope.uploadForm = {
-    		name : "",
-    		description :"",
-    		file : "",
-    		appversion: "",
-    		buildversion:""	
-    };
-    //{error:"",msg:""}
-    $scope.uploadFormErrorList = [];
-	
-	$scope.submitUploadform = function(event){
-		var bool = doBuildFormValiation();
-		if(!bool){
-			event.preventDefault();
-			return;
-		}
-		//multipartFormSvc.post('/buildapp/gateway/saveBuildInfo',$scope.uploadForm);
-		multipartFormSvc.post('/buildapp/gateway/saveBuildInfo',$scope.uploadForm).then(
-	            function (response) {
-	            	if(response.error === false){
-	            		$state.go("home");
-	            	}else{
-	            		$scope.uploadFormErrorList.push({error:"",msg:"File size / File Type not allowed."});
-	            	}
-	            },
-	            function (err) {
-	                console.log("Error >>>", err); 
-	            }
-	        );
+ 	
+	function getProjectList(){
+		 mainSvc.getProjectList().then(
+            function (response) {
+            	 $scope.projects = response.data;
+				 $scope.selectedProject = $scope.projects[0];
+				 $scope.getDetails();
+            },
+            function (err) {
+                console.log("Error >>>", err); 
+            }
+        );
 	}
 	
-	function doBuildFormValiation(){
-		$scope.uploadFormErrorList = []
-		if($scope.uploadForm.name.trim() === "" || $scope.uploadForm.description.trim() === ""
-			|| $scope.uploadForm.appversion.trim() === "" || $scope.uploadForm.buildversion.trim() === "" 
-			|| $scope.uploadForm.file === undefined || $scope.uploadForm.file === null || $scope.uploadForm.file === ""){
-			$scope.uploadFormErrorList.push({error:"",msg:"Field Should not be empty."});
-			return false;
-		}
-		var UPLOAD_FILE_SIZE = 1 * 1024 * 1024;
-		var ALLOWD_FILE_TYPE = ".zip,.txt,.apk,.ipa";
-		var filename = $scope.uploadForm.file.name;
-		var ext = filename.substring(filename.lastIndexOf("."),filename.length);
-    	console.log(ext,filename);
-    	if(ALLOWD_FILE_TYPE.indexOf(ext.toLowerCase()) == -1){
-    		$scope.uploadFormErrorList.push({error:"",msg:"Only file "+ALLOWD_FILE_TYPE+" allowed to upload."});
-    		return false;
-		}
-    	if($scope.uploadForm.file.size > UPLOAD_FILE_SIZE){
-    		$scope.uploadFormErrorList.push({error:"",msg:"File size not allowed."});
-    		return false;
-		}
-    	return true;
-	}
 	
-	if($state.current.name == "home"){
+	$scope.onProjectSelect = function(project){
 		$scope.getDetails();
 	}
 	
-	
-	
-	
-	
+	if($state.current.name == "home"){
+		getProjectList();
+	}
 	
 });
 

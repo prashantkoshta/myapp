@@ -47,10 +47,10 @@ app.service('mainSvc', function($http,$q) {
 		return defer.promise;
 	}
 	
-	function getBuildDetails(){
+	function addBuildInProjectd(data){
 		var defer = $q.defer();
-        var url = "/buildapp/gateway/getDetails";
-		$http.get(url).success(function(response){
+        var url = "/buildapp/gateway/addBuildsInProject";
+		$http.post(url,data).success(function(response){
 			defer.resolve(response);
 		}).error(function(err){
 			defer.reject(err);
@@ -58,10 +58,21 @@ app.service('mainSvc', function($http,$q) {
 		return defer.promise;
 	}
 	
-	function delBuild(ar){
+	function getBuildDetails(data){
 		var defer = $q.defer();
-        var url = "/buildapp/gateway/deleteBuildInfo";
-		$http.post(url,ar).success(function(response){
+        var url = "/buildapp/gateway/projectBuilds";
+		$http.post(url,data).success(function(response){
+			defer.resolve(response);
+		}).error(function(err){
+			defer.reject(err);
+		});
+		return defer.promise;
+	}
+	
+	function delBuild(data){
+		var defer = $q.defer();
+        var url = "/buildapp/gateway/deleteBuild";
+		$http.post(url,data).success(function(response){
 			defer.resolve(response);
 		}).error(function(err){
 			defer.reject(err);
@@ -91,6 +102,37 @@ app.service('mainSvc', function($http,$q) {
 		});
 		return defer.promise;
 	}
+		
+	function getProjectList(){
+		var defer = $q.defer();
+        var url = "buildapp/gateway/listOfProjects";
+		$http.get(url).success(function(response){
+			defer.resolve(response);
+		}).error(function(err){
+			defer.reject(err);
+		});
+		return defer.promise;
+	}
+	
+	function postCommon(url,data) {
+		var defer = $q.defer();
+		$http.post(url,data).success(function(response){
+			defer.resolve(response);
+		}).error(function(err){
+			defer.reject(err);
+		});
+		return defer.promise;
+	}
+	
+	function getCommon(url,data){
+		var defer = $q.defer();
+		$http.get(url,data).success(function(response){
+			defer.resolve(response);
+		}).error(function(err){
+			defer.reject(err);
+		});
+		return defer.promise;
+	}
 	
 	return {
 		"changePassword" : changePassword,
@@ -99,7 +141,11 @@ app.service('mainSvc', function($http,$q) {
 		"saveBuildData" : saveBuildData,
 		"publishBuildDetails" : publishBuildDetails,
 		"autoBuildProject":autoBuildProject,
-		"pushMessageData":pushMessageData
+		"pushMessageData":pushMessageData,
+		"getProjectList":getProjectList,
+		"addBuildInProjectd" : addBuildInProjectd,
+		"postCommon" :postCommon,
+		"getCommon" : getCommon
 	};
 	
 });

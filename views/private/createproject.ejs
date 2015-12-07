@@ -1,0 +1,67 @@
+<div class="row">
+
+  <div>
+    <h1>Create New Project</h1>
+  </div>
+  
+ 	<div class="alert alert-danger" role="alert" ng-repeat="item in errorList">
+      <div>
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        {{item.msg}}
+      </div>
+    </div>
+    
+	 <form class="form-horizontal" role="form">
+		  <div class="form-group col-sm-8">
+		    <label class="control-label col-sm-4" for="name">Project Name</label>
+		    <div class="col-sm-8">
+		      <input type="text" class="form-control" ng-model="createPrjFrm.projectname" id="name" placeholder="Enter proect name">
+		    </div>
+		  </div>
+		  
+	 	   <div class="form-group col-sm-8">
+		    <label class="control-label col-sm-4" for="giturl">Git URL</label>
+		    <div class="col-sm-8">
+		      <input type="text" class="form-control" ng-model="createPrjFrm.giturl" id="giturl" placeholder="Enter git url" />
+		    </div>
+		  </div>	
+		  
+		   <div class="form-group col-sm-8">
+		    <label class="control-label col-sm-4" for="gitusername">Git Username</label>
+		    <div class="col-sm-8">
+		      <input type="text" class="form-control" ng-model="createPrjFrm.gitusername" id="gitusername" placeholder="Enter git user name">
+		    </div>
+		  </div>	
+		  
+		  <div class="form-group col-sm-8">
+			<label class="control-label col-sm-4" for="gitpassword">Git Password</label>
+			<div class="col-sm-8">
+			  <input type="password" class="form-control" ng-model="createPrjFrm.gitpassword" id="gitpassword" placeholder="Enter git password">
+			</div>
+		  </div>
+
+		 <div class="form-group col-sm-8">
+			<label class="control-label col-sm-4" for="buildbatchfile">Build File Name</label>
+			<div class="col-sm-8">
+			  <input type="text" class="form-control" ng-model="createPrjFrm.buildbatchfile" id="buildbatchfile" placeholder="Enter build file name">
+			</div>
+		  </div>
+
+		 <div class="form-group col-sm-8">
+			<label class="control-label col-sm-4" for="buildlocation">Build Location in Project</label>
+			<div class="col-sm-8">
+			  <input type="text" class="form-control" ng-model="createPrjFrm.buildlocation" id="buildlocation" placeholder="Enter build file location in project.">
+			</div>
+		  </div>
+	  	 
+	 <div class="form-group col-sm-8"> 
+   		<div class="col-sm-offset-4 col-sm-8">
+		   <button type="submit" class="btn btn-primary" ng-click="onSubmitCreateProj($event);setGA({'event':'event','eventType':'CREATEPROJ_PAGE_FILE_HOME_CLICK','msg':'CREATEPROJ_PAGE_FILE_HOME_CLICK'})">Submit</button>
+	    	<a ui-sref="home" ng-click="setGA({'event':'event','eventType':'CREATEPROJ_PAGE_FILE_HOME_CLICK','msg':'CREATEPROJ_PAGE_FILE_HOME_CLICK'})">Cancel</a>
+	    </div>
+	  </div>
+	</form>
+
+  
+</div>

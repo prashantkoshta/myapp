@@ -21,7 +21,7 @@ var app = angular.module('privateMain', ['ui.router','ngTable','faye'])
 		.state("autobuild", {
             url: "/autobuild",
             templateUrl: "secureview/:autobuild",
-			controller: "buildController",
+			controller: "autobuildController",
             cache: false
         })
 		.state("pwdChanged", {
@@ -46,10 +46,18 @@ var app = angular.module('privateMain', ['ui.router','ngTable','faye'])
         .state("upload", {
         	url: "/upload",
             templateUrl: "secureview/:upload",
-            controller: "buildController",
+            controller: "uploadbuildController",
+            cache: false
+        })		
+		.state("createproject", {
+        	url: "/createproject",
+            templateUrl: "secureview/:createproject",
+			controller: "createProjectController",
             cache: false
         });
       
+	  
+	  
 }]);
 
 app.run(function ($rootScope, $templateCache, $location, $window) {

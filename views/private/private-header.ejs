@@ -20,12 +20,25 @@
 		<li><a ui-sref="upload" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_UPLOAD_CLICK','msg':'PRIVATE_NAV_UPLOAD_CLICK'})">Upload</a></li>
 	  <% } %>
 	  <li><a ui-sref="autobuild" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_BUILDNOW_CLICK','msg':'PRIVATE_NAV_BUILDNOW_CLICK'})">Build Now</a></li>
+	  <li class="dropdown">
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Manage Projects<span class="caret"></span></a>
+		<ul class="dropdown-menu">
+			<li><a ui-sref="createproject" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_CREATEPROJECT_CLICK','msg':'PRIVATE_NAV_CREATEPROJECT_CLICK'})">Create Project</a></li>
+			<li><a href="#">Add Users</a></li>
+			<li><a href="#">Change Role</a></li>
+			<li role="separator" class="divider"></li>
+			<li><a href="#">View Users</a></li>
+			<li role="separator" class="divider"></li>
+			<li><a href="#">Genrate Reports</a></li>
+		  </ul>
+	  </li>
 	  <li><a ui-sref="aboutus" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_ABOUTUS_CLICK','msg':'PRIVATE_NAV_ABOUTUS_CLICK'})">About Us</a></li>
 	  <li><a ui-sref="chpwd" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_CHANGEPASSWORD_CLICK','msg':'PRIVATE_NAV_CHANGEPASSWORD_CLICK'})">Change Password</a></li>
-	  <li><a href="/logout" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_LOGOUT_CLICK','msg':'PRIVATE_NAV_LOGOUT_CLICK'})">Logout</a></li>
 	  <% if( arRole.indexOf("admin") > -1){ %>
 	  <li><a href="/admincontrol/gateway/admindashboard" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_ADMIN_CLICK','msg':'PRIVATE_NAV_ADMIN_CLICK'})">Admin</a></li>
 	  <% } %>
+	  <li><a href="/logout" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_LOGOUT_CLICK','msg':'PRIVATE_NAV_LOGOUT_CLICK'})">Logout</a></li>
+	  
 	</ul>
   </div><!-- /.navbar-collapse -->
   
