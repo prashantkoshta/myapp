@@ -8,7 +8,12 @@ app.controller('buildController', function($scope,$rootScope, $state, mainSvc,ng
 	
     	
 	$scope.doPublish = function () {
-	        mainSvc.publishBuildDetails().then(
+		var buildid = "";
+	    	angular.forEach($scope.buildList, function(value, key) {
+	    		  if(value["selected"] === true) buildid = value["_id"];
+	    	});
+		var d = {"projectname" : $scope.selectedProject.projectname,"builds":[buildid]};
+	        mainSvc.postCommon("/buildapp/gateway/publishBuildInfo",d).then(
 	            function (response) {
 	            	 
 	            },
