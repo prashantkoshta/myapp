@@ -50,7 +50,7 @@ ProjectFactory.prototype.deleteProject = function(req,res,callback){
 
 ProjectFactory.prototype.getBuildsByProjectId = function(req,res,callback){
 	var data = req.body
-	Projects.find({"projectname":data.projectname},{projectname:1, builds:1},function(err, proj) {
+	Projects.findOne({"projectname":data.projectname},{projectname:1, builds:1},function(err, proj) {
 		if(err) throw err;
 		if(!proj)return callback(true,"No Project Found.",proj);
 		return callback(false,"",proj);
