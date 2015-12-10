@@ -145,11 +145,19 @@ ProjectFactory.prototype.addBuildsInProject = function(req,res,callback){
 // TODO on Dec 10th 2015
 ProjectFactory.prototype.deleteBuild = function(req,res,callback){
 	var data = req.body
-	Projects.update({"projectname":data.projectname},{$pullAll:{"builds":$elemMatch:{"_id":{$eq:data.builds._id}}}},function(err, obj) {
+	var result = [];
+	for(var j =0;j<data.builds.length;j++){
+		data.builds[j] = mongoose.Types.ObjectId(data.builds[j]);
+		Projects.findOneAndUpdate({"projectname":data.projectname},{$pull:{"builds":{_id:data.builds[j]}}},function(err, obj) {
 			if(err) throw err;
-			return callback(false,"",obj);
-	});
-		
+			result.push(obj);
+			if(result.length == data.builds.length){
+				return callback(false,"",result);
+			}
+			
+		});
+	}
+	
 	/*
 	BuildInfo.find({"_id":{$in:data.builds}},{id:1},function(er,builds){
 		if(er) throw er;
