@@ -34,9 +34,9 @@ module.exports = (function() {
 					"ProjectName" : proj.projectname,
 					"Title" : obj.buildname,
 					"CreatedBy" : obj.createdby,
-					"URL" : config.baseURLPath + "/downloadfile/:"+obj.filename,
+					"URL" : config.baseURLPath + "/buildapp/gateway/downloadfile/"+obj.filename,
 					"APP_V " : obj.appversion,
-					"BNO" : buildnum 
+					"BNO" : obj.buildnum 
 				};
 				return callback(true,"",data);
 			});

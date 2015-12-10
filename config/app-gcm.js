@@ -15,10 +15,11 @@ AppGCM.prototype.pushNotification = function(data,callback) {
   var sender = new gcm.Sender(config.senderId_gcm);
   var message = new gcm.Message(); 
 
-  message.addData(data);
-  message.addNotification('title', 'BuildInfo');
+  var obj = data.data;
+  message.addData(obj);
+  message.addNotification('title', obj.Title);
   message.addNotification('icon', 'ic_launcher');
-  message.addNotification('body', 'New Build Added.');
+  message.addNotification('body', obj.URL);
   
   sender.send(message, regTokens, function (err, response) {
     if(err) {
