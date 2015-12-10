@@ -145,7 +145,7 @@ ProjectFactory.prototype.addBuildsInProject = function(req,res,callback){
 // TODO on Dec 10th 2015
 ProjectFactory.prototype.deleteBuild = function(req,res,callback){
 	var data = req.body
-	Projects.update({"projectname":data.projectname},{$pullAll:{"builds":$elemMatch:{data.builds}}},function(err, obj) {
+	Projects.update({"projectname":data.projectname},{$pullAll:{"builds":$elemMatch:{"_id":{$eq:data.builds._id}}}},function(err, obj) {
 			if(err) throw err;
 			return callback(false,"",obj);
 	});
