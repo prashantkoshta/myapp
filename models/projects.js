@@ -14,8 +14,20 @@ var projectsSchema = mongoose.Schema({
 	buildbatchfile : String,
 	buildlocation : String,
 	status : String,
-	users : [Schema.Types.ObjectId],
-	builds : [Schema.Types.ObjectId]
+	created_user_id : String,
+	created_userfullname : String,
+	builds : [{
+		builddate : Date,
+		buildname : String,
+		ostype : String,
+		appversion : String,
+		buildnum : String,
+		filename : String,
+		createdby : String,
+		description : String,
+		build_user_id: String,
+		build_userfullname: String
+	}]
 });
 // Status can be active, unactive
 // create the model for users and expose it to our app

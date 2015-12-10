@@ -11,7 +11,9 @@ var buildinfoSchema = mongoose.Schema({
 	filename : String,
 	createdby : String,
 	description : String,
-	projectname : String
+	projectname : String,
+	build_user_id: String,
+	build_userfullname: String
 });
 // create the model for users and expose it to our app
 module.exports = mongoose.model('buildinfo', buildinfoSchema);
