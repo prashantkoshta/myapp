@@ -21,6 +21,8 @@ var path            = require('path');
 var privateRoutes   = require('./routes/privatestatic-routes');
 var busboy 			= require('connect-busboy');
 
+var jwt    			= require('jsonwebtoken'); // used to create, sign, and verify tokens
+
 
 /*var bayeux = new faye.NodeAdapter({
     mount: '/faye',
@@ -58,20 +60,16 @@ app.use(require('express-nocaptcha')({secret: config.recaptchasecretkey}));
 app.set('views', __dirname + config.viewsDir);
 app.set('view engine', 'ejs'); // set up ejs for templating
 
+
 // required for passport
+//app.set("superSecret", config.sessionSecret);
 app.use(session({ secret: config.sessionSecret, cookie: {expires: new Date(Date.now() + 60 * 10000),maxAge: 60*10000 } })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 
-app.use(function (req, res, next) {
-    //console.log('Time:', Date.now());
-    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate, max-age=600000');
-    // res.header('Expires', '-1');
-    //res.header('Pragma', 'no-cache');
-    next();
-});
+
 
 app.post('/message', function(req, res) {
    // bayeux.getClient().publish('/channel-1', { text: req.body.message });
@@ -80,6 +78,16 @@ app.post('/message', function(req, res) {
     console.log('broadcast message:' + req.body.message);
     res.send(200);
 });
+
+app.use(function (req, res, next) {
+    //console.log('Time:', Date.now());
+	//console.log("Header:",req.get("token"));
+    // res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate, max-age=600000');
+    // res.header('Expires', '-1');
+    //res.header('Pragma', 'no-cache');
+    next();
+});
+
 
 // routes ======================================================================
 app.use(config.staticPrivateContextPath, privateRoutes);

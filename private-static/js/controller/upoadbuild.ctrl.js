@@ -45,11 +45,9 @@ app.controller('uploadbuildController', function($scope,$rootScope, $state,valid
 			event.preventDefault();
 			return;
 		}
-		//multipartFormSvc.post('/buildapp/gateway/saveBuildInfo',$scope.uploadForm);
 		multipartFormSvc.post('/buildapp/gateway/saveBuildInfo',$scope.uploadForm).then(
 	            function (response) {
 	            	if(response.error === false){
-						addBuildsInProject(response.data);
 	            		$state.go("home");
 	            	}else{
 	            		$scope.uploadFormErrorList.push({error:"",msg:"File size / File Type not allowed."});
@@ -60,22 +58,7 @@ app.controller('uploadbuildController', function($scope,$rootScope, $state,valid
 	            }
 	        );
 	}
-	
-	function addBuildsInProject(data){
-		var d = {"projectname" : $scope.selectedProject.projectname,"builds":[data._id]};
-        mainSvc.addBuildInProjectd(d).then(
-            function (response) {
-            	if(response.error === false){
-					$state.go("home");
-				}
-            },
-            function (err) {
-                console.log("Error >>>", err); 
-            }
-        );
-	}
-	
-	
+		
 	function doBuildFormValiation(){
 		$scope.uploadFormErrorList = []
 		if($scope.uploadForm.name.trim() === "" || $scope.uploadForm.description.trim() === ""
@@ -107,7 +90,7 @@ app.controller('uploadbuildController', function($scope,$rootScope, $state,valid
 
 	
 	function getProjectList(){
-		 mainSvc.getProjectList().then(
+		 mainSvc.getCommon("/buildapp/gateway/listOfProjects",{}).then(
             function (response) {
             	 $scope.projects = response.data;
 				 //$scope.selectedProject = $scope.projects[0];

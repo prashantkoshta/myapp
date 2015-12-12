@@ -1,5 +1,5 @@
 'use strict';
-app.controller('createProjectController', function($scope,mainSvc) {
+app.controller('createProjectController', function($scope,$state,mainSvc) {
           
     $scope.createPrjFrm = {
     		projectname : "",
@@ -33,7 +33,7 @@ app.controller('createProjectController', function($scope,mainSvc) {
         mainSvc.postCommon("buildapp/gateway/createProject",d).then(
             function (response) {
             	if(response.error === false){
-					
+					$state.go("home");
 				}else{
 					$scope.errorList.push({error:"",msg:"Project name already exist."});
 				}

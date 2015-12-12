@@ -10,11 +10,11 @@ var AppGcm = require('../config/app-gcm');
 var buildProject = require('../config/build-project');
 var ProjectFactory = require('../controller/project-factory');
 /* GET users listing. */
-router.get('/',AppRule.isLoggedIn,function(req, res, next) {
+router.get('/', AppRule.validateToken, function(req, res, next) {
 	next();
 });
 
-router.post('/',AppRule.isLoggedIn,function(req, res, next) {
+router.post('/', AppRule.validateToken,function(req, res, next) {
 	next();
 });
 
@@ -74,16 +74,18 @@ router.get('/unsubscribe', function (req, res) {
 	});
 });
 
-router.get('/listOfProjects', function (req, res) {
+router.get('/listOfProjects',AppRule.validateToken, function (req, res) {
 	var projFactory = new ProjectFactory();
-	projFactory.getProjectList(req, res, function(errorFlag,erroType,result){
+	projFactory.getProjectList(req.user, function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
 
 router.post('/createProject', function (req, res) {
 	var projFactory = new ProjectFactory();
-	projFactory.createProject(req, res, function(errorFlag,erroType,result){
+	req.body.created_user_id = req.user.local.firstname + "  "+ req.user.local.lastname;
+	req.body.created_userfullname = req.user.id;
+	projFactory.createProject(req.body,function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
@@ -104,7 +106,7 @@ router.post('/projectBuilds', function (req, res) {
 
 router.post('/addUserInProject', function (req, res) {
 	var projFactory = new ProjectFactory();
-	projFactory.addUserInProject(req, res, function(errorFlag,erroType,result){
+	projFactory.addUserInProject(req.body, function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
@@ -112,7 +114,7 @@ router.post('/addUserInProject', function (req, res) {
 
 router.post('/addBuildsInProject', function (req, res) {
 	var projFactory = new ProjectFactory();
-	projFactory.addBuildsInProject(req, res, function(errorFlag,erroType,result){
+	projFactory.addBuildsInProject(req.body,function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
@@ -121,6 +123,13 @@ router.post('/addBuildsInProject', function (req, res) {
 router.post('/deleteBuild', function (req, res) {
 	var projFactory = new ProjectFactory();
 	projFactory.deleteBuild(req, res, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
+router.post('/usersList', function (req, res) {
+	var projFactory = new ProjectFactory();
+	projFactory.getListOfUsers(req.body, function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });

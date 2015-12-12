@@ -3,6 +3,7 @@ var adminTask = require('../controller/admin');
 var User = require('../models/user');
 var url  = require('url');
 var AppRule = require('../config/apprule-engine');
+var jwt    = require('jsonwebtoken');
 
 module.exports = function(app, passport) {
 
@@ -39,7 +40,6 @@ module.exports = function(app, passport) {
 			}else{
 				adminTask.resetPassword(req.params.email,req,function(b,user){
 					if(b){
-						console.log("AAA",req.params.email );
 						res.json({ 'error': false, 'errorType': "", "description": "done" });
 						return;
 					}
@@ -52,7 +52,7 @@ module.exports = function(app, passport) {
     // =====================================
     // Change Password =====================
     // =====================================
-	app.post('/auth/changepassword', AppRule.isLoggedIn, function (req, res) {
+	app.post('/auth/changepassword', AppRule.validateToken, function (req, res) {
         // render the page and pas,s in any flash data if it exists
         //res.render('index.ejs', { message: { 'error': true, 'errorType': "loginError", "description": req.flash('loginMessage') } });
 		adminTask.changePassword(req.session["userid"],req.body.oPwd,req.body.nPwd,function(a){
@@ -76,34 +76,22 @@ module.exports = function(app, passport) {
         res.render('public/index.ejs', { message:{'error':true,'errorType':"loginError","description":req.flash('loginMessage')}});
     });
 
-    // process the login form
-    app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/profile', // redirect to the secure profile section
-        failureRedirect : '/login', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
-    }));
+ 	app.post('/login', function(req, res, next) {
+	  passport.authenticate('local-login', function(err, user, info) {
+		if (err) { return next(err); }
+		if (!user) {return res.redirect('/login'); }
+		req.logIn(user, function(err) {
+		  if (err) { return next(err); }
+		  var token = AppRule.getNewToken(user,res);
+		  res.setHeader("token", token);
+		  res.render('private/profile.ejs', {arRole:user.role,"token":token});
+		});
+	  })(req, res, next);
+	});
 
-    // =====================================
-    // TOKEN LOGIN =========================
-    // =====================================
-    /*app.post('/loginfromtoken', passport.authenticate('bearer', {
-        session: false,
-        successRedirect : '/profile', // redirect to the secure profile section
-        failureRedirect : '/loginfromtoken', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
-    }));
-    */
-    /*app.post('/loginfromtoken',function(req,res){
-        console.log("HI");
-    });*/
+    
 
-    /*app.get('/loginfromtoken', function(req, res) {
-        // render the page and pass in any flash data if it exists
-        //res.render('loginfromtoken.ejs', { message: req.flash('loginMessage') });
-        res.render('loginfromtoken.ejs');
-    });*/
-
-
+	
 
     // =====================================
     // SIGNUP ==============================
@@ -128,11 +116,10 @@ module.exports = function(app, passport) {
     // =====================================
     // we will want this protected so you have to be logged in to visit
     // we will use route middleware to verify this (the isLoggedIn function)
-    app.get('/profile', AppRule.isLoggedIn, function(req, res) {
-        res.render('private/profile.ejs', {
-            arRole : req.user.role // get the user out of session and pass to template
-        });
-    });
+	
+	  app.get('/profile', AppRule.validateToken, function(req, res) {
+		res.render('private/profile.ejs', {arRole:user.role,"token":token});
+      });
 
 
     // =====================================

@@ -54,6 +54,12 @@ var app = angular.module('privateMain', ['ui.router','ngTable','faye'])
             templateUrl: "secureview/:createproject",
 			controller: "createProjectController",
             cache: false
+        })
+		.state("userview", {
+        	url: "/userview",
+            templateUrl: "secureview/:userview",
+			controller: "userviewController",
+            cache: false
         });
       
 	  
@@ -71,6 +77,13 @@ app.run(function ($rootScope, $templateCache, $location, $window) {
 });
 
 app.controller('privateMainController', function ($scope, $rootScope, $window ,$state) {
+	
+	$rootScope.token;
+	$scope.setInitToken = function(token){
+		$rootScope.token = token;
+		//console.log($rootScope.token);
+	}
+	
     $rootScope.pageError;
     $scope.setInitPageValue = function (obj){
         $rootScope.pageError = obj;

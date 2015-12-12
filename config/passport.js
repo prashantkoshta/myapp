@@ -117,7 +117,7 @@ module.exports = function(passport) {
         console.log(email,password,done);
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
-        User.findOne({ 'local.email' :  email }, function(err, user) {
+        User.findOne({ 'local.email' :  email },{"auth_token":0}, function(err, user) {
             // if there are any errors, return the error before anything else
             if (err)
                 return done(err);
@@ -130,8 +130,7 @@ module.exports = function(passport) {
             if (!user.validPassword(password))
                 return done(null, false, req.flash('loginMessage', errorMap.getError("0004"))); // create the loginMessage and save it to session as flashdata
 
-            // all is well, return successful user
-			req.session["userid"] = user.local.email;
+          
             return done(null, user);
         });
 

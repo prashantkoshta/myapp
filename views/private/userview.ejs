@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <h1>List of Users</h1>
+  </div>
+  
+    
+   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+	  <div class="table-responsive">
+		<table ng-table="tableConfigParam" class="table table-condensed table-bordered table-striped">
+			<colgroup>
+			  <col width="20%" />
+			  <col width="15%" />
+			  <col width="15%" />
+			  <col width="20%" />
+			  <col width="25%" />
+			  <col width="15%" />
+			</colgroup>
+			<tr ng-repeat="row in $data" ng-form="rowForm" demo-tracked-table-row="row">
+				<td data-title="'First Name'" filter="{'local.firstname':'text'}" sortable="'local.firstname'">{{row.local.firstname}}</td>
+				<td data-title="'Middle Name'" filter="{'local.middlename':'text'}" sortable="'local.middlename'">{{row.local.middlename}}</td>
+				<td data-title="'Last Name'" filter="{'local.lastname':'text'}" sortable="'local.lastname'">{{row.local.lastname}}</td>
+				<td data-title="'Role'" filter="{'role':'text'}" sortable="'role'">{{row.role}}</td>
+				<td data-title="'Projects Access'" filter="{'projects':'text'}" sortable="'projects'">{{row.projects}}</td>
+				<td><a href="#" ng-click=""><span class="glyphicon glyphicon-edit"></span></a></td>
+		  </tr>
+		</table>
+	  </div>
+   </div>
+  
+</div>
+
+
+

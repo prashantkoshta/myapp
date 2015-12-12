@@ -5,17 +5,22 @@ var User = require('../models/user');
 var mongoose = require('mongoose');
 var ProjectFactory = function(){};
 
-ProjectFactory.prototype.getProjectList = function(req,res,callback){
-  		Projects.find({},{projectname:1},function(err, list) {
+ProjectFactory.prototype.getProjectList = function(data,callback){
+  		User.findOne({"_id":mongoose.Types.ObjectId(data._id)},function(err, list) {
   			if(err)throw err;
   			if(!list)return callback(false,"",list);
-  			return callback(false,"",list);
-  		}).sort({'projectname': 1});
+			// Patch
+			var ar = [];
+			for(var i=0;i<list.projects.length;i++){
+				ar.push({"projectname":list.projects[i]});
+			}
+  			return callback(false,"",ar);
+  		});
 };
 
-ProjectFactory.prototype.createProject = function(req,res,callback){
+
+ProjectFactory.prototype.createProject = function(data,callback){
 	var newProjects = new Projects();
-	var data = req.body
 	newProjects.projectname = data.projectname;
 	newProjects.git = data.git;
 	newProjects.status = data.status;
@@ -57,42 +62,35 @@ ProjectFactory.prototype.getBuildsByProjectId = function(req,res,callback){
 	});
 };
 
-ProjectFactory.prototype.addUserInProject = function(req,res,callback){
-	var data = req.body
-	Projects.find({"projectname":data.projectname},function(err, proj) {
-		if(err) throw err;		
-		User.find({"local.email":{$in:data.users}},function(er,users){
-			if(er) throw er;
-			console.log(!users);
-			if(!users){
-				return callback(true,"No Record Found.",users);
-			}
-			var len = users.length;
-			var result = [];
-			for(var i=0;i<len;i++){
-				Projects.update({"projectname":data.projectname, $push:{"users":users[i].id}},function(e,p){
-					if(er) throw er;	
-					result.push(p);
-					if(result.length === len){
-						return callback(false,"",p);
-					}
-				});
-			}		
+ProjectFactory.prototype.addUserInProject = function(data,callback){
+	Projects.find({"projectname":{$in:data.projects}},{"_id":0,"projectname":1},function(err, proj) {
+		if(err) throw err;	
+		console.log(proj);		
+		if(!proj) return callback(true,"No Project Record Found.",proj);
+		var arProjs = [];
+		for(var i=0;i<proj.length;i++){
+			arProjs.push(proj[i].projectname);
+		}
+		console.log(arProjs);
+		User.findOneAndUpdate({"local.email":data.user},{$addToSet:{"projects":arProjs}},{ upsert: false },function(er,users){
+			if(err) throw err;
+			console.log(users);
+			if(!users) return callback(true,"No Project Found",users);
+			return callback(false,"",users);
 		});
 	});
 };
 
-ProjectFactory.prototype.addBuildsInProject = function(req,res,callback){
-	var data = req.body;
+ProjectFactory.prototype.addBuildsInProject = function(data,callback){
 	var obj = data.builds;
 	var arOfBuilds = []
 	for(var i=0;i<obj.length;i++){
 		var objBuild = new BuildInfo();
 		objBuild.builddate = new Date();
-		objBuild.buildname = obj[i].name;
+		objBuild.buildname = obj[i].buildname;
 		objBuild.ostype = obj[i].ostyle;
 		objBuild.appversion = obj[i].appversion;
-		objBuild.buildnum = obj[i].buildversion;
+		objBuild.buildnum = obj[i].buildnum;
 		objBuild.filename = obj[i].filename;//"aa.apk";
 		objBuild.createdby = obj[i].createdby; //req.session["userid"];
 		objBuild.description = obj[i].description;
@@ -104,42 +102,7 @@ ProjectFactory.prototype.addBuildsInProject = function(req,res,callback){
 		if(err) throw err;
 		if(!proj) return callback(true,"No Project Found",proj);
 		return callback(false,"",proj);
-	});
-	
-	/*{
-    "description" : "asdf",
-    "createdby" : "pra  Kos",
-    "filename" : "2 - Copy_2015112713439941.zip",
-    "buildnum" : "asdf",
-    "appversion" : "sadf",
-    "buildname" : "adf",
-    "builddate" : ISODate("2015-11-27T19:42:09.949Z"),
-}
-	
-	for(var j =0;j<data.builds.length;j++){
-		data.builds[j] = mongoose.Types.ObjectId(data.builds[j]);
-	}
-	Projects.find({"projectname":data.projectname},function(err, proj) {
-		if(err) throw err;		
-		BuildInfo.find({"_id":{$in:data.builds}},{id:1},function(er,builds){
-			if(er) throw er;
-			
-			if(!builds || builds.length === 0){
-				return callback(true,"No Record Found.",builds);
-			}
-			var len = builds.length;
-			var result = [];
-			for(var i=0;i<len;i++){
-				Projects.findOneAndUpdate({"projectname":data.projectname},{$addToSet:{"builds":builds[i].id}},{ upsert: true },function(e,p){
-					if(er) throw er;
-					result.push(p);
-					if(result.length === len){
-						return callback(false,"",p);
-					}
-				});
-			}		
-		});
-	});*/
+	});	
 };
 
 // TODO on Dec 10th 2015
@@ -157,23 +120,18 @@ ProjectFactory.prototype.deleteBuild = function(req,res,callback){
 			
 		});
 	}
-	
-	/*
-	BuildInfo.find({"_id":{$in:data.builds}},{id:1},function(er,builds){
-		if(er) throw er;
-		Projects.findOneAndUpdate({"projectname":data.projectname},{$pull:{"builds":{$in:builds}}},function(err, obj) {
-			if(err) throw err;
-			BuildInfo.remove({"_id":{$in:builds}},function(er1,builds1){
-				if(er1) throw er1;
-				return callback(false,"",builds1);
-			});
-		});
-	});
-	*/
 };
 
-
-
+/* 
+*	Get All list of Users
+*/
+ProjectFactory.prototype.getListOfUsers = function(data,callback){
+  		User.find({},{"local.firstname":1,"local.middlename":1,"local.lastname":1,"role":1,"projects":1},function(err, list) {
+  			if(err)throw err;
+  			if(!list)return callback(false,"",list);
+  			return callback(false,"",list);
+  		}).sort({'projectname': 1});
+};
 
 
 module.exports = ProjectFactory;

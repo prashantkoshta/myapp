@@ -1,5 +1,5 @@
 'use strict';
-app.service('mainSvc', function($http,$q) {
+app.service('mainSvc', function($http,$q, $rootScope) {
 	
 	
 	function pushMessageData(){
@@ -103,7 +103,7 @@ app.service('mainSvc', function($http,$q) {
 		return defer.promise;
 	}
 		
-	function getProjectList(){
+	/*function getProjectList(){
 		var defer = $q.defer();
         var url = "buildapp/gateway/listOfProjects";
 		$http.get(url).success(function(response){
@@ -112,11 +112,13 @@ app.service('mainSvc', function($http,$q) {
 			defer.reject(err);
 		});
 		return defer.promise;
-	}
+	}*/
 	
 	function postCommon(url,data) {
 		var defer = $q.defer();
-		$http.post(url,data).success(function(response){
+		//$http.post(url,data)
+		$http({"method": "post", "data":data, "url":url, headers: {"token": $rootScope.token}})
+		.success(function(response){
 			defer.resolve(response);
 		}).error(function(err){
 			defer.reject(err);
@@ -126,7 +128,9 @@ app.service('mainSvc', function($http,$q) {
 	
 	function getCommon(url,data){
 		var defer = $q.defer();
-		$http.get(url,data).success(function(response){
+		$http({"method": "get", "data":data, "url":url, headers: {"token": $rootScope.token}})
+		//$http.get(url,data,headers:{"token":$rootScope.token})
+		.success(function(response){
 			defer.resolve(response);
 		}).error(function(err){
 			defer.reject(err);

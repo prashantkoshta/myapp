@@ -10,6 +10,7 @@ var Projects = require('../models/projects');
 var mongoose = require('mongoose');
 var UPLOAD_FILE_SIZE = 1 * 1024 * 1024;
 var ALLOWD_FILE_TYPE = ".zip,.txt,.apk,.ipa";
+var ProjectFactory = require('../controller/project-factory');
 
 module.exports = (function() {
 	function getBuildInfoForPublish(req,res,callback){
@@ -67,22 +68,26 @@ module.exports = (function() {
 	}
 	
 	function saveBuildInfo(obj,callback){
-		var objBuild = new BuildInfo();
-		objBuild.builddate = new Date();
-		objBuild.buildname = obj.name;
-		objBuild.ostype = obj.ostyle;
-		objBuild.appversion = obj.appversion;
-		objBuild.buildnum = obj.buildversion;
-		objBuild.filename = obj.filename;//"aa.apk";
-		objBuild.createdby = obj.createdby; //req.session["userid"];
-		objBuild.description = obj.description;
-		objBuild.save(function(err,build) {
-            if (err){
-                throw err;
-            }		
-            return callback(true,build);
-        });
-		
+		var data = {
+			"projectname" : obj.projectname,
+			"builds":[
+				{
+					"buildname" : obj.name,
+					"appversion" : obj.appversion,
+					"buildnum" : obj.buildversion,
+					"filename" : obj.filename,
+					"createdby" : obj.createdby,
+					"description" : obj.description,
+					"build_user_id": obj.build_user_id,
+					"build_userfullname": obj.build_userfullname
+				}
+			]
+		};
+		console.log("#################:",data);
+		var projFactory = new ProjectFactory();
+		projFactory.addBuildsInProject(data,function(errorFlag,erroType,result){
+			return callback(true,result);
+		});		
 	}
 	
 	function onFileUpload(req,res,callback){
@@ -118,13 +123,13 @@ module.exports = (function() {
 			    		fromData["ostype"] = ext.substring(1,ext.length);
 			    		fromData["filename"] = newFileName;
 			    		fromData["createdby"] = req.user.local.firstname + "  "+ req.user.local.lastname;
+						fromData["build_user_id"] = req.user.id;
+						fromData["build_userfullname"] = req.user.local.firstname + "  "+ req.user.local.lastname;
 						console.log("fromData:",fromData);
 			         	saveBuildInfo(fromData,function(bool,data){
 			        		if(bool){
-			        			//res.json({ 'error': false, 'errorType': "", "data": null });
 			        			callback(false,"",data);
 			        		}else{
-			        			//res.json({ 'error': true, 'errorType': "", "data": null });
 			        			callback(true,"",data);
 			        		}
 			        	});
@@ -135,7 +140,6 @@ module.exports = (function() {
 		        			}
 	        			   console.log("File deleted successfully!", newFileName);
 	        			});
-		        		//res.json({ 'error': true, 'errorType': "fileSizeError", "data": null });
 		        		callback(true,"fileSizeError",null);
 		        	}
 		         });
@@ -194,12 +198,13 @@ module.exports = (function() {
 					var fromData = new Object();
 					fromData.builddate = new Date();
 					fromData.buildname = "auto uplodaed test";
-					fromData.ostype = ".zip";
 					fromData.appversion = "av";
 					fromData.buildnum = "bv";
 					fromData.filename = "autoupload"+getTimeStamp()+".apk";
 					fromData.createdby = "test"; //req.session["userid"];
 					fromData.description = "Test test";
+					fromData["build_user_id"] = req.user.id;
+					fromData["build_userfullname"] = req.user.local.firstname + "  "+ req.user.local.lastname;
 					saveBuildInfo(fromData,function(bool,data){
 							if(bool){
 								//res.json({ 'error': false, 'errorType': "", "data": null });

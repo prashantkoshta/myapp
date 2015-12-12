@@ -27,9 +27,9 @@ app.controller('buildController', function($scope,$rootScope, $state, mainSvc,ng
 	
 	$scope.getDetails = function () {
 		var d = {"projectname" : $scope.selectedProject.projectname};
-        mainSvc.getBuildDetails(d).then(
+        mainSvc.postCommon("/buildapp/gateway/projectBuilds",d).then(
             function (response) {
-            	 $scope.buildList= response.data;
+            	 $scope.buildList= response.data.builds;
 				 $scope.tableConfigParam = new ngTableParams(
 						{
 							sorting: {builddate:"asc"}
@@ -67,8 +67,8 @@ app.controller('buildController', function($scope,$rootScope, $state, mainSvc,ng
 	  		  }
 	  		
 	  	});
-		var d = {"projectname" : $scope.selectedProject.projectname,"builds":arBuild};
-        mainSvc.delBuild(d).then(
+		var d = {"projectname" :$scope.selectedProject.projectname,"builds":arBuild};
+        mainSvc.postCommon("/buildapp/gateway/deleteBuild",d).then(
             function (response) {
             	$scope.getDetails();
             },
@@ -79,7 +79,7 @@ app.controller('buildController', function($scope,$rootScope, $state, mainSvc,ng
     };
  	
 	function getProjectList(){
-		 mainSvc.getProjectList().then(
+		 mainSvc.getCommon("/buildapp/gateway/listOfProjects",{}).then(
             function (response) {
             	 $scope.projects = response.data;
 				 $scope.selectedProject = $scope.projects[0];
@@ -105,8 +105,9 @@ app.controller('buildController', function($scope,$rootScope, $state, mainSvc,ng
 /* Filter for file type */
 app.filter("getFileType", function(){
 	return function(filename){
-			var ext = filename.substring(filename.lastIndexOf("."),filename.length);
-	    	return ext
+		if(filename === undefined) return "";
+		var ext = filename.substring(filename.lastIndexOf("."),filename.length);
+	    return ext
 	};
 });
 
