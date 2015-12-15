@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 var projectsSchema = mongoose.Schema({
+	_id : String,
 	projectname : String,
 	git : {
 	  url : String,
@@ -17,6 +18,7 @@ var projectsSchema = mongoose.Schema({
 	created_user_id : String,
 	created_userfullname : String,
 	builds : [{
+		_id : String,
 		builddate : Date,
 		buildname : String,
 		ostype : String,

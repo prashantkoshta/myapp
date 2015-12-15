@@ -6,3 +6,9 @@ ul.list-unstyled li {
     width: 500px;
     height: 400px;
 }
+
+.navbar {
+	margin:0px;
+	padding:0px;
+	margin-bottom:0px;
+}

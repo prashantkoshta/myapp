@@ -1,5 +1,5 @@
 'use strict';
-app.service('mainSvc', function($http,$q, $rootScope) {
+app.service('mainSvc', function($http,$q, $rootScope,$window) {
 	
 	
 	function pushMessageData(){
@@ -116,11 +116,18 @@ app.service('mainSvc', function($http,$q, $rootScope) {
 	
 	function postCommon(url,data) {
 		var defer = $q.defer();
-		//$http.post(url,data)
 		$http({"method": "post", "data":data, "url":url, headers: {"token": $rootScope.token}})
-		.success(function(response){
-			defer.resolve(response);
-		}).error(function(err){
+		.success(function(response,status, headers, config){
+			if(response["auth-error"]) {
+				var er = new Error();
+				er.message = response;
+				defer.reject(er);
+				$window.location.href = "/";
+			} else {
+				defer.resolve(response);
+				$rootScope.token = 	headers("token");
+			}
+		}).error(function(err,status){
 			defer.reject(err);
 		});
 		return defer.promise;
@@ -129,10 +136,17 @@ app.service('mainSvc', function($http,$q, $rootScope) {
 	function getCommon(url,data){
 		var defer = $q.defer();
 		$http({"method": "get", "data":data, "url":url, headers: {"token": $rootScope.token}})
-		//$http.get(url,data,headers:{"token":$rootScope.token})
-		.success(function(response){
-			defer.resolve(response);
-		}).error(function(err){
+		.success(function(response,status, headers, config){
+			if(response["auth-error"]) {
+				var er = new Error();
+				er.message = response;
+				defer.reject(er);
+				$window.location.href = "/";
+			} else {
+				defer.resolve(response);
+				$rootScope.token = 	headers("token");
+			}
+		}).error(function(err,status){
 			defer.reject(err);
 		});
 		return defer.promise;
@@ -146,7 +160,6 @@ app.service('mainSvc', function($http,$q, $rootScope) {
 		"publishBuildDetails" : publishBuildDetails,
 		"autoBuildProject":autoBuildProject,
 		"pushMessageData":pushMessageData,
-		"getProjectList":getProjectList,
 		"addBuildInProjectd" : addBuildInProjectd,
 		"postCommon" :postCommon,
 		"getCommon" : getCommon

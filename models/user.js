@@ -5,6 +5,7 @@ var crypto   = require('crypto');
 
 // define the schema for our user model
 var userSchema = mongoose.Schema({
+	_id : String,
     local            : {
         email        : String,
         password     : String,
@@ -45,7 +46,8 @@ var userSchema = mongoose.Schema({
     role : [String],
     projects : [String],
     mobiletoken : String,
-	auth_token : String
+	auth_token : String,
+	lastlogouttime : Date
 });
 
 // methods ======================

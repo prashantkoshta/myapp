@@ -4,6 +4,7 @@
   "description": "This sample example.",
   "main": "server.js",
   "dependencies": {
+    "async": "^1.5.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "~1.13.2",
     "connect-busboy": "0.0.2",
@@ -15,13 +16,16 @@
     "express": "~4.13.1",
     "express-nocaptcha": "^1.1.1",
     "express-session": "~1.0.0",
+    "faye": "^1.1.2",
     "file-stream-rotator": "~0.0.6",
     "fs-extra": "^0.26.2",
     "jsonwebtoken": "^5.4.0",
     "method-override": "~1.0.0",
     "mongoose": "^4.2.6",
     "morgan": "~1.6.1",
+    "ms": "^0.7.1",
     "multer": "^1.1.0",
+    "node-gcm": "^0.13.0",
     "nodemailer": "^0.7.0",
     "passport": "~0.1.17",
     "passport-facebook": "~1.0.2",
@@ -30,8 +34,6 @@
     "passport-local": "~0.1.6",
     "passport-token-auth": "^0.1.2",
     "passport-twitter": "~1.0.2",
-    "serve-favicon": "~2.3.0",
-    "node-gcm": "^0.13.0",
-    "faye": "^1.1.2"
+    "serve-favicon": "~2.3.0"
   }
 }

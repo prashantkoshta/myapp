@@ -76,7 +76,7 @@ app.run(function ($rootScope, $templateCache, $location, $window) {
     });
 });
 
-app.controller('privateMainController', function ($scope, $rootScope, $window ,$state) {
+app.controller('privateMainController', function ($scope, $rootScope, $window ,$state, mainSvc) {
 	
 	$rootScope.token;
 	$scope.setInitToken = function(token){
@@ -96,6 +96,18 @@ app.controller('privateMainController', function ($scope, $rootScope, $window ,$
     	if (!$window.ga) return;
         	$window.ga('send', analyticObject.event, analyticObject.eventType,analyticObject.msg);
     }
+	
+	$scope.onLogout = function(){
+		 mainSvc.getCommon("/logout",{}).then(
+            function (response) {
+				 $window.location.href = "/";
+            },
+            function (err) {
+                console.log("Error >>>", err); 
+				$window.location.href = "/";
+            }
+        );
+	}
 	
 	$state.go("home");
 });

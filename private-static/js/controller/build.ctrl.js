@@ -59,7 +59,6 @@ app.controller('buildController', function($scope,$rootScope, $state, mainSvc,ng
    
     
     $scope.deleteBuilds = function () {
-    	console.log($scope.buildList);
     	var arBuild = [];
     	angular.forEach($scope.buildList, function(value, key) {
 	  		  if(value["selected"]){

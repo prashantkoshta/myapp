@@ -30,7 +30,7 @@ var jwt    			= require('jsonwebtoken'); // used to create, sign, and verify tok
 });*/
 
 console.log(app.get('env'), config.url);
-// configuration ===============================================================\
+// configuration ===============================================================
 mongoose.connect(config.url); // connect to our database
 require('./config/passport')(passport); // pass passport for configuration
 

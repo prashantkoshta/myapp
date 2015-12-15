@@ -1,5 +1,5 @@
 // config/passport.js
-
+var async            	= require('async');
 // load all the things we need
 var LocalStrategy       = require('passport-local').Strategy;
 var FacebookStrategy    = require('passport-facebook').Strategy;
@@ -8,9 +8,11 @@ var GoogleStrategy      = require('passport-google-oauth').OAuth2Strategy;
 
 // load up the user model
 var User            = require('../models/user');
+var indexcounter    = require('../models/indexcounter');
 
 // load the auth variables
 var configAuth = require('./config');
+var genrateKey = require('./genratekey');
 var errorMap = require('./errormap');
 
 
@@ -60,7 +62,7 @@ module.exports = function(passport) {
         // we are checking to see if the user trying to login already exists
        console.log('req.validnocaptcha :',req.validnocaptcha);
        if(!req.validnocaptcha) { return done(null, false, req.flash('signupMessage', errorMap.getError("0001")));} 	
-       User.findOne({ 'local.email' : email},{'local.email':1,'local.password':1,'local.hash':1,'local.firstname':1,'local.middlename':1,'local.lastname':1,'role':1}, function(err, user) {
+       User.findOne({'local.email' : email},{'local.email':1,'local.password':1,'local.hash':1,'local.firstname':1,'local.middlename':1,'local.lastname':1,'role':1}, function(err, user) {
             // if there are any errors, return the error
             if (err)
                 return done(err);
@@ -83,13 +85,23 @@ module.exports = function(passport) {
                 newUser.local.hash = hash;
                 newUser.local.password = encryptedPwd;
                 newUser.role.push("user");
+				
+				
+				async.waterfall([
+					function(callback){
+						var tid = genrateKey.genrateNewIndexId("userid",function(arg){
+							callback(null,arg);
+						});
+					}
+			    ],function(err,_id){
+						newUser._id = _id;
+						newUser.save(function(err) {
+							if (err)
+								throw err;
+							return done(null, newUser);
+						});
+				});	
 
-                // save the user
-                newUser.save(function(err) {
-                    if (err)
-                        throw err;
-                    return done(null, newUser);
-                });
             }
 
         });
@@ -175,12 +187,21 @@ module.exports = function(passport) {
 					//profile.emails[0].value; // facebook can return multiple emails so we'll take the first
                     newUser.role.push("user");
 					// save our user to the database
-                    newUser.save(function(err) {
-                        if (err)
-                            throw err;
-                        // if successful, return the new user
-                        return done(null, newUser);
-                    });
+					async.waterfall([
+						function(callback){
+							var tid = genrateKey.genrateNewIndexId("userid",function(arg){
+								callback(null,arg);
+							});
+						}
+					],function(err,_id){
+							newUser._id = _id;
+							newUser.save(function(err) {
+								if (err)
+									throw err;
+								return done(null, newUser);
+							});
+					});
+                   
                 }
 
             });
@@ -224,11 +245,20 @@ module.exports = function(passport) {
                     newUser.twitter.displayName = profile.displayName;
 					newUser.role.push("user");
                     // save our user into the database
-                    newUser.save(function(err) {
-                        if (err)
-                            throw err;
-                        return done(null, newUser);
-                    });
+                    async.waterfall([
+						function(callback){
+							var tid = genrateKey.genrateNewIndexId("userid",function(arg){
+								callback(null,arg);
+							});
+						}
+					],function(err,_id){
+							newUser._id = _id;
+							newUser.save(function(err) {
+								if (err)
+									throw err;
+								return done(null, newUser);
+							});
+					});
                 }
             });
 
@@ -273,11 +303,20 @@ module.exports = function(passport) {
                     newUser.google.email = profile.emails[0].value; // pull the first email
 					newUser.role.push("user");
                     // save the user
-                    newUser.save(function(err) {
-                        if (err)
-                            throw err;
-                        return done(null, newUser);
-                    });
+                    async.waterfall([
+						function(callback){
+							var tid = genrateKey.genrateNewIndexId("userid",function(arg){
+								callback(null,arg);
+							});
+						}
+					],function(err,_id){
+							newUser._id = _id;
+							newUser.save(function(err) {
+								if (err)
+									throw err;
+								return done(null, newUser);
+							});
+					});
                 }
             });
         });

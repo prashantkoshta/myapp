@@ -3,19 +3,16 @@
 var config 	= require('./config');
 var gcm 		= require("node-gcm")
 
-var AppGCM  = function(){
-  
-};
+var AppGCM  = function(){};
 
 AppGCM.prototype.pushNotification = function(data,callback) {
-
   //Add your mobile device registration tokens here
-  var regTokens = [config.serverAPIKey_gcm];
+  var regTokens = data.senders;//[config.serverAPIKey_gcm];
   //Replace your developer API key with GCM enabled here
   var sender = new gcm.Sender(config.senderId_gcm);
   var message = new gcm.Message(); 
 
-  var obj = data.data;
+  var obj = data.msgObj;
   message.addData(obj);
   message.addNotification('title', obj.Title);
   message.addNotification('icon', 'ic_launcher');

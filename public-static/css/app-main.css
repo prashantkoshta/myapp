@@ -6,3 +6,8 @@ ul.list-unstyled li {
     width: 500px;
     height: 400px;
 }
+
+header{
+	height:50px;
+	    border: solid;
+}

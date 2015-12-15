@@ -37,7 +37,7 @@
 	  <% if( arRole.indexOf("admin") > -1){ %>
 	  <li><a href="/admincontrol/gateway/admindashboard" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_ADMIN_CLICK','msg':'PRIVATE_NAV_ADMIN_CLICK'})">Admin</a></li>
 	  <% } %>
-	  <li><a href="/logout" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_LOGOUT_CLICK','msg':'PRIVATE_NAV_LOGOUT_CLICK'})">Logout</a></li>
+	  <li><a href="#" ng-click="onLogout();setGA({'event':'event','eventType':'PRIVATE_NAV_LOGOUT_CLICK','msg':'PRIVATE_NAV_LOGOUT_CLICK'})">Logout</a></li>
 	  
 	</ul>
   </div><!-- /.navbar-collapse -->

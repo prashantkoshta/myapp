@@ -4,7 +4,7 @@ var User = require('../models/user');
 var url  = require('url');
 var AppRule = require('../config/apprule-engine');
 var jwt    = require('jsonwebtoken');
-
+var config = require('../config/config');
 module.exports = function(app, passport) {
 
     // =====================================
@@ -169,11 +169,30 @@ module.exports = function(app, passport) {
     // LOGOUT ==============================
     // =====================================
     app.get('/logout', function(req, res) {
-        req.session.destroy();
+		req.session.destroy();
         delete req.session;
         req.logout();
-        res.redirect('/');
-        res.end();
+		var token = req.body.token || req.query.token || req.headers['token'];
+		if (token) {
+			jwt.verify(token,config.sessionSecret, function(err, decoded) {
+			  if (err) {
+				 if(err.name === "TokenExpiredError"){
+					 var new_decoded = jwt.decode(token,{complete: true});
+					 User.findOneAndUpdate({"_id":new_decoded.payload._id},{$set:{"lastlogouttime":new Date()}},{upsert:true},function(err,user){
+						if(err) throw err;
+						return res.json({ 'error': false, 'errorType': "", "data": ""});
+					});
+				 }
+			  } else {
+				var new_decoded = jwt.decode(token,{complete: true});
+				 User.findOneAndUpdate({"_id":new_decoded.payload._id},{$set:{"lastlogouttime":new Date()}},{upsert:true},function(err,user){
+					if(err) throw err;
+					return res.json({ 'error': false, 'errorType': "", "data": ""});
+				});
+			  }
+			});
+		}		
+        //res.redirect('/');
+        //res.end();
     });
-
 };

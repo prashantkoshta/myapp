@@ -11,38 +11,70 @@ var mongoose = require('mongoose');
 var UPLOAD_FILE_SIZE = 1 * 1024 * 1024;
 var ALLOWD_FILE_TYPE = ".zip,.txt,.apk,.ipa";
 var ProjectFactory = require('../controller/project-factory');
+var async    = require('async');
 
 module.exports = (function() {
-	function getBuildInfoForPublish(req,res,callback){
+	
+	function getBuildInfoForPublish(req,res,done){
 		var data = req.body;
-		for(var j =0;j<data.builds.length;j++){
-			data.builds[j] = mongoose.Types.ObjectId(data.builds[j]);
-		}
-		Projects.findOne({"projectname":data.projectname},function(e,proj){
-			if(e) throw e;
-			if(!proj) {
-			    return callback(false,"",null);  
+		async.waterfall([
+			function(callback){
+				// Query
+				// db.projects.findOne({"_id" : "projectid_6"},{"builds":{$elemMatch:{"_id" :{$in:["buildid_8"]}}},"projectname":1});
+				Projects.findOne({"projectname":data.projectname},{"builds":{$elemMatch:{"_id" :{$in:data.builds}}},"projectname":1},function(e,proj){
+					if(e) throw e;
+					if(!proj) callback(new Error(true),"", proj);
+					if(!proj.builds) return(false,"",proj);
+					var obj = proj.builds[0];
+					var msgData = {
+						"_id" : proj._id,
+						"ProjectName" : proj.projectname,
+						"Title" : obj.buildname,
+						"CreatedBy" : obj.createdby,
+						"URL" : config.baseURLPath + "/buildapp/gateway/downloadfile/"+obj.filename,
+						"APP_V " : obj.appversion,
+						"BNO" : obj.buildnum 
+					};
+					return callback(null,msgData,proj);
+				});
+			},
+			function(msgData,projObj,callback){
+				User.find({"projects" : {$in:[projObj._id]}},{mobiletoken:1,_id:0}, function(err1, tokens) {
+					if(err1) throw err1;
+					var arMobileTokens = [];
+					for(var i =0;i<tokens.length;i++){
+						arMobileTokens.push(tokens[i].mobiletoken);
+					}
+					console.log(msgData,arMobileTokens);
+					callback(null,{"msgObj":msgData,"senders":arMobileTokens});
+				});
 			}
-			
-			BuildInfo.findOne({"_id":data.builds[0]}, function(err, obj) {
-				if(err) throw err;
-				
-				if(!obj) {
-				    return callback(false,"",null);  
-				}
-				
-				var data = {
-					"ProjectName" : proj.projectname,
-					"Title" : obj.buildname,
-					"CreatedBy" : obj.createdby,
-					"URL" : config.baseURLPath + "/buildapp/gateway/downloadfile/"+obj.filename,
-					"APP_V " : obj.appversion,
-					"BNO" : obj.buildnum 
-				};
-				return callback(true,"",data);
-			});
-		})
+		],function(err,data){
+			if(err) done(true,"",{});
+			done(false,"",data);
+		});
 		
+		/*
+		
+		// Query
+		// db.projects.findOne({"_id" : "projectid_6"},{"builds":{$elemMatch:{"_id" :{$in:["buildid_8"]}}},"projectname":1});
+		Projects.findOne({"projectname":data.projectname},{"builds":{$elemMatch:{"_id" :{$in:data.builds}}},"projectname":1},function(e,proj){
+			if(e) throw e;
+			if(!proj) return(false,"",proj);
+			if(!proj.builds) return(false,"",proj);
+			var obj = proj.builds[0];
+			var data = {
+				"_id" : proj._id,
+				"ProjectName" : proj.projectname,
+				"Title" : obj.buildname,
+				"CreatedBy" : obj.createdby,
+				"URL" : config.baseURLPath + "/buildapp/gateway/downloadfile/"+obj.filename,
+				"APP_V " : obj.appversion,
+				"BNO" : obj.buildnum 
+			};
+			return done(true,"",data);
+		});
+		*/
 	}
 	
 	function getBuildInfo(callback){
@@ -231,42 +263,18 @@ module.exports = (function() {
 	}
 	
 	function subscribeForBuildInfo(req,res,callback){
-		//	callback(true,"fileSizeError",nul
-		var email = req.user.local.email;
+		var _id = req.user._id;
 		var mtoken = req.params.mobiletoken;
-		User.findOne({'local.email' : email },function(err, buildlist) {
-			if(err){
-                		throw err;
-			}
-			if(!buildlist) {
-			    return callback(false,"Invalid",null);  
-			}
-			/*User.update({"local.email": email}, {"$set": { "mobiletoken" : mtoken},{ upsert: false},function (err, result) {
-				if (err)
-					throw err;
-				return callback(true,"Done",null);  
-			});*/
+		User.findOneAndUpdate({'_id': _id},{"mobiletoken":mtoken},{upsert:true},function(err, buildlist) {
+			if(err) throw err;
 			return callback(false,"",null);
 		});
 	}
 	
 	function unsubscribeForBuildInfo(req,res,callback){
-		var email = req.user.local.email;
-		var mtoken = req.params.mobiletoken;
-		User.findOne({'local.email' : email },function(err, buildlist) {
-			if(err){
-                		throw err;
-			}
-			if(!buildlist) {
-			    return callback(false,"Invalid",null);  
-			}
-		
-			/*User.update({"local.email": email}, {"$set": { "mobiletoken" : null}, { upsert: false},function (err, result) {
-				if (err)
-					throw err;
-				return callback(true,"Done",null);  
-			});*/
-			
+		var _id = req.user._id;
+		User.findOneAndUpdate({'_id': _id},{"mobiletoken":null},{upsert:true},function(err, buildlist) {
+			if(err) throw err;
 			return callback(false,"",null);
 		});
 	}
