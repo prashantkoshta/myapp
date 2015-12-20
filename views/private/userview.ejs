@@ -21,13 +21,62 @@
 				<td data-title="'Last Name'" filter="{'local.lastname':'text'}" sortable="'local.lastname'">{{row.local.lastname}}</td>
 				<td data-title="'Role'" filter="{'role':'text'}" sortable="'role'">{{row.role}}</td>
 				<td data-title="'Projects Access'" filter="{'projects':'text'}" sortable="'projects'">{{row.projects}}</td>
-				<td><a href="#" ng-click=""><span class="glyphicon glyphicon-edit"></span></a></td>
+				<td><a href="#" ng-click="openEditInfo(row)"><span class="glyphicon glyphicon-edit"></span></a></td>
 		  </tr>
 		</table>
 	  </div>
    </div>
   
 </div>
+
+ <script type="text/ng-template" id="userDetails.html">
+	<div class="modal-header">
+		<h3 class="modal-title">User : {{user.local.firstname}}</h3>
+	</div>
+	<div class="modal-body">
+		<form>
+			<div class="form-group">
+				<label class="control-label" for="firstname">First Name</label>
+				<div>
+				  <input type="text" disabled class="form-control ng-pristine ng-valid ng-touched" ng-model="user.local.firstname" id="firstname" placeholder="Enter build name" value="user.local.firstname">
+				</div>
+			 </div>
+			 <div class="form-group">
+				<label class="control-label" for="middlename">Middle Name</label>
+				<div>
+				  <input type="text" disabled class="form-control ng-pristine ng-valid ng-touched" ng-model="user.local.middlename" id="middlename" placeholder="Enter build name" value="user.local.middlename">
+				</div>
+			 </div>
+			 <div class="form-group">
+				<label class="control-label" for="lastname">Last Name</label>
+				<div>
+				  <input type="text" disabled class="form-control ng-pristine ng-valid ng-touched" ng-model="user.local.firstname" id="lastname" placeholder="Enter build name" value="user.local.lastname">
+				</div>
+			 </div>
+			 <div class="form-group">
+				<label class="control-label" for="role">Role : {{user.role}}</label>
+				<div>				  
+					<select class="form-control ng-pristine ng-valid ng-touched" id="multipleSelect" multiple="true" ng-model="user.role" ng-options="r.role for r in roleList"></select>	
+				</div>
+			 </div>
+			 <div class="form-group">
+				<label class="control-label" for="multipleSelect">Projects : {{user.projects}}</label>
+				<div>
+					<select class="form-control ng-pristine ng-valid ng-touched" id="multipleSelect" multiple="true" ng-model="user.projects" ng-options="project.projectname+' ('+project._id+')' for project in projectList"></select>
+				    <!-- select class="form-control ng-pristine ng-valid ng-touched" name="multipleSelect" id="multipleSelectProject" ng-model="user.projects" multiple>
+					  <option ng-repeat="project in projectList" value="{{project}}">{{project}}</option>
+					</select -->	
+				</div>
+			 </div>
+			 
+		</form>
+		
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" type="button" ng-click="save()">Save</button>
+		<button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+	</div>
+</script>
 
 
 

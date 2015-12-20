@@ -2,6 +2,7 @@
 var Projects = require('../models/projects');
 var BuildInfo = require('../models/buildinfo');
 var User = require('../models/user');
+var Role = require('../models/role');
 var mongoose = require('mongoose');
 var async    = require('async');
 var indexcounter    = require('../models/indexcounter');
@@ -9,7 +10,7 @@ var genrateKey = require('../config/genratekey');
 
 var ProjectFactory = function(){};
 
-ProjectFactory.prototype.getProjectList = function(data,done){
+ProjectFactory.prototype.getProjectListByUserId = function(data,done){
   		async.waterfall([
 	    function(callback){
 			User.findOne({"_id":data._id},{"projects":1},function(err, list) {
@@ -63,7 +64,7 @@ ProjectFactory.prototype.createProject = function(data,done){
 			});
 		},
 		function(projectid,callback){
-			User.findOneAndUpdate({"_id":data.created_user_id},{$addToSet:{"projects":projectid}},{ upsert: false },function(er1,users){
+			User.findOneAndUpdate({"_id":data.created_user_id},{$addToSet : {"projects": { $each: data.projects}}, $addToSet : {"role": { $each: data.role}}},{ upsert: false },function(er1,users){
 				if(er1) throw er1;
 				if(!users) return callback(new Error(true),"No Project Found",users);
 				callback(null,users);
@@ -167,7 +168,6 @@ ProjectFactory.prototype.addBuildsInProject = function(data,done){
 ProjectFactory.prototype.deleteBuild = function(data,callback){
 	// Query: 
 	//db.projects.update({"_id":"projectid_6"},{$pull:{"builds" : {"_id": {$in:["buildid_4"]}}}},false,true);
-	console.log(">>>>>",data.builds);
 	Projects.findOneAndUpdate({"projectname":data.projectname},{$pull:{"builds":{"_id":{$in:data.builds}}}},{upsert:false,multi:true},function(err, obj) {
 		if(err) throw err;
 		callback(false,"",obj);
@@ -181,7 +181,58 @@ ProjectFactory.prototype.getListOfUsers = function(data,callback){
   		User.find({},{"local.firstname":1,"local.middlename":1,"local.lastname":1,"role":1,"projects":1},function(err, list) {
   			if(err)throw err;
   			if(!list)return callback(false,"",list);
-  			return callback(false,"",list);
+			var result = [];
+			var len = list.length;
+			console.log(list);
+			for(var i in list){
+				Projects.find({"_id":{$in:list[i].projects}},{"_id":1,"projectname":1},function(er1,projects){
+					if(err)throw err;
+					var userJ = list[i].toJSON();
+					userJ.projects = projects;
+					result.push(userJ);
+					if(result.length===len){
+						console.log(">>>>>",result);
+						return callback(false,"",result);
+					}
+				}).sort({'projectname': 1});
+			}
   		}).sort({'projectname': 1});
 };
+
+ProjectFactory.prototype.getAllProjectList = function(data,callback){
+		Projects.find({},{"_id":1,"projectname":1},function(err,projects){
+			if(err)throw err;
+			return callback(false,"",projects);
+		}).sort({'projectname': 1});
+};
+
+ProjectFactory.prototype.updateProjectAndRoleInfoByUserId = function(data,callback){
+	Projects.find({"_id":{$in:data.projects}},{"_id":1,"projectname":1},function(err, proj) {
+		if(err) throw err;	
+		console.log(proj);		
+		if(!proj) return callback(true,"No Project Record Found.",proj);
+		var arProjs = [];
+		for(var i=0;i<proj.length;i++){
+			arProjs.push(proj[i]._id);
+		}
+		console.log(arProjs);
+		//,$addToSet:{"role":data.role}
+		//db.users.update({"_id":"userid_38"},{$set:{projects:["projectid_6","projectid_4"],role:["user"]}});
+		User.findOneAndUpdate({"_id":data._id},{$set:{"projects":data.projects,"role":data.role}},{upsert:true,multi:false},function(er,users){
+			if(err) throw err;
+			console.log(users);
+			if(!users) return callback(true,"No User Found",users);
+			return callback(false,"",users);
+		});
+	});
+};
+
+ProjectFactory.prototype.getAllRole = function(data,callback){
+		Role.find({},{"_id":0,"role":1},function(err,roles){
+			if(err)throw err;
+			console.log("roles : ",roles);
+			return callback(false,"",roles);
+		}).sort({'role': 1});
+};
+
 module.exports = ProjectFactory;

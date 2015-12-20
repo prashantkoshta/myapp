@@ -45,7 +45,7 @@ AppRule.prototype.getNewToken = function(user,res){
         role: user.role,
 		tokencreatedtime:new Date()
     };
-	var token = jwt.sign(userInfo,config.sessionSecret,{expiresIn:ms(1000 * 60 * 1)});
+	var token = jwt.sign(userInfo,config.sessionSecret,{expiresIn:ms(1000 * 60 * 10)});
 	return token;
 }
 
