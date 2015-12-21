@@ -32,7 +32,7 @@
 				<td data-title="'Build Version'" filter="{buildnum:'text'}" sortable="'buildnum'">{{item.buildnum}}</td>
 				<td data-title="'OS Type'" filter="{filename:'text'}" sortable="'filename'">{{item.filename | getFileType}}</td>
 				<td data-title="'Created By'" filter="{createdby:'text'}" sortable="'createdby'">{{item.createdby}}</td>
-				<td><a href="buildapp/gateway/downloadfile/{{item.filename}}" ng-click="setGA({'event':'event','eventType':'UPLOADDETAILS_PAGE_DOWNLOAD_CLICK','msg':'UPLOADDETAILS_PAGE_DOWNLOAD_CLICK'})"><span class="glyphicon glyphicon-download"></span></a></td>
+				<td><a href="buildapp/gateway/downloadfile/{{item.filename}}?token={{token}}" ng-click="setGA({'event':'event','eventType':'UPLOADDETAILS_PAGE_DOWNLOAD_CLICK','msg':'UPLOADDETAILS_PAGE_DOWNLOAD_CLICK'})"><span class="glyphicon glyphicon-download"></span></a></td>
 		  </tr>
 		</table>
 	  </div>

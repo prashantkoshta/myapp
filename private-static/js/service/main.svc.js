@@ -91,6 +91,7 @@ app.service('mainSvc', function($http,$q, $rootScope,$window) {
 		return defer.promise;
 	}
 	
+	/*
 	function changePassword(oPwd,nPwd){
         var defer = $q.defer();
 		//auth/changepassword/:opwd/:npwd
@@ -102,7 +103,7 @@ app.service('mainSvc', function($http,$q, $rootScope,$window) {
 		});
 		return defer.promise;
 	}
-		
+	*/	
 	/*function getProjectList(){
 		var defer = $q.defer();
         var url = "buildapp/gateway/listOfProjects";
@@ -153,7 +154,7 @@ app.service('mainSvc', function($http,$q, $rootScope,$window) {
 	}
 	
 	return {
-		"changePassword" : changePassword,
+		//"changePassword" : changePassword,
 		"getBuildDetails" : getBuildDetails,
 		"delBuild" : delBuild,
 		"saveBuildData" : saveBuildData,

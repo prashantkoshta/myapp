@@ -8,6 +8,7 @@ var config = require('../config/config');
 var AppRule = require('../config/apprule-engine');
 var AppGcm = require('../config/app-gcm');
 var ReqJsonValidator = require('../src/validator/request-json-validator');
+var AppServiceAccessValidator  = require('../src/validator/service-access-validator');
 
 var buildProject = require('../config/build-project');
 var ProjectFactory = require('../controller/project-factory');
@@ -20,7 +21,7 @@ router.post('/', AppRule.validateToken,function(req, res, next) {
 	next();
 });
 
-router.get('/getDetails', AppRule.validateToken,function(req, res, next) {
+router.get('/getDetails', AppRule.validateToken,AppServiceAccessValidator.validateServiceAccess, function(req, res, next) {
 	buildcontroller.getBuildInfo(function(bool,buildList){
 		if(bool){
 			res.json({ 'error': false, 'errorType': "", "data": buildList });
@@ -30,17 +31,17 @@ router.get('/getDetails', AppRule.validateToken,function(req, res, next) {
 	});
 });
 
-router.get('/downloadfile/:filename', AppRule.isLoggedIn,function (req, res) {
+router.get('/downloadfile/:filename', AppRule.validateToken,AppServiceAccessValidator.validateServiceAccess, function (req, res) {
 	res.download(config.uploadFilePath+"/"+req.params.filename); 
 });
 
-router.post('/saveBuildInfo', AppRule.validateToken, AppRule.canAccessService, function(req, res) {
+router.post('/saveBuildInfo', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess, function(req, res) {
 	buildcontroller.onFileUpload(req, res, function(errorFlag,erroType,result){
 			res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
 
-router.post('/publishBuildInfo', AppRule.validateToken, function(req, res) {
+router.post('/publishBuildInfo', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess,ReqJsonValidator.publishBuildInfoSchema, function(req, res) {
 	buildcontroller.getBuildInfoForPublish(req,res,function(errorFlag,erroType,result){
 		if(!errorFlag){
 			AppGcm.pushNotification(result,function(result){
@@ -52,32 +53,32 @@ router.post('/publishBuildInfo', AppRule.validateToken, function(req, res) {
 	});
 });
 
-router.post('/buildProjectAndDeploy', AppRule.validateToken,function(req, res) {
+router.post('/buildProjectAndDeploy', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess,function(req, res) {
 	buildcontroller.buildProject(req, res,function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
 
-router.get('/subscribe/:mobiletoken', AppRule.validateToken, function (req, res) {
+router.get('/subscribe/:mobiletoken', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess, function (req, res) {
 	buildcontroller.subscribeForBuildInfo(req, res, function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
 
-router.get('/unsubscribe', AppRule.validateToken, function (req, res) {
+router.get('/unsubscribe', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess,function (req, res) {
 	buildcontroller.unsubscribeForBuildInfo(req, res, function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
 
-router.get('/listOfProjects',AppRule.validateToken, function (req, res) {
+router.get('/listOfProjects',AppRule.validateToken,AppServiceAccessValidator.validateServiceAccess,function (req, res) {
 	var projFactory = new ProjectFactory();
 	projFactory.getProjectListByUserId(req.user, function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
 
-router.post('/createProject', AppRule.validateToken, function (req, res) {
+router.post('/createProject', AppRule.validateToken,AppServiceAccessValidator.validateServiceAccess, ReqJsonValidator.createProject,function (req, res) {
 	var projFactory = new ProjectFactory();
 	req.body.created_user_id = req.user._id;
 	req.body.created_userfullname = req.user.local.firstname + "  "+ req.user.local.lastname;
@@ -86,21 +87,21 @@ router.post('/createProject', AppRule.validateToken, function (req, res) {
 	});
 });
 
-router.post('/deleteProject', AppRule.validateToken, function (req, res) {
+router.post('/deleteProject', AppRule.validateToken,AppServiceAccessValidator.validateServiceAccess, function (req, res) {
 	var projFactory = new ProjectFactory();
 	projFactory.deleteProject(req, res, function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
 
-router.post('/projectBuilds', AppRule.validateToken, ReqJsonValidator.projectBuilds, function (req, res) {
+router.post('/projectBuilds', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess,ReqJsonValidator.projectBuilds, function (req, res) {
 	var projFactory = new ProjectFactory();
 	projFactory.getBuildsByProjectId(req, res, function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
 
-router.post('/addUserInProject', AppRule.validateToken, function (req, res) {
+router.post('/addUserInProject', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess,function (req, res) {
 	var projFactory = new ProjectFactory();
 	projFactory.addUserInProject(req.body, function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
@@ -108,7 +109,7 @@ router.post('/addUserInProject', AppRule.validateToken, function (req, res) {
 });
 
 
-router.post('/addBuildsInProject', AppRule.validateToken, function (req, res) {
+router.post('/addBuildsInProject', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess,function (req, res) {
 	var projFactory = new ProjectFactory();
 	projFactory.addBuildsInProject(req.body,function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
@@ -116,35 +117,35 @@ router.post('/addBuildsInProject', AppRule.validateToken, function (req, res) {
 });
 
 
-router.post('/deleteBuild', AppRule.validateToken, ReqJsonValidator.deleteBuilds, function (req, res) {
+router.post('/deleteBuild', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess,ReqJsonValidator.deleteBuilds, function (req, res) {
 	var projFactory = new ProjectFactory();
 	projFactory.deleteBuild(req.body, function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
 
-router.post('/usersList', AppRule.validateToken, function (req, res) {
+router.post('/usersList', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess,function (req, res) {
 	var projFactory = new ProjectFactory();
 	projFactory.getListOfUsers(req.body, function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
 
-router.get('/allListOfProjects', AppRule.validateToken, function (req, res) {
+router.get('/allListOfProjects', AppRule.validateToken,AppServiceAccessValidator.validateServiceAccess, function (req, res) {
 	var projFactory = new ProjectFactory();
 	projFactory.getAllProjectList(req.user, function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
 
-router.post('/updateProjectAndRoleInfoByUserId', AppRule.validateToken, ReqJsonValidator.userProjctRoleInfoSchema, function (req, res) {
+router.post('/updateProjectAndRoleInfoByUserId', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess,ReqJsonValidator.userProjctRoleInfoSchema, function (req, res) {
 	var projFactory = new ProjectFactory();
 	projFactory.updateProjectAndRoleInfoByUserId(req.body, function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
 
-router.get('/allRole', AppRule.validateToken, function (req, res) {
+router.get('/allRole', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess,function (req, res) {
 	var projFactory = new ProjectFactory();
 	projFactory.getAllRole(req.body, function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});

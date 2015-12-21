@@ -90,7 +90,6 @@ app.controller('buildController', function($scope,$rootScope, $state, mainSvc,ng
         );
 	}
 	
-	
 	$scope.onProjectSelect = function(project){
 		$scope.getDetails();
 	}

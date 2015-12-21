@@ -29,7 +29,8 @@ app.controller('accountController', function($scope,$rootScope, $state, validato
                 return;
             }
             var ref = this;
-            mainSvc.changePassword(this.oPwd,this.nPwd).then(
+			//
+            mainSvc.postCommon("/auth/changepassword",{"oPwd":this.oPwd,"nPwd":this.nPwd}).then(
                 function (response) {
                     if (response.error == false) {
                         $state.go("pwdChanged");
@@ -43,5 +44,36 @@ app.controller('accountController', function($scope,$rootScope, $state, validato
             );
         }
     };
+	
+	$scope.tokenAction = {
+		token : "",
+		flag : false,
+		onSubscribe : function(){
+			var ref = this;
+			mainSvc.getCommon("/buildapp/gateway/subscribe/"+this.token,{}).then(
+                function (response) {
+                    ref.token = "";
+					ref.flag = true;
+                },
+                function (err) {
+                    console.log("Error >>>", err); 
+                }
+            );
+		},
+		onUnSubscribe : function(){
+			var ref = this;
+			mainSvc.getCommon("/buildapp/gateway/unsubscribe",{}).then(
+                function (response) {
+                    ref.flag = true;
+                },
+                function (err) {
+                    console.log("Error >>>", err); 
+                }
+            );
+		},
+		onCloseMsg:function(){
+			this.flag = false;
+		}
+	};
 	
 });

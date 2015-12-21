@@ -38,7 +38,10 @@ app.controller('userviewController', function($scope,$rootScope,$state,mainSvc,n
 		  
 		   mainSvc.getCommon("/buildapp/gateway/allRole",{}).then(
 				function (response) {
-					$scope.roleList = response.data;
+					$scope.roleList = [];
+					for(var i in response.data){
+						$scope.roleList.push(response.data[i].role);
+					}
 				},
 				function (err) {
 					console.log("Error >>>", err); 
@@ -90,12 +93,8 @@ app.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, user, p
 	 for(var i in tempUser.projects){
 		 tempProjectList.push(tempUser.projects[i]._id);
 	 }
-	 for(var k in tempUser.role){
-		 tempRoleList.push(tempUser.role[k].role);
-	 }
 	 delete tempUser.local;
 	 tempUser.projects = tempProjectList;
-	 tempUser.role = tempRoleList;
 	 console.log(tempUser);
 	 mainSvc.postCommon("/buildapp/gateway/updateProjectAndRoleInfoByUserId",tempUser).then(
 		function (response) {

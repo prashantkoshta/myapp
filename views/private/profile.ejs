@@ -1,8 +1,8 @@
-  <% include ../template/htmldoctype %>
+  <% include ../template/private-htmldoctype%>
   <head>
 	<!-- Add Meta tag -->
 	<% include ../template/search-meta-tag %>
-	<meta http-equiv="refresh" content="600;URL=/logout"> 
+	<meta http-equiv="refresh" content="600;URL=/logout?token={{token}}"> 
 	<!-- End Meta tag -->
 
 
@@ -15,7 +15,7 @@
     
   </head>
 
-  <body ng-app="privateMain" ng-controller="privateMainController">
+  <body>
 	<input type="hidden" ng-model="token" ng-init="setInitToken('<%=token%>')"/>
 	<% if(typeof message != "undefined") {	%>
 	
@@ -49,17 +49,17 @@
 	<script src="/lib/js/ng-table.js"></script>
 	<script src="/lib/js/faye-browser.js"></script>
 	<!-- -->
-	<script src="/js/private-main.js?v=123123121554"></script>
+	<script src="/js/private-main.js?v=1231231215541"></script>
 	<script src="/js/components/custom-directive.js"></script>
-	<script src="/js/controller/account.ctrl.js"></script>
+	<script src="/js/controller/account.ctrl.js?v=122020151119"></script>
 	<script src="/js/factory/validator.fctry.js"></script>
 	<script src="/js/service/main.svc.js?v=1210201561132"></script>
 	<script src="/js/service/multipartform.js?v=12345"></script>
-	<script src="/js/controller/build.ctrl.js"></script>
+	<script src="/js/controller/build.ctrl.js?v=122020151106"></script>
 	<script src="/js/controller/upoadbuild.ctrl.js"></script>
 	<script src="/js/controller/createproject.ctrl.js"></script>
 	<script src="/js/controller/autobuild.ctrl.js"></script>
-	<script src="/js/controller/userview.ctrl.js?121920151025"></script>
+	<script src="/js/controller/userview.ctrl.js?121920151043"></script>
 	<script src="/js/factory/faye-batch.js"></script>
 	
 	

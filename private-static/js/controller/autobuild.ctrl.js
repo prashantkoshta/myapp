@@ -28,19 +28,7 @@ app.controller('autobuildController', function($scope,$rootScope, $state, mainSv
         );
 	        
     };
-    	
-	$scope.doPublish = function () {
-	        mainSvc.publishBuildDetails().then(
-	            function (response) {
-	            	 
-	            },
-	            function (err) {
-	                console.log("Error >>>", err); 
-	            }
-	        );
-    	};
-
-	
+  	
 	function getProjectList(){
 		 mainSvc.getCommon("/buildapp/gateway/listOfProjects",{}).then(
             function (response) {

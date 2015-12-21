@@ -84,7 +84,7 @@ module.exports = function(passport) {
                 newUser.local.lastname = req.body.lastname;
                 newUser.local.hash = hash;
                 newUser.local.password = encryptedPwd;
-                newUser.role.push("user");
+                newUser.role = "user";
 				
 				
 				async.waterfall([
@@ -185,7 +185,7 @@ module.exports = function(passport) {
                     newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName; // look at the passport user profile to see how names are returned
                     newUser.facebook.email = profile.emails[0].value;
 					//profile.emails[0].value; // facebook can return multiple emails so we'll take the first
-                    newUser.role.push("user");
+                    newUser.role = "user";
 					// save our user to the database
 					async.waterfall([
 						function(callback){
@@ -243,7 +243,7 @@ module.exports = function(passport) {
                     newUser.twitter.token       = token;
                     newUser.twitter.username    = profile.username;
                     newUser.twitter.displayName = profile.displayName;
-					newUser.role.push("user");
+					newUser.role = "user";
                     // save our user into the database
                     async.waterfall([
 						function(callback){
@@ -301,7 +301,7 @@ module.exports = function(passport) {
                     newUser.google.token = token;
                     newUser.google.name  = profile.displayName;
                     newUser.google.email = profile.emails[0].value; // pull the first email
-					newUser.role.push("user");
+					newUser.role = "user";
                     // save the user
                     async.waterfall([
 						function(callback){

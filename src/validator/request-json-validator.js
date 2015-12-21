@@ -34,4 +34,23 @@ AppJSONReqInputValidator.prototype.userProjctRoleInfoSchema = function(req, res,
 	}
 };
 
+AppJSONReqInputValidator.prototype.changepasswordSchema = function(req, res, next) {
+	var results = schemavalidator.validateInputJSON("changepasswordSchema",req.body);
+	if(results.errors.length>0){
+		res.json({ 'error': true, 'errorType': "Invalid Input", "data": results.errors});
+	}else{
+		next();
+	}
+};
+
+AppJSONReqInputValidator.prototype.publishBuildInfoSchema = function(req, res, next) {
+	var results = schemavalidator.validateInputJSON("publishBuildInfoSchema",req.body);
+	if(results.errors.length>0){
+		res.json({ 'error': true, 'errorType': "Invalid Input", "data": results.errors});
+	}else{
+		next();
+	}
+};
+
+
 module.exports = new AppJSONReqInputValidator();

@@ -76,7 +76,7 @@ app.run(function ($rootScope, $templateCache, $location, $window) {
     });
 });
 
-app.controller('privateMainController', function ($scope, $rootScope, $window ,$state, mainSvc) {
+app.controller('privateMainController', function ($scope, $rootScope, $window ,$state, mainSvc,$templateCache) {
 	
 	$rootScope.token;
 	$scope.setInitToken = function(token){
@@ -98,6 +98,7 @@ app.controller('privateMainController', function ($scope, $rootScope, $window ,$
     }
 	
 	$scope.onLogout = function(){
+		$templateCache.removeAll();
 		 mainSvc.getCommon("/logout",{}).then(
             function (response) {
 				 $window.location.href = "/";

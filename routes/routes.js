@@ -5,6 +5,7 @@ var url  = require('url');
 var AppRule = require('../config/apprule-engine');
 var jwt    = require('jsonwebtoken');
 var config = require('../config/config');
+var ReqJsonValidator = require('../src/validator/request-json-validator');
 module.exports = function(app, passport) {
 
     // =====================================
@@ -52,10 +53,10 @@ module.exports = function(app, passport) {
     // =====================================
     // Change Password =====================
     // =====================================
-	app.post('/auth/changepassword', AppRule.validateToken, function (req, res) {
+	app.post('/auth/changepassword', AppRule.validateToken, ReqJsonValidator.changepasswordSchema, function (req, res) {
         // render the page and pas,s in any flash data if it exists
         //res.render('index.ejs', { message: { 'error': true, 'errorType': "loginError", "description": req.flash('loginMessage') } });
-		adminTask.changePassword(req.session["userid"],req.body.oPwd,req.body.nPwd,function(a){
+		adminTask.changePassword(req.user._id,req.body.oPwd,req.body.nPwd,function(a){
 			if(!a){
 				req.flash('passwordMessage',"Incorrect password.")
 				res.json({ 'error': true, 'errorType': "passwordError", "description": req.flash('passwordMessage')});
@@ -180,14 +181,16 @@ module.exports = function(app, passport) {
 					 var new_decoded = jwt.decode(token,{complete: true});
 					 User.findOneAndUpdate({"_id":new_decoded.payload._id},{$set:{"lastlogouttime":new Date()}},{upsert:true},function(err,user){
 						if(err) throw err;
-						return res.json({ 'error': false, 'errorType': "", "data": ""});
+						//return res.json({ 'error': false, 'errorType': "", "data": ""});
+						return res.redirect('/');
 					});
 				 }
 			  } else {
 				var new_decoded = jwt.decode(token,{complete: true});
 				 User.findOneAndUpdate({"_id":new_decoded.payload._id},{$set:{"lastlogouttime":new Date()}},{upsert:true},function(err,user){
 					if(err) throw err;
-					return res.json({ 'error': false, 'errorType': "", "data": ""});
+					//return res.json({ 'error': false, 'errorType': "", "data": ""});
+					return res.redirect('/');
 				});
 			  }
 			});

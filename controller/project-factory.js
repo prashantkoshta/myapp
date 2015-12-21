@@ -3,7 +3,6 @@ var Projects = require('../models/projects');
 var BuildInfo = require('../models/buildinfo');
 var User = require('../models/user');
 var Role = require('../models/role');
-var mongoose = require('mongoose');
 var async    = require('async');
 var indexcounter    = require('../models/indexcounter');
 var genrateKey = require('../config/genratekey');
@@ -45,9 +44,13 @@ ProjectFactory.prototype.createProject = function(data,done){
 	
 	async.waterfall([
 	    function(callback){
-			Projects.findOne({"projectname":data.projectname},function(err, proj) {
+			Projects.findOne({"projectname":data.projectname},{projectname:1},function(err, proj) {
 				if(err) throw err;
-				if(proj) return callback(new Error("true"),"Project already exist.",proj);
+				if(proj) {
+					var e = new Error();
+					e.message = {'error':true,'errorType': "Project already exist.", "data": proj};
+					return callback(e);
+				}
 				callback(null,proj);
 			});
 		},
@@ -64,15 +67,19 @@ ProjectFactory.prototype.createProject = function(data,done){
 			});
 		},
 		function(projectid,callback){
-			User.findOneAndUpdate({"_id":data.created_user_id},{$addToSet : {"projects": { $each: data.projects}}, $addToSet : {"role": { $each: data.role}}},{ upsert: false },function(er1,users){
+			User.findOneAndUpdate({"_id":data.created_user_id},{$addToSet : {"projects": { $each:[projectid]}}},{upsert:true,multi:false},function(er1,users){
 				if(er1) throw er1;
-				if(!users) return callback(new Error(true),"No Project Found",users);
+				if(!users){ 
+					var e = new Error();
+					e.message = {'errorType': "No Project Found", "data": users};
+					return callback(e);
+				}
 				callback(null,users);
 			});
 		}
 	],function(err,data){
-		if(err) done(true,"Project already exist.",{});
-		done(false,"",data);
+		if(err) return done(err.message.error,err.message.errorType,err.message.data);
+		return done(false,"",data);
 	});
 	
 	

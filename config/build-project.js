@@ -1,11 +1,9 @@
 'use strict';
-var fayeConf          = require('./faye-conf.js');
-var os = require('os');
-var spawn = require('child_process').spawn; 
-var flagBuildDone = false;
-var BuildProject  = function(){
-  
-};
+var fayeConf        = require('./faye-conf.js');
+var os 				= require('os');
+var spawn 			= require('child_process').spawn; 
+var flagBuildDone 	= false;
+var BuildProject  	= function(){};
 
 BuildProject.prototype.buildNow = function(data,callback) {
 	/*  arg data

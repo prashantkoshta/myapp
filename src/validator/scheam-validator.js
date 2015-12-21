@@ -35,7 +35,10 @@ var gitSchema = {
 	"id": "/gitSchema",
 	"type": "object",
 	properties: {
-		url : {type: 'string'},
+		url : {
+			type: 'string',
+			"pattern" : /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
+		},
 		username : {type: 'string'},
 		password : {type: 'string'}
 	},
@@ -69,7 +72,7 @@ var deleteBuildSchema = {
 	"type": "object",
 	properties: {
 				projectname : {type: 'string'},
-				builds : {type: 'array'},
+				builds : {type: 'array',"uniqueItems": true},
 	},
 	additionalProperties: false,
 	required: ['projectname','builds']
@@ -80,30 +83,35 @@ var userProjctRoleInfoSchema = {
 	"type": "object",
 	properties: {
 				_id : {type: 'string'},
-				projects : {type: 'array'},
+				projects : {type: 'array',"uniqueItems": true},
 				role : {
-					type : 'array', 
-					"items": [{
 						"type" : "string",
 						"enum" : ["admin", "user"]
 					},
-					{
-						"type" : "string",
-						"enum" : ["user"]
-					}],
-					"minItems": 1,
-					"maxItems": 2},
 				},
 	additionalProperties: false,
 	required: ['_id','projects','role']
-}
+};
 
+
+var changepasswordSchema = {
+	"id": "/changepasswordSchema",
+	"type": "object",
+	properties: {
+				oPwd : {type: 'string'},
+				nPwd : {type: 'string'}
+				},
+	additionalProperties: false,
+	required: ['oPwd','nPwd']
+};
 
 var schemaMap = {
 	"projectBuildsSchema" : projectBuildsSchema,
 	"createProjectSchema" : createProjectSchema,
 	"deleteBuildSchema" : deleteBuildSchema,
-	"userProjctRoleInfoSchema" : userProjctRoleInfoSchema
+	"userProjctRoleInfoSchema" : userProjctRoleInfoSchema,
+	"changepasswordSchema" : changepasswordSchema,
+	"publishBuildInfoSchema" : deleteBuildSchema
 };
 v.addSchema(gitSchema, '/gitSchema');
 
@@ -114,6 +122,8 @@ AppJSONValidator.prototype.validateInputJSON = function(schemaType,inputJson) {
 	//console.log(results);
 	return results;
 };
+
+
 /*
 var t = new AppJSONValidator().validateInputJSON("deleteBuildSchema",{
 "projectname" : "New Test 1",

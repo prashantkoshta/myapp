@@ -2,7 +2,7 @@
 var User            = require('../models/user');
 var mail 			= require('../config/mail');
 var CustomMail 		= require('../config/custommail');
-var config 		= require('../config/config');
+var config 			= require('../config/config');
 var url 			= require('url');
 
 module.exports = (function() {
@@ -70,8 +70,8 @@ module.exports = (function() {
 		
 	}
 	
-	function changePassword(aEmail,oPassword,nPassword,callback){
-		User.findOne({'local.email' : aEmail}, function (err, user) {
+	function changePassword(id,oPassword,nPassword,callback){
+		User.findOne({'_id' : id}, function (err, user) {
 			    if (err)
                     throw err;
 				if (!user) {
@@ -82,7 +82,7 @@ module.exports = (function() {
 					 return callback(false,null);
 				 
 				var newUser = new User();
-				User.update({"local.email": aEmail}, {"$set": { "local.password" : newUser.generatePassword(user.local.hash,nPassword)}}, { upsert: false},function (err, result) {
+				User.update({"_id": id}, {"$set": { "local.password" : newUser.generatePassword(user.local.hash,nPassword)}}, { upsert: false},function (err, result) {
 					if (err)
 						throw err;
 					return callback(true,user);

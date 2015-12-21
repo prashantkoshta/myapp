@@ -8,30 +8,6 @@ var User   = require('../models/user');
 var ms = require('ms');
 var AppRule = function(){ };
 
-AppRule.prototype.canAccessService = function(req, res, next) {
-	var arRole = req.user.role;
-	var access = true;
-	if((arRole.indexOf("user") > -1 || arRole.indexOf("admin") >-1) && req.url === "/saveBuildInfo"){
-		access = true;
-	}
-    if (access)
-        return next();
-    res.render('error');
-    res.end();
-}
-
-AppRule.prototype.canAccessServiceOnlyAdmin = function(req, res, next) {
-	var arRole = req.user.role;
-	var access = true;
-	if((arRole.indexOf("user") > -1 || arRole.indexOf("admin") >-1) && req.url === "/buildProjectAndDeploy"){
-		access = false;
-	}
-    if (access)
-        return next();
-    res.render('error');
-    res.end();
-}
-
 AppRule.prototype.isLoggedIn = function(req, res, next) {
     if (req.isAuthenticated())
         return next();

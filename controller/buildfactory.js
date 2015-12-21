@@ -229,7 +229,7 @@ module.exports = (function() {
 					console.log("XXXX I am done");
 					var fromData = new Object();
 					fromData.builddate = new Date();
-					fromData.buildname = "auto uplodaed test";
+					fromData.buildname = "Auto upload test";
 					fromData.appversion = "av";
 					fromData.buildnum = "bv";
 					fromData.filename = "autoupload"+getTimeStamp()+".apk";
