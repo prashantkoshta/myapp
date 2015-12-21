@@ -85,7 +85,7 @@ module.exports = function(app, passport) {
 		  if (err) { return next(err); }
 		  var token = AppRule.getNewToken(user,res);
 		  res.setHeader("token", token);
-		  res.render('private/profile.ejs', {arRole:user.role,"token":token});
+		  res.render('private/profile.ejs', {role:user.role,"token":token});
 		});
 	  })(req, res, next);
 	});
@@ -119,7 +119,7 @@ module.exports = function(app, passport) {
     // we will use route middleware to verify this (the isLoggedIn function)
 	
 	  app.get('/profile', AppRule.validateToken, function(req, res) {
-		res.render('private/profile.ejs', {arRole:user.role,"token":token});
+		res.render('private/profile.ejs', {role:user.role,"token":token});
       });
 
 

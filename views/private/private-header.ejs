@@ -16,7 +16,7 @@
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	<ul class="nav navbar-nav">
 	  <li><a ui-sref="home" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_HOME_CLICK','msg':'PRIVATE_NAV_HOME_CLICK'})">Build Details<span class="sr-only">(current)</span></a></li>
-	  <% if( arRole.indexOf("user") > -1 || arRole.indexOf("admin") > -1){ %>
+	  <% if( role === "user"){ %>
 		<li><a ui-sref="upload" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_UPLOAD_CLICK','msg':'PRIVATE_NAV_UPLOAD_CLICK'})">Upload</a></li>
 	  <% } %>
 	  <li><a ui-sref="autobuild" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_BUILDNOW_CLICK','msg':'PRIVATE_NAV_BUILDNOW_CLICK'})">Build Now</a></li>
@@ -26,15 +26,19 @@
 			<li><a ui-sref="createproject" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_CREATEPROJECT_CLICK','msg':'PRIVATE_NAV_CREATEPROJECT_CLICK'})">Create Project</a></li>
 			<li><a href="#">Add Users</a></li>
 			<li><a href="#">Change Role</a></li>
+			
+			<% if( role === "admin"){ %>
 			<li role="separator" class="divider"></li>
 			<li><a ui-sref="userview">View Users</a></li>
 			<li role="separator" class="divider"></li>
+			<% } %>
+			
 			<li><a href="#">Genrate Reports</a></li>
 		  </ul>
 	  </li>
 	  <li><a ui-sref="aboutus" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_ABOUTUS_CLICK','msg':'PRIVATE_NAV_ABOUTUS_CLICK'})">About Us</a></li>
 	  <li><a ui-sref="chpwd" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_CHANGEPASSWORD_CLICK','msg':'PRIVATE_NAV_CHANGEPASSWORD_CLICK'})">Change Password</a></li>
-	  <% if( arRole.indexOf("admin") > -1){ %>
+	  <% if( role === "admin"){ %>
 	  <li><a href="/admincontrol/gateway/admindashboard" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_ADMIN_CLICK','msg':'PRIVATE_NAV_ADMIN_CLICK'})">Admin</a></li>
 	  <% } %>
 	  <li><a href="#" ng-click="onLogout();setGA({'event':'event','eventType':'PRIVATE_NAV_LOGOUT_CLICK','msg':'PRIVATE_NAV_LOGOUT_CLICK'})">Logout</a></li>
