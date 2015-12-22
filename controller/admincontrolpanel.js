@@ -3,7 +3,6 @@ var mongoose = require('mongoose');
 module.exports = (function() {
 	function getCollectionList(req,res,callback){
 		mongoose.connection.db.collectionNames(function(err, result) {
-			console.log(err,result);
 			if(err){
                 throw err;
 			}

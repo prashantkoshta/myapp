@@ -24,7 +24,6 @@ AppGCM.prototype.pushNotification = function(data,callback) {
       console.error(err);
     } else {
       callback(response);
-      console.log(response);
     }
   });
   

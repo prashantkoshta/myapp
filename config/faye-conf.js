@@ -12,8 +12,6 @@ var fayeBayeux = function fayeBayeux(){
 	
 	this.pulishMessage = function(channel,data){
 	   bayeux.getClient().publish(channel,data);
-	   // console.log('broadcast message:' + req.body.message);
-	   //res.send(200);
 	};
 	
     if(fayeBayeux.caller != fayeBayeux.getInstance){

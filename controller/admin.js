@@ -43,7 +43,6 @@ module.exports = (function() {
 				   return callback(false,user);;
 				}
 				var password = getRandomPwd(5,'qwertyuiopasdfg@!hjklzxcv#%bnmQWERTYUIO$PASDFGHJKLZXCVBNM12345*?67890');
-				console.log("Password",password);
 				var newUser = new User();
 				var encryptedPwd = newUser.generatePassword( user.local.hash,password); 
 				User.update({"local.email": aEmail}, {"$set": {"local.password" : encryptedPwd}}, { upsert: false},function (err, result) {
@@ -61,7 +60,7 @@ module.exports = (function() {
 						pageUrl: getLoginUrl(req)
 					};
 					var customMail = new CustomMail(data.member.email, 'Your password changed : '+data.appName, 'forgotpwdmail', data);
-					customMail.send(function (err){console.log("Error :",err);})
+					customMail.send(function (err){console.error("Error :",err);})
 					return callback(true,user);
 				});
 				

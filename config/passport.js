@@ -60,7 +60,6 @@ module.exports = function(passport) {
 
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
-       console.log('req.validnocaptcha :',req.validnocaptcha);
        if(!req.validnocaptcha) { return done(null, false, req.flash('signupMessage', errorMap.getError("0001")));} 	
        User.findOne({'local.email' : email},{'local.email':1,'local.password':1,'local.hash':1,'local.firstname':1,'local.middlename':1,'local.lastname':1,'role':1}, function(err, user) {
             // if there are any errors, return the error
@@ -79,6 +78,7 @@ module.exports = function(passport) {
             	var encryptedPwd = newUser.generatePassword(hash,password);
                 // set the user's local credentials
                 newUser.local.email    = email;
+				newUser.fullname = req.body.firstname+" "+req.body.middlename+" "+req.body.lastname;
                 newUser.local.firstname = req.body.firstname;
                 newUser.local.middlename = req.body.middlename;
                 newUser.local.lastname = req.body.lastname;
@@ -126,7 +126,6 @@ module.exports = function(passport) {
         passReqToCallback : true // allows us to pass back the entire request to the callback
     },
     function(req, email, password, done) { // callback with email and password from our form
-        console.log(email,password,done);
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
         User.findOne({ 'local.email' :  email },{"auth_token":0}, function(err, user) {
@@ -184,6 +183,7 @@ module.exports = function(passport) {
                     newUser.facebook.token = token; // we will save the token that facebook provides to the user                    
                     newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName; // look at the passport user profile to see how names are returned
                     newUser.facebook.email = profile.emails[0].value;
+					newUser.fullname =  newUser.facebook.name;
 					//profile.emails[0].value; // facebook can return multiple emails so we'll take the first
                     newUser.role = "user";
 					// save our user to the database
@@ -223,7 +223,6 @@ module.exports = function(passport) {
         // make the code asynchronous
         // User.findOne won't fire until we have all our data back from Twitter
         process.nextTick(function() {
-
             User.findOne({ 'twitter.id' : profile.id }, function(err, user) {
 
                 // if there is an error, stop everything and return that
@@ -243,6 +242,7 @@ module.exports = function(passport) {
                     newUser.twitter.token       = token;
                     newUser.twitter.username    = profile.username;
                     newUser.twitter.displayName = profile.displayName;
+					newUser.fullname = profile.displayName;
 					newUser.role = "user";
                     // save our user into the database
                     async.waterfall([
@@ -301,6 +301,7 @@ module.exports = function(passport) {
                     newUser.google.token = token;
                     newUser.google.name  = profile.displayName;
                     newUser.google.email = profile.emails[0].value; // pull the first email
+					newUser.fullname = profile.displayName;
 					newUser.role = "user";
                     // save the user
                     async.waterfall([

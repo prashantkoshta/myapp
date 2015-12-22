@@ -60,6 +60,20 @@ var createProjectSchema = {
 	required: ['projectname','git','buildbatchfile','buildlocation','status']
 };
 
+var editProjectSchema = {
+	"id": "/editprojectSchema",
+	"type": "object",
+	properties: {
+				_id : {type: 'string'},
+				git : {"$ref": "/gitSchema"},
+				buildbatchfile : {type: 'string'},
+				buildlocation : {type: 'string'},
+				status : {"enum": [ "Active" ] }	  
+	},
+	additionalProperties: false,
+	required: ['_id','git','buildbatchfile','buildlocation','status']
+};
+
 
 
 // Delete build
@@ -111,7 +125,8 @@ var schemaMap = {
 	"deleteBuildSchema" : deleteBuildSchema,
 	"userProjctRoleInfoSchema" : userProjctRoleInfoSchema,
 	"changepasswordSchema" : changepasswordSchema,
-	"publishBuildInfoSchema" : deleteBuildSchema
+	"publishBuildInfoSchema" : deleteBuildSchema,
+	"editProjectSchema" : editProjectSchema
 };
 v.addSchema(gitSchema, '/gitSchema');
 
@@ -119,7 +134,6 @@ v.addSchema(gitSchema, '/gitSchema');
 
 AppJSONValidator.prototype.validateInputJSON = function(schemaType,inputJson) {
 	var results = v.validate(inputJson,schemaMap[schemaType]);
-	//console.log(results);
 	return results;
 };
 

@@ -50,7 +50,6 @@ app.controller('userviewController', function($scope,$rootScope,$state,mainSvc,n
 	}
 	$scope.items = ['item1', 'item2', 'item3'];
 	$scope.openEditInfo = function(user){
-		console.log(">>>",user);
 		var size = "lg";
 		 var modalInstance = $uibModal.open({
 		  animation: $scope.animationsEnabled,
@@ -94,8 +93,8 @@ app.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, user, p
 		 tempProjectList.push(tempUser.projects[i]._id);
 	 }
 	 delete tempUser.local;
+	 delete tempUser.fullname;
 	 tempUser.projects = tempProjectList;
-	 console.log(tempUser);
 	 mainSvc.postCommon("/buildapp/gateway/updateProjectAndRoleInfoByUserId",tempUser).then(
 		function (response) {
 			 response.data;

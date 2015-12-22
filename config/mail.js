@@ -22,9 +22,8 @@ module.exports = {
         // send mail with defined transport object
         smtpTransport.sendMail(mailOptions, function (error, response) {
             if (error) {
-                console.log(error);
+                console.error(error);
             } else {
-                console.log("Message sent: " + response.message);
             }
 			smtpTransport.close();
     // if you don't want to use this transport object anymore, uncomment following line

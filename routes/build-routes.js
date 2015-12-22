@@ -81,7 +81,7 @@ router.get('/listOfProjects',AppRule.validateToken,AppServiceAccessValidator.val
 router.post('/createProject', AppRule.validateToken,AppServiceAccessValidator.validateServiceAccess, ReqJsonValidator.createProject,function (req, res) {
 	var projFactory = new ProjectFactory();
 	req.body.created_user_id = req.user._id;
-	req.body.created_userfullname = req.user.local.firstname + "  "+ req.user.local.lastname;
+	req.body.created_userfullname = req.user.fulname;
 	projFactory.createProject(req.body,function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
@@ -148,6 +148,13 @@ router.post('/updateProjectAndRoleInfoByUserId', AppRule.validateToken, AppServi
 router.get('/allRole', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess,function (req, res) {
 	var projFactory = new ProjectFactory();
 	projFactory.getAllRole(req.body, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
+router.post('/editProjectInfo', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess,ReqJsonValidator.editProjectSchema, function (req, res) {
+	var projFactory = new ProjectFactory();
+	projFactory.editProjectInfo(req.body, function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });

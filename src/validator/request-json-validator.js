@@ -53,4 +53,14 @@ AppJSONReqInputValidator.prototype.publishBuildInfoSchema = function(req, res, n
 };
 
 
+AppJSONReqInputValidator.prototype.editProjectSchema = function(req, res, next) {
+	var results = schemavalidator.validateInputJSON("editProjectSchema",req.body);
+	if(results.errors.length>0){
+		res.json({ 'error': true, 'errorType': "Invalid Input", "data": results.errors});
+	}else{
+		next();
+	}
+};
+
+
 module.exports = new AppJSONReqInputValidator();

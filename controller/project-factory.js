@@ -19,7 +19,6 @@ ProjectFactory.prototype.getProjectListByUserId = function(data,done){
 			});
 		},
 		function(arProjectid,callback){
-			console.log(arProjectid);
 			Projects.find({"_id":{$in:arProjectid}},{"_id":1,"projectname":1}, function(err1, projects) {
 				if(err1) throw err1;
 				callback(null,projects);
@@ -71,10 +70,10 @@ ProjectFactory.prototype.createProject = function(data,done){
 				if(er1) throw er1;
 				if(!users){ 
 					var e = new Error();
-					e.message = {'errorType': "No Project Found", "data": users};
+					e.message = {'errorType': "No Project Found", "data":projectid};
 					return callback(e);
 				}
-				callback(null,users);
+				callback(null,projectid);
 			});
 		}
 	],function(err,data){
@@ -109,16 +108,13 @@ ProjectFactory.prototype.getBuildsByProjectId = function(req,res,callback){
 ProjectFactory.prototype.addUserInProject = function(data,callback){
 	Projects.find({"projectname":{$in:data.projects}},{"_id":0,"projectname":1},function(err, proj) {
 		if(err) throw err;	
-		console.log(proj);		
 		if(!proj) return callback(true,"No Project Record Found.",proj);
 		var arProjs = [];
 		for(var i=0;i<proj.length;i++){
 			arProjs.push(proj[i]._id);
 		}
-		console.log(arProjs);
-		User.findOneAndUpdate({"local.email":data.user},{$addToSet:{"projects":arProjs}},{ upsert: false },function(er,users){
+		User.findOneAndUpdate({"_id":data._id},{$addToSet:{"projects":arProjs}},{ upsert: false },function(er,users){
 			if(err) throw err;
-			console.log(users);
 			if(!users) return callback(true,"No Project Found",users);
 			return callback(false,"",users);
 		});
@@ -185,12 +181,11 @@ ProjectFactory.prototype.deleteBuild = function(data,callback){
 *	Get All list of Users
 */
 ProjectFactory.prototype.getListOfUsers = function(data,callback){
-  		User.find({},{"local.firstname":1,"local.middlename":1,"local.lastname":1,"role":1,"projects":1},function(err, list) {
+  		User.find({},{"fullname":1,"role":1,"projects":1},function(err, list) {
   			if(err)throw err;
   			if(!list)return callback(false,"",list);
 			var result = [];
 			var len = list.length;
-			console.log(list);
 			for(var i in list){
 				Projects.find({"_id":{$in:list[i].projects}},{"_id":1,"projectname":1},function(er1,projects){
 					if(err)throw err;
@@ -198,7 +193,6 @@ ProjectFactory.prototype.getListOfUsers = function(data,callback){
 					userJ.projects = projects;
 					result.push(userJ);
 					if(result.length===len){
-						console.log(">>>>>",result);
 						return callback(false,"",result);
 					}
 				}).sort({'projectname': 1});
@@ -216,18 +210,15 @@ ProjectFactory.prototype.getAllProjectList = function(data,callback){
 ProjectFactory.prototype.updateProjectAndRoleInfoByUserId = function(data,callback){
 	Projects.find({"_id":{$in:data.projects}},{"_id":1,"projectname":1},function(err, proj) {
 		if(err) throw err;	
-		console.log(proj);		
 		if(!proj) return callback(true,"No Project Record Found.",proj);
 		var arProjs = [];
 		for(var i=0;i<proj.length;i++){
 			arProjs.push(proj[i]._id);
 		}
-		console.log(arProjs);
 		//,$addToSet:{"role":data.role}
 		//db.users.update({"_id":"userid_38"},{$set:{projects:["projectid_6","projectid_4"],role:["user"]}});
 		User.findOneAndUpdate({"_id":data._id},{$set:{"projects":data.projects,"role":data.role}},{upsert:true,multi:false},function(er,users){
 			if(err) throw err;
-			console.log(users);
 			if(!users) return callback(true,"No User Found",users);
 			return callback(false,"",users);
 		});
@@ -237,9 +228,16 @@ ProjectFactory.prototype.updateProjectAndRoleInfoByUserId = function(data,callba
 ProjectFactory.prototype.getAllRole = function(data,callback){
 		Role.find({},{"_id":0,"role":1},function(err,roles){
 			if(err)throw err;
-			console.log("roles : ",roles);
 			return callback(false,"",roles);
 		}).sort({'role': 1});
+};
+// Not tested yet
+ProjectFactory.prototype.editProjectInfo = function(data,callback){
+		Projects.findOneAndUpdate({"_id":data._id},{$set:{'buildlocation':data.buildlocation,'buildbatchfile':data.buildbatchfile,'status':data.status,'git.url':data.git.url,'git.username':data.git.username,'git.password':data.git.password}},function(err,project){
+			if(err)throw err;
+			if(!project) return callback(true,"No Project Found.",project);
+			return callback(false,"",data._id);
+		});
 };
 
 module.exports = ProjectFactory;

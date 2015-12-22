@@ -26,7 +26,7 @@ AppRule.prototype.getNewToken = function(user,res){
 }
 
 AppRule.prototype.validateToken = function (req, res, next){
-	var token = req.body.token || req.query.token || req.headers['token'];
+	var token = req.headers['token'] || req.body.token || req.query.token;
 		 if (token) {
 			jwt.verify(token,config.sessionSecret, function(err, decoded) {
 			  if (err) {

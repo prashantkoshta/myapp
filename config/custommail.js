@@ -38,7 +38,6 @@ CustomMail.prototype.send = function (callback){
 		smtpTransport.sendMail(mailOptions, function (err, info){
 			// If a problem occurs, return callback with the error
 			if(err) return callback(err);
-			console.log(info);
 			callback();
 		});
 	});

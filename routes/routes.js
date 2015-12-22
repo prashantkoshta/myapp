@@ -78,16 +78,16 @@ module.exports = function(app, passport) {
     });
 
  	app.post('/login', function(req, res, next) {
-	  passport.authenticate('local-login', function(err, user, info) {
-		if (err) { return next(err); }
-		if (!user) {return res.redirect('/login'); }
-		req.logIn(user, function(err) {
-		  if (err) { return next(err); }
-		  var token = AppRule.getNewToken(user,res);
-		  res.setHeader("token", token);
-		  res.render('private/profile.ejs', {role:user.role,"token":token});
-		});
-	  })(req, res, next);
+	  passport.authenticate('local-login',function(err, user, info){
+			if (err) { return next(err); }
+			if (!user) {return res.redirect('/login'); }
+			req.logIn(user, function(err) {
+			  if (err) { return next(err); }
+			  var token = AppRule.getNewToken(user,res);
+			  res.setHeader("token", token);
+			  res.redirect('/profile?token='+token);
+				});
+		})(req, res, next);
 	});
 
     
@@ -119,10 +119,9 @@ module.exports = function(app, passport) {
     // we will use route middleware to verify this (the isLoggedIn function)
 	
 	  app.get('/profile', AppRule.validateToken, function(req, res) {
-		res.render('private/profile.ejs', {role:user.role,"token":token});
+		res.render('private/profile.ejs', {role:req.user.role,"token":res._headers.token});
       });
-
-
+	  
     // =====================================
     // FACEBOOK ROUTES =====================
     // =====================================
@@ -130,11 +129,18 @@ module.exports = function(app, passport) {
     app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
 
     // handle the callback after facebook has authenticated the user
-    app.get('/auth/facebook/callback',
-        passport.authenticate('facebook', {
-            successRedirect : '/profile',
-            failureRedirect : '/'
-    }));
+    app.get('/auth/facebook/callback',function(req, res, next) {
+	  passport.authenticate('facebook',function(err, user, info){
+			if (err) { return next(err); }
+			if (!user) {return res.redirect('/login'); }
+			req.logIn(user, function(err) {
+			  if (err) { return next(err); }
+			  var token = AppRule.getNewToken(user,res);
+			  res.setHeader("token", token);
+			  res.redirect('/profile?token='+token);
+				});
+		})(req, res, next);
+	});
 
 
     // =====================================
@@ -143,13 +149,20 @@ module.exports = function(app, passport) {
     // route for twitter authentication and login
    app.get('/auth/twitter', passport.authenticate('twitter'));
 
-    // handle the callback after twitter has authenticated the user
-    app.get('/auth/twitter/callback',
-        passport.authenticate('twitter', {
-            successRedirect : '/profile',
-            failureRedirect : '/'
-    }));
-
+   app.get('/auth/twitter/callback',function(req, res, next) {
+	  passport.authenticate('twitter',function(err, user, info){
+			if (err) { return next(err); }
+			if (!user) {return res.redirect('/login'); }
+			req.logIn(user, function(err) {
+			  if (err) { return next(err); }
+			  var token = AppRule.getNewToken(user,res);
+			  res.setHeader("token", token);
+			  res.redirect('/profile?token='+token);
+				});
+		})(req, res, next);
+	});
+	
+	
 
     // =====================================
     // GOOGLE ROUTES =======================
@@ -160,11 +173,18 @@ module.exports = function(app, passport) {
     app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
 
     // the callback after google has authenticated the user
-    app.get('/auth/google/callback',
-            passport.authenticate('google', {
-                    successRedirect : '/profile',
-                    failureRedirect : '/'
-    }));
+    app.get('/auth/google/callback',function(req, res, next) {
+	  passport.authenticate('google',function(err, user, info){
+			if (err) { return next(err); }
+			if (!user) {return res.redirect('/login'); }
+			req.logIn(user, function(err) {
+			  if (err) { return next(err); }
+			  var token = AppRule.getNewToken(user,res);
+			  res.setHeader("token", token);
+			  res.redirect('/profile?token='+token);
+				});
+		})(req, res, next);
+	});
 
     // =====================================
     // LOGOUT ==============================
@@ -173,7 +193,7 @@ module.exports = function(app, passport) {
 		req.session.destroy();
         delete req.session;
         req.logout();
-		var token = req.body.token || req.query.token || req.headers['token'];
+		var token = req.headers['token'] || req.body.token || req.query.token;
 		if (token) {
 			jwt.verify(token,config.sessionSecret, function(err, decoded) {
 			  if (err) {
@@ -198,4 +218,6 @@ module.exports = function(app, passport) {
         //res.redirect('/');
         //res.end();
     });
+    
+	
 };

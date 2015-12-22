@@ -45,7 +45,6 @@ module.exports = (function() {
 					for(var i =0;i<tokens.length;i++){
 						arMobileTokens.push(tokens[i].mobiletoken);
 					}
-					console.log(msgData,arMobileTokens);
 					callback(null,{"msgObj":msgData,"senders":arMobileTokens});
 				});
 			}
@@ -115,7 +114,6 @@ module.exports = (function() {
 				}
 			]
 		};
-		console.log("#################:",data);
 		var projFactory = new ProjectFactory();
 		projFactory.addBuildsInProject(data,function(errorFlag,erroType,result){
 			return callback(true,result);
@@ -128,7 +126,6 @@ module.exports = (function() {
 	    var fromData = {};   
 	    req.busboy.on('file', function (fieldname, file, filename) {
 	    	var ext = filename.substring(filename.lastIndexOf("."),filename.length);
-	    	console.log(ext,filename);
 	    	var isDel = false; 
 	    	if(ALLOWD_FILE_TYPE.indexOf(ext.toLowerCase())> -1){
 	    		 var fileSufix = getTimeStamp();
@@ -151,13 +148,11 @@ module.exports = (function() {
 		         
 		         fstream.on('finish', function (e) {
 		        	if(!isDel){
-			         	console.log("return 1....");
 			    		fromData["ostype"] = ext.substring(1,ext.length);
 			    		fromData["filename"] = newFileName;
-			    		fromData["createdby"] = req.user.local.firstname + "  "+ req.user.local.lastname;
+			    		fromData["createdby"] = req.user.fullname;
 						fromData["build_user_id"] = req.user.id;
-						fromData["build_userfullname"] = req.user.local.firstname + "  "+ req.user.local.lastname;
-						console.log("fromData:",fromData);
+						fromData["build_userfullname"] = req.user.fullname;
 			         	saveBuildInfo(fromData,function(bool,data){
 			        		if(bool){
 			        			callback(false,"",data);
@@ -170,7 +165,6 @@ module.exports = (function() {
 		        			if(err){
 		                        throw err;
 		        			}
-	        			   console.log("File deleted successfully!", newFileName);
 	        			});
 		        		callback(true,"fileSizeError",null);
 		        	}
@@ -219,14 +213,10 @@ module.exports = (function() {
 			echo %projectdirname%
 			echo %outputfilepath%
 			*/
-			console.log(batchParamData);
 			
 				buildObj.buildNow(batchParamData, function(arg){
 				//fayeConf.pulishMessage('/channel-1', { msg: {"mode":"callback check", "error":false,"data":"I am done thanks."}});
-				//console.log("factory :",arg);
-				//console.log("XXBefor IF XX I am done");
 				if(arg.mode === "close" && arg.data === true){
-					console.log("XXXX I am done");
 					var fromData = new Object();
 					fromData.builddate = new Date();
 					fromData.buildname = "Auto upload test";
@@ -236,11 +226,10 @@ module.exports = (function() {
 					fromData.createdby = "test"; //req.session["userid"];
 					fromData.description = "Test test";
 					fromData["build_user_id"] = req.user.id;
-					fromData["build_userfullname"] = req.user.local.firstname + "  "+ req.user.local.lastname;
+					fromData["build_userfullname"] = req.user.fullname;
 					saveBuildInfo(fromData,function(bool,data){
 							if(bool){
 								//res.json({ 'error': false, 'errorType': "", "data": null });
-								console.log("Added");
 								callback(false,"",null);
 							}else{
 								//res.json({ 'error': true, 'errorType': "", "data": null });
