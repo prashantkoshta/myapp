@@ -2,14 +2,28 @@
 app.controller('autobuildController', function($scope,$rootScope, $state, mainSvc,svcFaye) {
     
 	
-	$scope.messageData = ""
+	$scope.consoleLog = ""
 	$scope.projects = []
     $scope.selectedProject;
 	$scope.isBuildBtnDisabled = false;
 	
        
 	svcFaye.subscribe("/channel-1", function(message){
-			$scope.messageData =  $scope.messageData +"\n"+ message.msg.mode+">"+message.msg.error+" |  "+message.msg.data;
+			var stramData = "";
+			var str = ""+message.msg.data;
+		    if(message.msg.mode === 'stderr'){
+				if(str.trim() !== ""){
+					stramData =  message.msg.mode+"##"+message.msg.error+" | "+str;
+					$scope.consoleLog =  $scope.consoleLog + stramData;
+				}
+			}else{
+				if(str.trim() !== ""){
+					stramData =  message.msg.mode+">"+message.msg.error+" | "+str;
+					$scope.consoleLog =  $scope.consoleLog + stramData;
+				}
+			}
+			
+			
 	});
 	
 	$scope.pushData = function (){
@@ -17,10 +31,11 @@ app.controller('autobuildController', function($scope,$rootScope, $state, mainSv
 	}
 	
 	$scope.doAutoBuild = function () {
+		$scope.consoleLog = ""
 		var data = {"projectname":$scope.selectedProject.projectname};
 		mainSvc.postCommon("/buildapp/gateway/buildProjectAndDeploy",data).then(
             function (response) {
-            	 $scope.messageData =  $scope.messageData + "\n GREAT JOB";
+            	 $scope.consoleLog =  $scope.consoleLog + "\n GREAT JOB";
             },
             function (err) {
                 console.log("Error >>>", err); 
@@ -52,3 +67,4 @@ app.controller('autobuildController', function($scope,$rootScope, $state, mainSv
 	
 	
 });
+

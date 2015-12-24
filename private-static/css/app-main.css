@@ -12,3 +12,21 @@ ul.list-unstyled li {
 	padding:0px;
 	margin-bottom:0px;
 }
+
+.console{
+    min-height: 50px;
+    border: 2px solid #0f0f0f;
+    cursor: default;
+    white-space: pre-wrap;
+    background-color: #efefef;
+    padding: 8px;
+}
+
+.console p{
+	margin:0;
+	padding:0;
+}
+
+.console-error{
+	color:red;
+}

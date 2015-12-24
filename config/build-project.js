@@ -6,7 +6,7 @@ var flagBuildDone 	= false;
 var BuildProject  	= function(){};
 
 BuildProject.prototype.buildNow = function(data,callback) {
-	/*  arg data
+		/*  arg data
 			echo %giturl%
 			echo %tempdirname%
 			echo %batchfilename%
