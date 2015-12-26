@@ -27,7 +27,7 @@ BuildProject.prototype.buildNow = function(data,callback) {
 	ls.stdout.on('data', function (data) {
 		var str = data.toString('utf8');
 		fayeConf.pulishMessage('/channel-1', { msg: {"mode":"stdout", "error":false,"data":str}});
-		if(str.indexOf("echo SUCCESSFULLCOMPLETEDBUILDTOKEN") > -1){
+		if(str.indexOf("SUCCESSFULLCOMPLETEDBUILDTOKEN") > -1){
 			flagBuildDone = true;
 		}
 		callback({"mode":"stdout", "error":false,"data":str});
