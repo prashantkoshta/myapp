@@ -1,9 +1,10 @@
 // server.js
 // set up ======================================================================
 // get all the tools we need
+var config          	= require('./config/config.js');
 var express             = require('express');
 var app                 = express();
-var port                = process.env.PORT || 8080;
+var port                = process.env.PORT || config.port;
 var faye                = require('faye');
 var mongoose            = require('mongoose');
 var passport            = require('passport');
@@ -11,31 +12,25 @@ var flash               = require('connect-flash');
 var favicon             = require('serve-favicon');
 var http                = require('http');
 
-var morgan          = require('morgan');
-var cookieParser    = require('cookie-parser');
-var bodyParser      = require('body-parser');
-var session         = require('express-session');
-var config          = require('./config/config.js');
-var fayeConf          = require('./config/faye-conf.js');
-var path            = require('path');
-var privateRoutes   = require('./routes/privatestatic-routes');
-var busboy 			= require('connect-busboy');
+var morgan         		= require('morgan');
+var cookieParser    	= require('cookie-parser');
+var bodyParser     		= require('body-parser');
+var session         	= require('express-session');
 
-var jwt    			= require('jsonwebtoken'); // used to create, sign, and verify tokens
+var fayeConf        	= require('./config/faye-conf.js');
+var path            	= require('path');
+var privateRoutes   	= require('./routes/privatestatic-routes');
+var busboy 				= require('connect-busboy');
 
+var jwt    				= require('jsonwebtoken'); // used to create, sign, and verify tokens
 
-/*var bayeux = new faye.NodeAdapter({
-    mount: '/faye',
-    timeout: 45
-});*/
-
-console.log(app.get('env'), config.url);
 // configuration ===============================================================
 mongoose.connect(config.url); // connect to our database
 require('./config/passport')(passport); // pass passport for configuration
 
 //upload file path 
 config.uploadFilePath = path.join(__dirname, config.uploadDir); //__dirname+"/"+config.uploadDir;
+config.buildDumpingLocation = path.join(__dirname, config.buildDumpDir);
 
 
 // set up our express application
@@ -132,7 +127,7 @@ app.use(function(err, req, res, next) {
   });
 });
 
-var server = app.listen(port);
+var server = app.listen(port,config.hostname);
 fayeConf.getBayeux().attach(server);
 //bayeux.attach(server);
-console.log('The magic happens on port ' + port);
+console.log('The magic happens on '+config.hostname+":"+port);

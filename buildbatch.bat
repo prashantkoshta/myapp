@@ -7,22 +7,24 @@
 @REM  tempdirname: 'Test Me201512711820261',
 @REM  batchfilename: 'gradlew.bat',
 @REM  projectdirname: '/android_hello_world',
-@REM  outputfilepath: '/android_hello_world.apk' }
+@REM  outputfilepath: '/android_hello_world.apk' 
+@REM  dumpingbuildPath: ''}
 
 set giturl=%~1
 set tempdirname=%~2
 set batchfilename=%~3
 set projectdirname=%~4
 set outputfile=%~5
+set dumpingbuildPath=%~6
 
 echo %giturl%
 echo %tempdirname%
 echo %batchfilename%
 echo %projectdirname%
 echo %outputfilepath%
+echo %dumpingbuildPath%
 
-cd p:
-p:
+cd %dumpingbuildPath%
 rd %tempdirname% /S /Q
 mkdir %tempdirname%
 cd %tempdirname%

@@ -1,3 +1,3 @@
 //config.js
 // Include all configuration variable
-module.exports = require('../../serverconfig.js');
+module.exports = require('../../localconfig.js');

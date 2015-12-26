@@ -1,0 +1,39 @@
+#!/bin/bash
+echo "###################BUILD-START##########################"
+fn_task(){
+	echo "###Build Dump:" $4
+	cd $4
+	x=$(pwd)
+	echo "###Curent working directory:" $x
+	rm -rf $1
+	mkdir $1
+	cd $1
+	x=$(pwd)
+	echo "###Curent working directory:" $x
+	git clone $2
+	cd $3
+	x=$(pwd)
+	echo "###Curent working directory:" $x
+	bash $5
+}
+echo "#############################################"
+echo "Number of arguments:" $#
+echo "giturl:" $1
+echo "tempdirname:" $2
+echo "batchfilename:" $3
+echo "projectdirname:" $4
+echo "outputfile:" $5
+echo "dumpingbuildPath:" $6
+echo "#############################################"
+giturl=$1
+tempdirname=$2
+batchfilename=$3
+projectdirname=$4
+outputfile=$5
+dumpingbuildPath=$6
+#cd $dumpingbuildPath
+echo "##################RUN-TASK########################"
+fn_task $tempdirname $giturl $projectdirname $dumpingbuildPath $batchfilename
+echo "####################END-TASK#########################"
+echo "###################BUILD-END##########################"
+echo SUCCESSFULLCOMPLETEDBUILDTOKEN

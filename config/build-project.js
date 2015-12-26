@@ -12,17 +12,18 @@ BuildProject.prototype.buildNow = function(data,callback) {
 			echo %batchfilename%
 			echo %projectdirname%
 			echo %outputfilepath%
+			echo %dumpingbuildPath%
 			*/
 	flagBuildDone = false;
 	var ls;
 	if(os.type() === "Windows_NT"){
-		ls = spawn('cmd.exe', ['/c', 'buildbatch.bat '+data.giturl+' '+data.tempdirname+' '+data.batchfilename+' '+data.projectdirname+' '+data.outputfilepath+'']);
+		ls = spawn('cmd.exe', ['/c', 'buildbatch.bat '+data.giturl+' '+data.tempdirname+' '+data.batchfilename+' '+data.projectdirname+' '+data.outputfilepath+' '+data.dumpingbuildPath+'']);
 	}else if(os.type() === "OS X "){
 		//ls = spawn('bash', ['buildbatch.sh']);
 	}else{
-		ls = spawn('bash', ['buildbatch.sh']);
+		ls = spawn('bash', ['-c','./testbatch '+data.giturl+' '+data.tempdirname+' '+data.batchfilename+' '+data.projectdirname+' '+data.outputfilepath+' '+data.dumpingbuildPath+'']);
+		//ls = spawn('bash', ['buildbatch.sh']);
 	}
-	//ls = spawn('bash', ['buildbatch.sh']);
 	ls.stdout.on('data', function (data) {
 		var str = data.toString('utf8');
 		fayeConf.pulishMessage('/channel-1', { msg: {"mode":"stdout", "error":false,"data":str}});

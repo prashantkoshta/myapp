@@ -204,8 +204,10 @@ module.exports = (function() {
 				"tempdirname" : proj._id+getTimeStamp(),
 				"batchfilename" : proj.buildbatchfile,
 				"projectdirname" : proj.git.url.substring(proj.git.url.lastIndexOf("/")+1,proj.git.url.length),
-				"outputfilepath" : proj.buildlocation
+				"outputfilepath" : proj.buildlocation,
+				"dumpingbuildPath" : config.buildDumpingLocation
 			}
+			
 			/*
 			echo %giturl%
 			echo %tempdirname%
