@@ -74,6 +74,19 @@ var editProjectSchema = {
 	required: ['_id','git','buildbatchfile','buildlocation','status']
 };
 
+var saveAutoBuildSchema = {
+	"id": "/saveAutoBuildSchema",
+	"type": "object",
+	properties: {
+				builddumpid : {type: 'string'},
+				name : {type: 'string'},
+				description : {type: 'string'},
+				appversion : {type: 'string'},
+				buildversion : {type: 'string'}	  
+	},
+	additionalProperties: false,
+	required: ['builddumpid','name','description','appversion','buildversion']
+}
 
 
 // Delete build
@@ -126,7 +139,8 @@ var schemaMap = {
 	"userProjctRoleInfoSchema" : userProjctRoleInfoSchema,
 	"changepasswordSchema" : changepasswordSchema,
 	"publishBuildInfoSchema" : deleteBuildSchema,
-	"editProjectSchema" : editProjectSchema
+	"editProjectSchema" : editProjectSchema,
+	"saveAutoBuildSchema" : saveAutoBuildSchema
 };
 v.addSchema(gitSchema, '/gitSchema');
 

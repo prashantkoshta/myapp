@@ -62,5 +62,14 @@ AppJSONReqInputValidator.prototype.editProjectSchema = function(req, res, next) 
 	}
 };
 
+AppJSONReqInputValidator.prototype.saveAutoBuildSchema = function(req, res, next) {
+	var results = schemavalidator.validateInputJSON("saveAutoBuildSchema",req.body);
+	if(results.errors.length>0){
+		res.json({ 'error': true, 'errorType': "Invalid Input", "data": results.errors});
+	}else{
+		next();
+	}
+};
+
 
 module.exports = new AppJSONReqInputValidator();

@@ -159,4 +159,12 @@ router.post('/editProjectInfo', AppRule.validateToken, AppServiceAccessValidator
 	});
 });
 
+router.post('/saveAutoBuildDetails', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess,ReqJsonValidator.saveAutoBuildSchema, function (req, res) {
+	var projFactory = new ProjectFactory();
+	projFactory.saveAutoBuildDetails(req.body, req.user, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
+
 module.exports = router;

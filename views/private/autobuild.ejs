@@ -2,7 +2,6 @@
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <h1>Build Now</h1>
   </div>
-  
   <!-- div>{{data}}</div -->
   <form class="form-horizontal ng-pristine ng-valid">
 		  <div class="form-group col-sm-8">
@@ -12,7 +11,6 @@
 		    </div>
 		  </div>
   </form>
-  
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <button type="button" ng-disabled="{{isBuildBtnActive}}" class="btn btn-primary" ng-click="doAutoBuild();setGA({'event':'event','eventType':'BUILDNOW_PAGE_BUILDPROJECT_BTN_CLICK','msg':'UPLOADDETAILS_PAGE_BUILDPROJECT_BTN_CLICK'})">Build Now</button>
   </div>
@@ -22,9 +20,53 @@
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <h3>Selected Project For Build : <b>{{selectedProject.projectname}}</b></h3>
 	<div class="console" ng-bind="consoleLog"></div>
+	<button type="button" class="btn btn-primary" ng-click="editBuildInfo();setGA({'event':'event','eventType':'BUILDNOW_PAGE_BUILDPROJECT_BTN_CLICK','msg':'UPLOADDETAILS_PAGE_BUILDPROJECT_BTN_CLICK'})">Update Build Details</button>
   </div>
-
 </div>
 
-
- 
+<script type="text/ng-template" id="buildinfopopup.html">
+	<div class="modal-header">
+		<h3 class="modal-title">Add Build Details</h3>
+	</div>
+	<div class="modal-body">
+		<form class="form-horizontal" role="form">
+		  <div class="form-group col-sm-8">
+		    <label class="control-label col-sm-4">Select Projects :</label>
+		  </div>		  
+		  <div class="form-group col-sm-8">
+		    <label class="control-label col-sm-4" for="name">Name</label>
+		    <div class="col-sm-8">
+		      <input type="text" class="form-control" ng-model="buildForm.name" id="name" placeholder="Enter build name">
+		    </div>
+		  </div>
+		  
+	 	   <div class="form-group col-sm-8">
+		    <label class="control-label col-sm-4" for="description">Description</label>
+		    <div class="col-sm-8">
+		      <textarea class="form-control" ng-model="buildForm.description" id="description" placeholder="Enter build description" />
+		    </div>
+		  </div>	
+		  
+		  <div class="form-group col-sm-8">
+			<label class="control-label col-sm-4" for="appversion">App Version</label>
+			<div class="col-sm-8">
+			  <input type="text" class="form-control" ng-model="buildForm.appversion" id="appversion" placeholder="Enter App Version">
+			</div>
+		  </div>	
+		  
+		  <div class="form-group col-sm-8">
+			<label class="control-label col-sm-4" for="buildversion">Build Version</label>
+			<div class="col-sm-8">
+			  <input type="text" class="form-control" ng-model="buildForm.buildversion" id="buildversion" placeholder="Enter Build Version">
+			</div>
+		  </div>	
+		
+		</form>
+		
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" type="button" ng-click="save()">Save</button>
+		<button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+	</div>
+	
+</script>

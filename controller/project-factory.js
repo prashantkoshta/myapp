@@ -1,14 +1,17 @@
 // load up the user model
+var path = require('path');
+var config = require('../config/config');
 var Projects = require('../models/projects');
 var BuildInfo = require('../models/buildinfo');
+var BuildDump = require('../models/builddump');
 var User = require('../models/user');
 var Role = require('../models/role');
 var async    = require('async');
 var indexcounter    = require('../models/indexcounter');
 var genrateKey = require('../config/genratekey');
-
+var fsex = require('fs.extra');
+var buildObj = require('../config/build-project');
 var ProjectFactory = function(){};
-
 ProjectFactory.prototype.getProjectListByUserId = function(data,done){
   		async.waterfall([
 	    function(callback){
@@ -123,7 +126,6 @@ ProjectFactory.prototype.addUserInProject = function(data,callback){
 
 ProjectFactory.prototype.addBuildsInProject = function(data,done){
 	var obj = data.builds;
-	
 	async.waterfall([
 	    function(callback){
 			Projects.findOne({"projectname":data.projectname},function(err1,proj1){
@@ -240,4 +242,32 @@ ProjectFactory.prototype.editProjectInfo = function(data,callback){
 		});
 };
 
+ProjectFactory.prototype.saveAutoBuildDetails = function(data,user,callback){
+		BuildDump.findOne({"_id":data.builddumpid},function(er1,dmpBld){
+			if(er1) throw er1;
+			if(!dmpBld) return callback(true,"No build present.",null);
+			var arg =  {
+				"projectname" : dmpBld.projectname,
+				"builds":[
+					{
+						"buildname" : data.name,
+						"appversion" : data.appversion,
+						"buildnum" : data.buildversion,
+						"filename" : dmpBld.filename,
+						"createdby" : user.fullname,
+						"description" : data.description,
+						"build_user_id": user._id,
+						"build_userfullname": user.fullname
+					}
+				]
+			};
+			new ProjectFactory().addBuildsInProject (arg,function(arg1,arg2,arg3){
+				fsex.copy(dmpBld.relativepath, config.uploadFilePath+'\\'+dmpBld.filename, { replace: true }, function (errFile) {
+						  if (errFile) throw errFile;
+						  buildObj.clearDumpBackup(path.parse(dmpBld.clonefolder).name);
+						  return callback(arg1,arg2,arg3);
+				});
+			});
+		});
+};
 module.exports = ProjectFactory;

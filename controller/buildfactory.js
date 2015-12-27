@@ -1,18 +1,19 @@
 // load up the user model
-var path = require('path'); //used for file path
+var path = require('path');
 var fs = require('fs'); //File System - for file manipulation
 var BuildInfo = require('../models/buildinfo');
 var buildObj = require('../config/build-project');
 var fayeConf = require('../config/faye-conf');
 var config = require('../config/config');
 var User = require('../models/user');
+var BuildDump = require('../models/builddump');
 var Projects = require('../models/projects');
 var mongoose = require('mongoose');
 var UPLOAD_FILE_SIZE = 1 * 1024 * 1024;
-var ALLOWD_FILE_TYPE = ".zip,.txt,.apk,.ipa";
+var ALLOWD_FILE_TYPE = ".zip,.txt,.apk,.ipa,.war";
 var ProjectFactory = require('../controller/project-factory');
 var async    = require('async');
-
+var genrateKey = require('../config/genratekey');
 module.exports = (function() {
 	
 	function getBuildInfoForPublish(req,res,done){
@@ -195,9 +196,7 @@ module.exports = (function() {
 		var jsonData = req.body;
 		Projects.findOne({"projectname" :jsonData.projectname},function(err,proj){
 			if(err)throw err;
-			if(!proj) {
-			    return callback(true,"No Project Found",null);  
-			}
+			if(!proj) return callback(true,"No Project Found",null);  
 			
 			var batchParamData = {
 				"giturl" : proj.git.url,
@@ -218,26 +217,28 @@ module.exports = (function() {
 			
 				buildObj.buildNow(batchParamData, function(arg){
 				//fayeConf.pulishMessage('/channel-1', { msg: {"mode":"callback check", "error":false,"data":"I am done thanks."}});
-				if(arg.mode === "close" && arg.data === true){
-					var fromData = new Object();
-					fromData.builddate = new Date();
-					fromData.buildname = "Auto upload test";
-					fromData.appversion = "av";
-					fromData.buildnum = "bv";
-					fromData.filename = "autoupload"+getTimeStamp()+".apk";
-					fromData.createdby = "test"; //req.session["userid"];
-					fromData.description = "Test test";
-					fromData["build_user_id"] = req.user.id;
-					fromData["build_userfullname"] = req.user.fullname;
-					saveBuildInfo(fromData,function(bool,data){
-							if(bool){
-								//res.json({ 'error': false, 'errorType': "", "data": null });
-								callback(false,"",null);
-							}else{
-								//res.json({ 'error': true, 'errorType': "", "data": null });
-								callback(true,"",null);
-							}
-						});
+				if(arg.mode === "close"){
+					if(arg.data === 0){
+						var buildDump = new BuildDump();
+						buildDump.build_user_id = req.user._id,
+						buildDump.isSave = 1;
+						buildDump.relativepath = path.join(batchParamData.dumpingbuildPath,batchParamData.tempdirname,batchParamData.projectdirname,batchParamData.outputfilepath);
+						buildDump.clonefolder = path.join(batchParamData.dumpingbuildPath,batchParamData.tempdirname);
+						buildDump.projectid = proj._id;
+						buildDump.projectname  = proj.projectname;
+						var pObj = path.parse(buildDump.relativepath);
+						buildDump.filename = batchParamData.tempdirname+pObj.ext;
+						genrateKey.genrateNewIndexId("builddumpid",function(arg){
+							buildDump._id = arg;
+							buildDump.save(function(er1, obj) {
+								if(er1) throw er1;
+								callback(false,"",{'builddumpid':buildDump._id});
+							});
+						});						
+					}else{
+						callback(true,"",null);
+					}
+					
 				}
 			});
 			
