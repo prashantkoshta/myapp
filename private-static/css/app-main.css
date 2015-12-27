@@ -18,11 +18,16 @@ ul.list-unstyled li {
     border: 2px solid #0f0f0f;
     cursor: default;
     white-space: pre-wrap;
-    background-color: #efefef;
+    background-color: #020202;
     padding: 8px;
+	color:#ffffff;
+}
+.console  div{
+	padding :0;
+	margin:0;
 }
 
-.console p{
+.console  div{
 	margin:0;
 	padding:0;
 }

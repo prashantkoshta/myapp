@@ -1,5 +1,5 @@
 'use strict';
-app.controller('autobuildController', function($scope,$rootScope, $state, mainSvc,svcFaye,$uibModal) {
+app.controller('autobuildController', function($scope,$rootScope, $state, mainSvc,svcFaye,$uibModal,$anchorScroll,$location) {
     
 	
 	$scope.consoleLog = ""
@@ -7,23 +7,37 @@ app.controller('autobuildController', function($scope,$rootScope, $state, mainSv
     $scope.selectedProject;
 	$scope.isBuildBtnDisabled = false;
 	$scope.builddumpid = '';
+	$scope.clogs = '';
 	
-       
+     
 	svcFaye.subscribe("/channel-1", function(message){
 			var stramData = "";
 			var str = ""+message.msg.data;
 		    if(message.msg.mode === 'stderr'){
 				if(str.trim() !== ""){
 					stramData =  message.msg.mode+"##"+message.msg.error+" | "+str;
+					if(message.msg.error){
+							$scope.clogs = "<div class='console-error'>"+str+"</div>";
+					}else{
+							$scope.clogs = "<div>"+str+"</div>";
+					}
+					
 					$scope.consoleLog =  $scope.consoleLog + stramData;
 				}
 			}else{
 				if(str.trim() !== ""){
 					stramData =  message.msg.mode+">"+message.msg.error+" | "+str;
+					if(message.msg.error){
+							$scope.clogs = "<div class='console-error'>"+str+"</div>";
+					}else{
+							$scope.clogs = "<div>"+str+"</div>";
+					}
 					$scope.consoleLog =  $scope.consoleLog + stramData;
+					
 				}
 			}
-			
+			$location.hash('scrollbottom')
+			$anchorScroll();
 			
 	});
 	
@@ -62,6 +76,7 @@ app.controller('autobuildController', function($scope,$rootScope, $state, mainSv
 	$scope.onProjectSelect = function(project){
 		$scope.builddumpid = "";
 		$scope.consoleLog = '';
+		$scope.resetConsole();
 	}
 	
 	if($state.current.name == "autobuild"){
@@ -114,3 +129,23 @@ app.controller('ModalBuildInfoInstanceCtrl', function ($scope, $uibModalInstance
   };
 });
 
+app.directive("consoleLogger", function($compile){
+    return{
+        link: function(scope, element, attrs){
+            //var template = "<button ng-click='doSomething()'>{{clogs}}</button>";
+			scope.$watch('clogs', function(newValue) {
+               // console.log(scope.clogs, "#############", newValue);
+				var template = scope.clogs;
+				//var linkFn = $compile(template);
+				//var content = linkFn(scope);
+				//console.log(template);
+				element.append(template);
+            });
+			
+			scope.resetConsole = function() {
+				element.empty();
+			}
+			
+        }
+    }
+});

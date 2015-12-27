@@ -31,4 +31,3 @@ cd %tempdirname%
 git clone %giturl%
 cd %projectdirname%
 %batchfilename%
-echo "SUCCESSFULLCOMPLETEDBUILDTOKEN"
