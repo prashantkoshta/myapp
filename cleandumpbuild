@@ -1,15 +1,1 @@
-#!/bin/bash
-echo "###################CLEAN-START##########################"
-fn_task(){
-	cd $1
-	rm -rf $2
-}
-echo "#############################################"
-echo "Number of arguments:" $#
-echo "dirname:" $1
-echo "dumpingbuildPath:" $2
-echo "#############################################"
-dirname=$1
-dumpingbuildPath=$2
-fn_task $dumpingbuildPath $dirname
-echo "###################CLEAN-END##########################"
+jtest
