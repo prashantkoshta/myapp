@@ -101,10 +101,10 @@
     <% include ../template/common-js.ejs %>
     <script src='https://www.google.com/recaptcha/api.js'></script>
 	<!-- -->
-	<script src="/js/public-main.js"></script>
-	<script src="/js/controller/login.ctrl.js"></script>
-	<script src="/js/factory/validator.fctry.js"></script>
-	<script src="/js/service/public.svc.js"></script>
+	<script src="/js/public-main.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/js/controller/login.ctrl.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/js/factory/validator.fctry.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/js/service/public.svc.js?v=<%=new Date().getTime();%>"></script>
 
 	<!-- Add google analytic code here -->
 	<% include ../template/ganalytictrackerid %>

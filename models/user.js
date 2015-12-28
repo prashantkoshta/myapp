@@ -6,6 +6,7 @@ var crypto   = require('crypto');
 // define the schema for our user model
 var userSchema = mongoose.Schema({
 	_id : String,
+	uinkey : String,
 	fullname : String,
     local            : {
         email        : String,

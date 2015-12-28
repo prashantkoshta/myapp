@@ -1,16 +1,13 @@
 'use strict';
 app.controller('autobuildController', function($scope,$rootScope, $state, mainSvc,svcFaye,$uibModal,$anchorScroll,$location) {
-    
-	
 	$scope.consoleLog = ""
 	$scope.projects = []
     $scope.selectedProject;
 	$scope.isBuildBtnDisabled = false;
 	$scope.builddumpid = '';
 	$scope.clogs = '';
-	
-     
-	svcFaye.subscribe("/channel-1", function(message){
+    var chanelName = "/"+$rootScope.uinkey;
+	svcFaye.subscribe(chanelName, function(message){
 			var stramData = "";
 			var str = ""+message.msg.data;
 		    if(message.msg.mode === 'stderr'){
@@ -42,7 +39,7 @@ app.controller('autobuildController', function($scope,$rootScope, $state, mainSv
 	});
 	
 	$scope.pushData = function (){
-		svcFaye.publish("/channel-1", {msg: "hello"})
+		svcFaye.publish(chanelName, {msg: "hello"})
 	}
 	
 	$scope.doAutoBuild = function () {

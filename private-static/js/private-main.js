@@ -79,9 +79,13 @@ app.run(function ($rootScope, $templateCache, $location, $window) {
 app.controller('privateMainController', function ($scope, $rootScope, $window ,$state, mainSvc,$templateCache) {
 	
 	$rootScope.token;
+	$rootScope.uinkey;
 	$scope.setInitToken = function(token){
 		$rootScope.token = token;
 		//console.log($rootScope.token);
+	}
+	$scope.setInitUinKey= function(uinkey){
+		$rootScope.uinkey = uinkey;
 	}
 	
     $rootScope.pageError;

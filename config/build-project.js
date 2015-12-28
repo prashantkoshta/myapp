@@ -4,7 +4,7 @@ var fayeConf        = require('./faye-conf.js');
 var os 				= require('os');
 var spawn 			= require('child_process').spawn; 
 var BuildProject  	= function(){};
-BuildProject.prototype.buildNow = function(data,callback) {
+BuildProject.prototype.buildNow = function(data,chanelName,callback) {
 		/*  arg data
 			echo %giturl%
 			echo %tempdirname%
@@ -23,22 +23,22 @@ BuildProject.prototype.buildNow = function(data,callback) {
 	}
 	ls.stdout.on('data', function (data) {
 		var str = data.toString('utf8');
-		fayeConf.pulishMessage('/channel-1', { msg: {"mode":"stdout", "error":false,"data":str}});
+		fayeConf.pulishMessage(chanelName, { msg: {"mode":"stdout", "error":false,"data":str}});
 		//callback({"mode":"stdout", "error":false,"data":str});
 	});
 
 	ls.stderr.on('data', function (data) {
-	    fayeConf.pulishMessage('/channel-1', { msg: {"mode":"stderr", "error":true,"data":data.toString('utf8')}});
+	    fayeConf.pulishMessage(chanelName, { msg: {"mode":"stderr", "error":true,"data":data.toString('utf8')}});
 		//callback({"mode":"stderr", "error":true,"data":data.toString('utf8')});
 	});
 	
 	ls.on('close', function (code) {
-	    fayeConf.pulishMessage('/channel-1', { msg: {"mode":"close", "error":false,"data":code}});
+	    fayeConf.pulishMessage(chanelName, { msg: {"mode":"close", "error":false,"data":code}});
 	    callback({"mode":"close", "error":false,"data":code});
 	})
 
 	ls.on('exit', function (code) {
-		fayeConf.pulishMessage('/channel-1', { msg: {"mode":"exit", "error":false,"data":code}});
+		fayeConf.pulishMessage(chanelName, { msg: {"mode":"exit", "error":false,"data":code}});
 	});
 }
 

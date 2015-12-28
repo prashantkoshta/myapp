@@ -119,7 +119,7 @@ module.exports = function(app, passport) {
     // we will use route middleware to verify this (the isLoggedIn function)
 	
 	  app.get('/profile', AppRule.validateToken, function(req, res) {
-		res.render('private/profile.ejs', {role:req.user.role,"token":res._headers.token});
+		res.render('private/profile.ejs', {role:req.user.role,"token":res._headers.token,uinkey:req.user.uinkey});
       });
 	  
     // =====================================

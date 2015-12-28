@@ -214,8 +214,9 @@ module.exports = (function() {
 			echo %projectdirname%
 			echo %outputfilepath%
 			*/
+				var chanelName = "/"+req.user.uinkey;
 			
-				buildObj.buildNow(batchParamData, function(arg){
+				buildObj.buildNow(batchParamData, chanelName, function(arg){
 				//fayeConf.pulishMessage('/channel-1', { msg: {"mode":"callback check", "error":false,"data":"I am done thanks."}});
 				if(arg.mode === "close"){
 					if(arg.data === 0){

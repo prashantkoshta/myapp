@@ -95,6 +95,7 @@ module.exports = function(passport) {
 					}
 			    ],function(err,_id){
 						newUser._id = _id;
+						newUser.uinkey = 'uin_'+_id;
 						newUser.save(function(err) {
 							if (err)
 								throw err;
@@ -195,6 +196,7 @@ module.exports = function(passport) {
 						}
 					],function(err,_id){
 							newUser._id = _id;
+							newUser.uinkey = 'uin_'+_id;
 							newUser.save(function(err) {
 								if (err)
 									throw err;
@@ -253,6 +255,7 @@ module.exports = function(passport) {
 						}
 					],function(err,_id){
 							newUser._id = _id;
+							newUser.uinkey = 'uin_'+_id;
 							newUser.save(function(err) {
 								if (err)
 									throw err;
@@ -312,6 +315,7 @@ module.exports = function(passport) {
 						}
 					],function(err,_id){
 							newUser._id = _id;
+							newUser.uinkey = 'uin_'+_id;
 							newUser.save(function(err) {
 								if (err)
 									throw err;

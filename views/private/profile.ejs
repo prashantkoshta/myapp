@@ -17,6 +17,8 @@
 
   <body>
 	<input type="hidden" ng-model="token" ng-init="setInitToken('<%=token%>')"/>
+	<input type="hidden" ng-model="uinkey" ng-init="setInitUinKey('<%=uinkey%>')"/>
+	
 	<% if(typeof message != "undefined") {	%>
 	
 	<input type="hidden" ng-model="pageError" ng-init ='setInitPageValue(
@@ -46,21 +48,21 @@
     
 	<!-- Inlcude JS files -->
     <% include ../template/common-js.ejs %>
-	<script src="/lib/js/ng-table.js"></script>
-	<script src="/lib/js/faye-browser.js"></script>
+	<script src="/lib/js/ng-table.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/lib/js/faye-browser.js?v=<%=new Date().getTime();%>"></script>
 	<!-- -->
-	<script src="/js/private-main.js?v=1231231215541"></script>
-	<script src="/js/components/custom-directive.js"></script>
-	<script src="/js/controller/account.ctrl.js?v=122020151119"></script>
-	<script src="/js/factory/validator.fctry.js"></script>
-	<script src="/js/service/main.svc.js?v=1210201561132"></script>
-	<script src="/js/service/multipartform.js?v=12345"></script>
-	<script src="/js/controller/build.ctrl.js?v=122020151106"></script>
-	<script src="/js/controller/upoadbuild.ctrl.js"></script>
-	<script src="/js/controller/createproject.ctrl.js"></script>
-	<script src="/js/controller/autobuild.ctrl.js?v=1243dee3"></script>
-	<script src="/js/controller/userview.ctrl.js?121920151043"></script>
-	<script src="/js/factory/faye-batch.js"></script>
+	<script src="/js/private-main.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/js/components/custom-directive.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/js/controller/account.ctrl.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/js/factory/validator.fctry.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/js/service/main.svc.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/js/service/multipartform.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/js/controller/build.ctrl.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/js/controller/upoadbuild.ctrl.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/js/controller/createproject.ctrl.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/js/controller/autobuild.ctrl.js??v=<%=new Date().getTime();%>"></script>
+	<script src="/js/controller/userview.ctrl.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/js/factory/faye-batch.js?v=<%=new Date().getTime();%>"></script>
 	
 	
 	<!-- Add google analytic code here -->
