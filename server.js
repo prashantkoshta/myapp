@@ -25,6 +25,7 @@ var busboy 				= require('connect-busboy');
 var jwt    				= require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 // configuration ===============================================================
+app.set('env',config.environment);
 console.log("Env : ",app.get('env'));
 mongoose.connect(config.url); // connect to our database
 require('./config/passport')(passport); // pass passport for configuration
@@ -121,10 +122,10 @@ if (app.get('env') === 'development') {
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
-    //message: err.message,
+    //message: "Technical error found.",
     //error: {}
-        message: err,
-        error: err
+	message: err,
+    error: err
   });
 });
 
