@@ -54,27 +54,6 @@ module.exports = (function() {
 			done(false,"",data);
 		});
 		
-		/*
-		
-		// Query
-		// db.projects.findOne({"_id" : "projectid_6"},{"builds":{$elemMatch:{"_id" :{$in:["buildid_8"]}}},"projectname":1});
-		Projects.findOne({"projectname":data.projectname},{"builds":{$elemMatch:{"_id" :{$in:data.builds}}},"projectname":1},function(e,proj){
-			if(e) throw e;
-			if(!proj) return(false,"",proj);
-			if(!proj.builds) return(false,"",proj);
-			var obj = proj.builds[0];
-			var data = {
-				"_id" : proj._id,
-				"ProjectName" : proj.projectname,
-				"Title" : obj.buildname,
-				"CreatedBy" : obj.createdby,
-				"URL" : config.baseURLPath + "/buildapp/gateway/downloadfile/"+obj.filename,
-				"APP_V " : obj.appversion,
-				"BNO" : obj.buildnum 
-			};
-			return done(true,"",data);
-		});
-		*/
 	}
 	
 	function getBuildInfo(callback){

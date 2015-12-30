@@ -262,7 +262,8 @@ ProjectFactory.prototype.saveAutoBuildDetails = function(data,user,callback){
 				]
 			};
 			new ProjectFactory().addBuildsInProject (arg,function(arg1,arg2,arg3){
-				fsex.copy(dmpBld.relativepath, config.uploadFilePath+'\\'+dmpBld.filename, { replace: true }, function (errFile) {
+				var savedFilePath = path.join(config.uploadFilePath,dmpBld.filename);
+				fsex.copy(dmpBld.relativepath, savedFilePath, { replace: true }, function (errFile) {
 						  if (errFile) throw errFile;
 						  buildObj.clearDumpBackup(path.parse(dmpBld.clonefolder).name);
 						  return callback(arg1,arg2,arg3);

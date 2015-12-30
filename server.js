@@ -25,14 +25,17 @@ var busboy 				= require('connect-busboy');
 var jwt    				= require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 // configuration ===============================================================
+console.log("######################STARTING SERVER#############################");
 app.set('env',config.environment);
 console.log("Env : ",app.get('env'));
 mongoose.connect(config.url); // connect to our database
 require('./config/passport')(passport); // pass passport for configuration
 
 //upload file path 
-config.uploadFilePath = path.join(__dirname, config.uploadDir); //__dirname+"/"+config.uploadDir;
+config.uploadFilePath = path.join(__dirname, config.uploadDir);
 config.buildDumpingLocation = path.join(__dirname, config.buildDumpDir);
+console.log("uploadFilePath : ",config.uploadFilePath);
+console.log("buildDumpingLocation : ",config.buildDumpingLocation);
 
 
 // set up our express application
