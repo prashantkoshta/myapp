@@ -25,7 +25,7 @@ var busboy 				= require('connect-busboy');
 var jwt    				= require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 // configuration ===============================================================
-console.log("Env:",app.get('env'));
+console.log("Env : ",app.get('env'));
 mongoose.connect(config.url); // connect to our database
 require('./config/passport')(passport); // pass passport for configuration
 
