@@ -128,7 +128,6 @@ module.exports = function(app, passport) {
 	  
 	  function getLoginBy(aUsr){
 		  var signfrom;
-		  console.log(aUsr);
 		  if(isEmpty(aUsr.facebook)){
 			   signfrom = "facebook"
 		  }else if(isEmpty(aUsr.google)){
