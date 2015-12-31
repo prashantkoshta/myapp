@@ -119,8 +119,22 @@ module.exports = function(app, passport) {
     // we will use route middleware to verify this (the isLoggedIn function)
 	
 	  app.get('/profile', AppRule.validateToken, function(req, res) {
-		res.render('private/profile.ejs', {role:req.user.role,"token":res._headers.token,uinkey:req.user.uinkey});
+		res.render('private/profile.ejs', {"role":req.user.role,"token":res._headers.token,uinkey:req.user.uinkey,"sign-by":getLoginBy(req.user)});
       });
+	  
+	  function getLoginBy(aUsr){
+		  var signfrom
+		  if(aUsr.facebook){
+			   signfrom = "facebook"
+		  }else if(aUsr.google){
+			   signfrom = "google"
+		  }else if(aUsr.twitter){
+			   signfrom = "twitter"
+		  }else{
+			  signfrom = "local"
+		  }
+		 return signfrom;
+	  }
 	  
     // =====================================
     // FACEBOOK ROUTES =====================

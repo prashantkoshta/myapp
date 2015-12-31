@@ -4,11 +4,12 @@
   </div>
   <!-- div>{{data}}</div -->
   <form class="form-horizontal ng-pristine ng-valid">
-		  <div class="form-group col-sm-8">
-		    <label class="control-label col-sm-4" for="projects">Autherized Projects :</label>
-		    <div class="col-sm-8">
+		  <div class="form-group col-sm-12">
+		    <label class="control-label col-lg-2 col-md-4 col-sm-12 col-xs-12" for="projects">Autherized Projects :</label>
+		    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 		      <select id="projects" name="project" class="form-control" ng-model="selectedProject" ng-options="project.projectname for project in projects" ng-change="onProjectSelect(selectedProject)" />
 		    </div>
+			<div class="col-lg-4 col-md-3 col-sm-0 col-xs-0" />
 		  </div>
   </form>
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

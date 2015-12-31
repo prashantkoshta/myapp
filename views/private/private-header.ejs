@@ -24,7 +24,6 @@
 			<li><a ui-sref="createproject" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_CREATEPROJECT_CLICK','msg':'PRIVATE_NAV_CREATEPROJECT_CLICK'})">Create Project</a></li>
 			<li><a href="#">Add Users</a></li>
 			<li><a href="#">Change Role</a></li>
-			
 			<% if( role === "admin"){ %>
 			<li role="separator" class="divider"></li>
 			<li><a ui-sref="userview">View Users</a></li>
@@ -35,7 +34,9 @@
 		  </ul>
 	  </li>
 	  <li><a ui-sref="aboutus" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_ABOUTUS_CLICK','msg':'PRIVATE_NAV_ABOUTUS_CLICK'})">About Us</a></li>
+	  <% if( role === "sign-by"){ %>
 	  <li><a ui-sref="chpwd" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_CHANGEPASSWORD_CLICK','msg':'PRIVATE_NAV_CHANGEPASSWORD_CLICK'})">Change Password</a></li>
+	  <% } %>
 	  <% if( role === "admin"){ %>
 	  <li><a href="/admincontrol/gateway/admindashboard" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_ADMIN_CLICK','msg':'PRIVATE_NAV_ADMIN_CLICK'})">Admin</a></li>
 	  <% } %>
