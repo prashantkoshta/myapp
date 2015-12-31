@@ -6,6 +6,7 @@ app.controller('autobuildController', function($scope,$rootScope, $state, mainSv
 	$scope.isBuildBtnDisabled = false;
 	$scope.builddumpid = '';
 	$scope.clogs = '';
+	$scope.boolBldSuccess = false;
     var chanelName = "/"+$rootScope.uinkey;
 	svcFaye.subscribe(chanelName, function(message){
 			var stramData = "";
@@ -48,6 +49,7 @@ app.controller('autobuildController', function($scope,$rootScope, $state, mainSv
 		mainSvc.postCommon("/buildapp/gateway/buildProjectAndDeploy",data).then(
             function (response) {
 				$scope.builddumpid = response.data.builddumpid;
+				$scope.boolBldSuccess = true;
             },
             function (err) {
 				$scope.builddumpid = null;
@@ -73,6 +75,7 @@ app.controller('autobuildController', function($scope,$rootScope, $state, mainSv
 	$scope.onProjectSelect = function(project){
 		$scope.builddumpid = "";
 		$scope.consoleLog = '';
+		$scope.boolBldSuccess = false;
 		$scope.resetConsole();
 	}
 	

@@ -35,3 +35,11 @@ ul.list-unstyled li {
 .console-error{
 	color:red;
 }
+
+footer{
+	margin-top:3.2em;
+}
+
+.margin-top-8{
+	margin-top:.8em;
+}

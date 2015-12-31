@@ -1,39 +1,46 @@
 <div class="row">
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <h1>Build Now</h1>
+	<hr/>
   </div>
   <!-- div>{{data}}</div -->
-  <form class="form-horizontal ng-pristine ng-valid">
-		  <div class="form-group col-sm-12">
-		    <label class="control-label col-lg-2 col-md-4 col-sm-12 col-xs-12" for="projects">Autherized Projects :</label>
-		    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-		      <select id="projects" name="project" class="form-control" ng-model="selectedProject" ng-options="project.projectname for project in projects" ng-change="onProjectSelect(selectedProject)" />
-		    </div>
-			<div class="col-lg-4 col-md-3 col-sm-0 col-xs-0" />
-		  </div>
-  </form>
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <button type="button" ng-disabled="{{isBuildBtnActive}}" class="btn btn-primary" ng-click="doAutoBuild();setGA({'event':'event','eventType':'BUILDNOW_PAGE_BUILDPROJECT_BTN_CLICK','msg':'UPLOADDETAILS_PAGE_BUILDPROJECT_BTN_CLICK'})">Build Now</button>
-  </div>
-  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-	<br />
+		<form class="form-horizontal ng-pristine ng-valid">
+			  <div>
+				<h4 for="projects">Autherized Projects :</h4>
+				  <select id="projects" name="project" class="form-control" ng-model="selectedProject" ng-options="project.projectname for project in projects" ng-change="onProjectSelect(selectedProject)" />
+			  </div>
+	  </form>
   </div>
   
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <h3>Selected Project For Build : <b>{{selectedProject.projectname}}</b></h3>
-	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-		<div class="console" console-logger></div>
-    </div>
-	<!-- div ng-bind="consoleLog"></div -->
-	
-	<button type="button" class="btn btn-primary" ng-click="editBuildInfo();setGA({'event':'event','eventType':'BUILDNOW_PAGE_BUILDPROJECT_BTN_CLICK','msg':'UPLOADDETAILS_PAGE_BUILDPROJECT_BTN_CLICK'})">Update Build Details</button>
+    <button type="button" ng-disabled="{{isBuildBtnActive}}" class="btn btn-primary" ng-click="doAutoBuild();setGA({'event':'event','eventType':'BUILDNOW_PAGE_BUILDPROJECT_BTN_CLICK','msg':'UPLOADDETAILS_PAGE_BUILDPROJECT_BTN_CLICK'})">Build Now</button>
   </div>
+ 
+  
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <h4>Selected Project : <strong>{{selectedProject.projectname}}</strong></h4>
+	<!-- div ng-bind="consoleLog"></div -->
+  </div>
+  
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		<div class="console" console-logger></div>
+  </div>
+  
+   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		<div style="height:1.6em;"></div>
+  </div>
+   
+   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+   	<button type="button" class="btn btn-primary" ng-show="boolBldSuccess" ng-click="editBuildInfo();setGA({'event':'event','eventType':'BUILDNOW_PAGE_BUILDPROJECT_BTN_CLICK','msg':'UPLOADDETAILS_PAGE_BUILDPROJECT_BTN_CLICK'})">Update Build Details</button>
+   </div>
+  
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 		<div id='scrollbottom'></div>
   </div>
 </div>
 
-<script type="text/ng-template" id="buildinfopopup.html">
+<script type= "text/ng-template" id= "buildinfopopup.html">
 	<div class="modal-header">
 		<h3 class="modal-title">Add Build Details</h3>
 	</div>

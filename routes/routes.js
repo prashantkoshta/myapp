@@ -99,7 +99,6 @@ module.exports = function(app, passport) {
     // =====================================
     // show the signup form
     app.get('/signup', function(req, res) {
-        // render the page and pass in any flash data if it exists
         res.render('public/signup.ejs', { message: req.flash('signupMessage') });
     });
 
@@ -119,16 +118,22 @@ module.exports = function(app, passport) {
     // we will use route middleware to verify this (the isLoggedIn function)
 	
 	  app.get('/profile', AppRule.validateToken, function(req, res) {
-		res.render('private/profile.ejs', {"role":req.user.role,"token":res._headers.token,uinkey:req.user.uinkey,"sign-by":getLoginBy(req.user)});
+		res.render('private/profile.ejs', {"role":req.user.role,"token":res._headers.token,uinkey:req.user.uinkey,"signby":getLoginBy(req.user)});
       });
 	  
+	  function isEmpty(obj) {
+		  var i = !Object.keys(obj).length > 0;
+		  return i
+	  }
+	  
 	  function getLoginBy(aUsr){
-		  var signfrom
-		  if(aUsr.facebook){
+		  var signfrom;
+		  console.log(aUsr);
+		  if(isEmpty(aUsr.facebook)){
 			   signfrom = "facebook"
-		  }else if(aUsr.google){
+		  }else if(isEmpty(aUsr.google)){
 			   signfrom = "google"
-		  }else if(aUsr.twitter){
+		  }else if(isEmpty(aUsr.twitter)){
 			   signfrom = "twitter"
 		  }else{
 			  signfrom = "local"
@@ -232,6 +237,4 @@ module.exports = function(app, passport) {
         //res.redirect('/');
         //res.end();
     });
-    
-	
 };

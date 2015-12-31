@@ -34,7 +34,7 @@
 		  </ul>
 	  </li>
 	  <li><a ui-sref="aboutus" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_ABOUTUS_CLICK','msg':'PRIVATE_NAV_ABOUTUS_CLICK'})">About Us</a></li>
-	  <% if( role === "sign-by"){ %>
+	  <% if( signby === "local"){ %>
 	  <li><a ui-sref="chpwd" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_CHANGEPASSWORD_CLICK','msg':'PRIVATE_NAV_CHANGEPASSWORD_CLICK'})">Change Password</a></li>
 	  <% } %>
 	  <% if( role === "admin"){ %>

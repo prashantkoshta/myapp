@@ -1,0 +1,84 @@
+  <% include ../template/htmldoctype %>
+  <head>
+	<!-- Add Meta tag -->
+	<% include ../template/search-meta-tag %>
+	<!-- End Meta tag -->
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Build Tool - sitemap</title>
+	<!-- Add include css files -->
+	<% include ../template/common-css.ejs %>
+  </head>
+
+  <body ng-app="publicMain" ng-controller="publicMainController">
+	<!-- start public header -->
+	<% include ./public-signup-header %>
+	<!-- end public header -->
+    <!-- start container -->
+  <div class="container" ng-controller="loginController">
+		<div class="row">
+		  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			 <h1>Site Map</h1>
+			    <hr>
+				<p>Build projects leverage with feature of build automation and maintain version repository of your builds.</p>
+				<ul>
+					<li>Already have an account? <a href="/#/loginview" ng-click="">Login</a></li>
+					<li><a href="/">Home</a></li>
+					<li><a href="/#/review">Review</a></li>
+					<li><a href="/#/aboutus">About Us</a></li>
+					<li><a href="/#/loginview">Login</a></li>
+					<li><a href="/#/forgotpassword">Forgot Password</a></li>
+					<li>New user <a href="/signup">Sign Up</a> here.</li>
+					<li><a href="/public/termsconditions">Terms & Conditions </a></li>
+				</ul>
+		  </div>
+		</div>
+		
+		<div class="row">
+		  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			 <h3>Contact Us</h3>
+			    <hr>
+				<p>You can E-mail your query. We are happy to help on you.</p>
+				<ul>
+					<li>Email Us at <a href="mailto:pkosta2005@gmail.com">pkosta2005@gmail.com</a></li>
+					<li>Click here to <a href="/public/contactus">Contact Us</a></li>
+				</ul>
+		  </div>
+		</div>
+		
+		<div class="row">
+		  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			 <h3>FAQ</h3>
+			    <hr>
+				<p>Take help from here about your query and feature of product. <a href="/public/faq">FAQ</a></p>
+				<p>You can share your feedback with us at <a href="mailto:pkosta2005@gmail.com">pkosta2005@gmail.com</a>.</p>
+		  </div>
+		</div>
+		
+		
+	</div>
+	<!-- end container -->
+    
+	<!-- start public footer -->
+	<% include ./public-footer %>
+	<!-- end public footer -->
+    
+	<!-- Inlcude JS files -->
+    <% include ../template/common-js.ejs %>
+	<!-- -->
+	<script src="/js/public-main.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/js/controller/login.ctrl.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/js/factory/validator.fctry.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/js/service/public.svc.js?v=<%=new Date().getTime();%>"></script>
+
+	<!-- Add google analytic code here -->
+	<% include ../template/ganalytictrackerid %>
+	<!-- End google analytic code here -->
+
+	<!-- Add google adsense -->
+	<% include ../template/gadsense %>
+	<!-- End google adsense -->
+	<script>
+		setGA({'event':'event','eventType':'SITEMAP_PAGE','msg':'SITEMAP_PAGE'})
+	</script>
+  </body>
+</html>
