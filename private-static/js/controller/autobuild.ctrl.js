@@ -45,11 +45,15 @@ app.controller('autobuildController', function($scope,$rootScope, $state, mainSv
 	
 	$scope.doAutoBuild = function () {
 		$scope.consoleLog = ""
+		$scope.resetConsole();
 		var data = {"projectname":$scope.selectedProject.projectname};
 		mainSvc.postCommon("/buildapp/gateway/buildProjectAndDeploy",data).then(
             function (response) {
-				$scope.builddumpid = response.data.builddumpid;
-				$scope.boolBldSuccess = true;
+				if(response.data){
+					$scope.builddumpid = response.data.builddumpid;
+					$scope.boolBldSuccess = true;
+				}
+				
             },
             function (err) {
 				$scope.builddumpid = null;

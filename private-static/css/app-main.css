@@ -14,13 +14,15 @@ ul.list-unstyled li {
 }
 
 .console{
-    min-height: 50px;
+    min-height: 75px;
     border: 2px solid #0f0f0f;
+	border-radius: 5px;
     cursor: default;
     white-space: pre-wrap;
     background-color: #020202;
     padding: 8px;
 	color:#ffffff;
+	font-size: 12px;
 }
 .console  div{
 	padding :0;
@@ -42,4 +44,7 @@ footer{
 
 .margin-top-8{
 	margin-top:.8em;
+}
+.page-footer {
+	color:#999;
 }
