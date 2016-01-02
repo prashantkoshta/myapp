@@ -49,7 +49,14 @@ var userSchema = mongoose.Schema({
     projects : [String],
     mobiletoken : String,
 	auth_token : String,
-	lastlogouttime : Date
+	lastlogouttime : Date,
+	sessioninfo:  {
+				useragent : String,
+				ip : String,
+				islogin : Number
+	}
+	
+	
 });
 
 // methods ======================

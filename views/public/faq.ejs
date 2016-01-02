@@ -17,18 +17,48 @@
   <div class="container" ng-controller="loginController">
 		<div class="row">
 		  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			 <h1>Terms of Use</h1>
+			 <h1>Frequently Asked Questions</h1>
 			    <hr>
 				<p>
-				By accessing this Web site, you agree to the following Terms of Use. If you do not agree to these Terms of Use, do not access this Web site. Build Tool reserves the right to change these Terms of Use, and your continued use of this Web site constitutes agreement to all such changes.
+					You can go thorugh on this page about your query.
 				</p>
-				<h4>Uses of this Web Site</h4>
-				<p>
-				 <ul>
-					<li>This web site intended to use for build automation and build repository.</li>
-					<li>Certain area of website require user registation to access features.</li>
-				 </ul>
-				</p>
+				<div>
+					<p><b>Question 1. What is Build Details page contain?</b></p>
+					<p><b>Answer:</b> This page contain details of all your individual project duild details as will as you can download on click of download button.</p>
+				</div>
+				
+				<div>
+					<p><b>Question 2. How to create project?</b></p>
+					<p>
+						<b>Answer:</b> Go to Mange Project > Create Project page. Filll below sample details as per your project. Here is example:
+					</p>
+					<ul>
+						<li>Project Name : Sample Project</li>
+						<li>GIT URL : https://github.com/ferdynice/helloworld-war</li>
+						<li>Git Username : xyz@abc.com (Optional)</li>
+						<li>Git Password : XXXXXXXXX (Optional)</li>
+						<li>Build File Name : ant</li>
+						<li>Created Build Location in Project : /build/hello-world-java-1.0.war</li>
+					</ul>
+				</div>
+				
+				<div>
+					<p><b>Question 2. What is Upload Build Page?</b></p>
+					<p>
+						<b>Answer:</b> Go to Upload Build > Here you can upload your project build manually with fill all required details in from.
+					</p>
+					
+				</div>
+				
+				<div>
+					<p><b>Question 2. How to build your project?</b></p>
+					<p>
+						<b>Answer:</b> Go to Build Now. Select your authorized project from drop down then click on build now. It start your batch execuation on server. In console log show all your project build status. Once it successful completed it. It enable Save Build button. On click of button you can fill respective build details and save it. After save go to build details and you can see your build corosponding project.
+					</p>
+					
+				</div>
+				
+				
 				
 		  </div>
 		</div>
@@ -65,8 +95,6 @@
 	<!-- Add google adsense -->
 	<% include ../template/gadsense %>
 	<!-- End google adsense -->
-	<script>
-		setGA({'event':'event','eventType':'FAQ_PAGE','msg':'FAQ_PAGE'})
-	</script>
+	<div ng-init="setGA({'event':'event','eventType':'FAQ_PAGE','msg':'FAQ_PAGE'})" />
   </body>
 </html>

@@ -52,7 +52,7 @@ app.run(function ($rootScope, $templateCache, $location, $window) {
     });
 });
 
-app.controller('publicMainController', function ($scope, $rootScope, $window,$state) {
+app.controller('publicMainController', function ($scope,$rootScope,$window,$state, $interval) {
     $rootScope.pageError;
     $scope.setInitPageValue = function (obj){
         $rootScope.pageError = obj;
@@ -64,6 +64,7 @@ app.controller('publicMainController', function ($scope, $rootScope, $window,$st
     	if (!$window.ga) return;
         	$window.ga('send', analyticObject.event, analyticObject.eventType,analyticObject.msg);
     }
-    
-	$state.go("home");
+   
+	
+	
 });

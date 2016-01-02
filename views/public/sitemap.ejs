@@ -77,8 +77,6 @@
 	<!-- Add google adsense -->
 	<% include ../template/gadsense %>
 	<!-- End google adsense -->
-	<script>
-		setGA({'event':'event','eventType':'SITEMAP_PAGE','msg':'SITEMAP_PAGE'})
-	</script>
+	<div ng-init="setGA({'event':'event','eventType':'SITEMAP_PAGE','msg':'SITEMAP_PAGE'})" />
   </body>
 </html>

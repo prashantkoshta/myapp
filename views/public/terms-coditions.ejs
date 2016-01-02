@@ -65,8 +65,6 @@
 	<!-- Add google adsense -->
 	<% include ../template/gadsense %>
 	<!-- End google adsense -->
-	<script>
-		setGA({'event':'event','eventType':'TERMSOFUSE_PAGE','msg':'TERMSOFUSE_PAGE'})
-	</script>
+	<div ng-init="setGA({'event':'event','eventType':'TERMSOFUSE_PAGE','msg':'TERMSOFUSE_PAGE'})" />
   </body>
 </html>

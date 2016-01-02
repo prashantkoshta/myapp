@@ -3,41 +3,46 @@
 	<!-- Add Meta tag -->
 	<% include ../template/search-meta-tag %>
 	<!-- End Meta tag -->
+
+
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Build Tool - sitemap</title>
+    <title>Build Tool - Singup</title>
+
 	<!-- Add include css files -->
 	<% include ../template/common-css.ejs %>
   </head>
 
   <body ng-app="publicMain" ng-controller="publicMainController">
+	
 	<!-- start public header -->
 	<% include ./public-signup-header %>
 	<!-- end public header -->
     <!-- start container -->
   <div class="container" ng-controller="loginController">
 		<div class="row">
-		  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			 <h1>Contact Us</h1>
-			    <hr>
-				<h3>Build Tool</h3>
-				<p>Name: <strong>Prashant K</strong></p>
-				<p>Email at : <a href="mailto:pkosta2005@gmail.com">pkosta2005@gmail.com</a></p>
-				<p>Website: <a href="/">https://build-projects.com</a></p>
-				<p>Pune, India</p>
-				
-		  </div>
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			    <h1><span class="fa fa-sign-in"></span>Technical Error</h1>
+				<hr />
 		</div>
 		
-		<div class="row">
-			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			</div>
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<p>We are sorry for technical error. We are unable to process your request at this time due to invalid authentication.</p>
+			<p>Please click here to relogin: <a href="/#/loginview" ng-click="setGA({'event':'event','eventType':'ERROR_PAGE_LOGIN_CLICK','msg':'ERROR_PAGE_LOGIN_CLICK'})">Login</a></p>
+			
 		</div>
 		
-		<div class="row">
-			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			</div>
+		
+		
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<p>If you are New user: <a href="/#/loginview" ng-click="setGA({'event':'event','eventType':'ERROR_PAGE_SIGNUP_CLICK','msg':'ERROR_PAGE_SIGNUP_CLICK'})">Signup</a></p>
 		</div>
 		
+		
+		
+		
+	</div>
+	
+	</div>
 	</div>
 	<!-- end container -->
     
@@ -47,6 +52,7 @@
     
 	<!-- Inlcude JS files -->
     <% include ../template/common-js.ejs %>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 	<!-- -->
 	<script src="/js/public-main.js?v=<%=new Date().getTime();%>"></script>
 	<script src="/js/controller/login.ctrl.js?v=<%=new Date().getTime();%>"></script>
@@ -60,6 +66,6 @@
 	<!-- Add google adsense -->
 	<% include ../template/gadsense %>
 	<!-- End google adsense -->
-	<div ng-init="setGA({'event':'event','eventType':'CONTACTUS_PAGE','msg':'CONTACTUS_PAGE'})"></div>
+	<div ng-init="setGA({'event':'event','eventType':'TECHERROR_PAGE','msg':'TECHERROR_PAGE'})"/>
   </body>
 </html>

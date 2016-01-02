@@ -60,7 +60,7 @@ module.exports = function(passport) {
 
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
-       if(!req.validnocaptcha) { return done(null, false, req.flash('signupMessage', errorMap.getError("0001")));} 	
+       if(!req.validnocaptcha) { return done(null, false, req.flash = {'signupMessage': errorMap.getError("0001")});} 	
        User.findOne({'local.email' : email},{'local.email':1,'local.password':1,'local.hash':1,'local.firstname':1,'local.middlename':1,'local.lastname':1,'role':1}, function(err, user) {
             // if there are any errors, return the error
             if (err)
@@ -68,7 +68,7 @@ module.exports = function(passport) {
 
             // check to see if theres already a user with that email
             if (user) {
-                return done(null, false, req.flash('signupMessage', errorMap.getError("0002")));
+                return done(null, false, req.flash= {'signupMessage': errorMap.getError("0002")});
             } else {
 
                 // if there is no user with that email
@@ -136,12 +136,13 @@ module.exports = function(passport) {
 
             // if no user is found, return the message
             if (!user)
-                return done(null, false, req.flash('loginMessage', errorMap.getError("0003"))); // req.flash is the way to set flashdata using connect-flash
+                return done(null, false, req.flash = {'loginMessage': errorMap.getError("0003")}); // req.flash is the way to set flashdata using connect-flash
 
             // if the user is found but the password is wrong
-            if (!user.validPassword(password))
-                return done(null, false, req.flash('loginMessage', errorMap.getError("0004"))); // create the loginMessage and save it to session as flashdata          
-            return done(null, user);
+            if (!user.validPassword(password)){
+                return done(null, false,req.flash = {'loginMessage': errorMap.getError("0004")}); // create the loginMessage and save it to session as flashdata
+            }
+			return done(null, user);
         });
 
     }));
@@ -173,7 +174,11 @@ module.exports = function(passport) {
 
                 // if the user is found, then log them in
                 if (user) {
-                    return done(null, user); // user found, return that user
+					User.findOneAndUpdate({"_id":user._id},{$set:{"sessioninfo.islogin":1,'sessioninfo.useragent':req.headers['user-agent'],'sessioninfo.ip':req.headers['x-forwarded-for'] || req.connection.remoteAddress}},{upsert:true},function(er1,obj){
+						if(er1) throw er1;
+						 return done(null, user); // user found, return that user
+					});
+                    
                 } else {
                     // if there is no user found with that facebook id, create them
                     var newUser            = new User();
@@ -234,7 +239,7 @@ module.exports = function(passport) {
 
                 // if the user is found then log them in
                 if (user) {
-                    return done(null, user); // user found, return that user
+						return done(null, user); // user found, return that user
                 } else {
                     // if there is no user, create them
                     var newUser                 = new User();
@@ -292,9 +297,9 @@ module.exports = function(passport) {
                     return done(err);
 
                 if (user) {
-
-                    // if a user is found, log them in
-                    return done(null, user);
+						 // if a user is found, log them in
+						return done(null, user);
+                   
                 } else {
                     // if the user isnt in our database, create a new user
                     var newUser          = new User();

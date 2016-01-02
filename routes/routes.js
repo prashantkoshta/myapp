@@ -22,7 +22,8 @@ module.exports = function(app, passport) {
         res.render('public/' + req.params[0]);
     });
     
-    app.get('/secureview/:*',AppRule.isLoggedIn,function (req, res) {
+    app.get('/secureview/:*', function (req, res) {
+		console.log(req.url);
         var name = req.params.name;
         res.render('private/' + req.params[0]);
     });
@@ -73,16 +74,21 @@ module.exports = function(app, passport) {
     // LOGIN ===============================
     // =====================================
     // show the login form
-    app.get('/login', function(req, res) {
+    /*app.get('/login', function(req, res) {
+		console.log("#############",req.flash);
         res.render('public/index.ejs', { message:{'error':true,'errorType':"loginError","description":req.flash('loginMessage')}});
     });
-
+	*/
  	app.post('/login', function(req, res, next) {
 	  passport.authenticate('local-login',function(err, user, info){
 			if (err) { return next(err); }
-			if (!user) {return res.redirect('/login'); }
+			if (!user) {
+				//return res.redirect('/login'); 
+				return  res.render('public/index.ejs', {message:{'error':true,'errorType':"loginError","description":req.flash.loginMessage}});
+			}
 			req.logIn(user, function(err) {
 			  if (err) { return next(err); }
+			  updateLoginInfo(req,user);
 			  var token = AppRule.getNewToken(user,res);
 			  res.setHeader("token", token);
 			  res.redirect('/profile?token='+token);
@@ -117,8 +123,12 @@ module.exports = function(app, passport) {
     // we will want this protected so you have to be logged in to visit
     // we will use route middleware to verify this (the isLoggedIn function)
 	
-	  app.get('/profile', AppRule.validateToken, function(req, res) {
-		res.render('private/profile.ejs', {"role":req.user.role,"token":res._headers.token,uinkey:req.user.uinkey,"signby":getLoginBy(req.user)});
+	  app.get('/profile', AppRule.validateTokenBeforeOnPage, function(req, res) {
+		 res.render('private/profile.ejs', {"role":req.user.role,"token":res._headers.token,uinkey:req.user.uinkey,"signby":getLoginBy(req.user)});
+      });
+	  
+	  app.get('/isAuthenticated', AppRule.validateToken, function(req, res) {
+			res.send();
       });
 	  
 	  function isEmpty(obj) {
@@ -153,12 +163,21 @@ module.exports = function(app, passport) {
 			if (!user) {return res.redirect('/login'); }
 			req.logIn(user, function(err) {
 			  if (err) { return next(err); }
+			  updateLoginInfo(req,user);
 			  var token = AppRule.getNewToken(user,res);
 			  res.setHeader("token", token);
 			  res.redirect('/profile?token='+token);
-				});
+			});
 		})(req, res, next);
 	});
+
+
+function updateLoginInfo(req,user){
+	console.log(">>>>>>>>");
+	User.findOneAndUpdate({"_id":user._id},{$set:{"sessioninfo.islogin":1,'sessioninfo.useragent':req.headers['user-agent'],'sessioninfo.ip':req.headers['x-forwarded-for'] || req.connection.remoteAddress}},{upsert:true},function(er1,obj){
+						if(er1) throw er1;
+	});
+}	
 
 
     // =====================================
@@ -173,6 +192,7 @@ module.exports = function(app, passport) {
 			if (!user) {return res.redirect('/login'); }
 			req.logIn(user, function(err) {
 			  if (err) { return next(err); }
+			  updateLoginInfo(req,user);
 			  var token = AppRule.getNewToken(user,res);
 			  res.setHeader("token", token);
 			  res.redirect('/profile?token='+token);
@@ -197,6 +217,7 @@ module.exports = function(app, passport) {
 			if (!user) {return res.redirect('/login'); }
 			req.logIn(user, function(err) {
 			  if (err) { return next(err); }
+			  updateLoginInfo(req,user);
 			  var token = AppRule.getNewToken(user,res);
 			  res.setHeader("token", token);
 			  res.redirect('/profile?token='+token);
@@ -208,16 +229,13 @@ module.exports = function(app, passport) {
     // LOGOUT ==============================
     // =====================================
     app.get('/logout', function(req, res) {
-		req.session.destroy();
-        delete req.session;
-        req.logout();
 		var token = req.headers['token'] || req.body.token || req.query.token;
 		if (token) {
 			jwt.verify(token,config.sessionSecret, function(err, decoded) {
 			  if (err) {
 				 if(err.name === "TokenExpiredError"){
 					 var new_decoded = jwt.decode(token,{complete: true});
-					 User.findOneAndUpdate({"_id":new_decoded.payload._id},{$set:{"lastlogouttime":new Date()}},{upsert:true},function(err,user){
+					 User.findOneAndUpdate({"_id":new_decoded.payload._id},{$set:{"lastlogouttime":new Date(),"sessioninfo.islogin":0}},{upsert:true},function(err,user){
 						if(err) throw err;
 						//return res.json({ 'error': false, 'errorType': "", "data": ""});
 						return res.redirect('/');
@@ -225,7 +243,7 @@ module.exports = function(app, passport) {
 				 }
 			  } else {
 				var new_decoded = jwt.decode(token,{complete: true});
-				 User.findOneAndUpdate({"_id":new_decoded.payload._id},{$set:{"lastlogouttime":new Date()}},{upsert:true},function(err,user){
+				 User.findOneAndUpdate({"_id":new_decoded.payload._id},{$set:{"lastlogouttime":new Date(),"sessioninfo.islogin":0}},{upsert:true},function(err,user){
 					if(err) throw err;
 					//return res.json({ 'error': false, 'errorType': "", "data": ""});
 					return res.redirect('/');
@@ -233,7 +251,5 @@ module.exports = function(app, passport) {
 			  }
 			});
 		}		
-        //res.redirect('/');
-        //res.end();
     });
 };

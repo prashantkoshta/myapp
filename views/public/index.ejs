@@ -12,7 +12,8 @@
   </head>
 
   <body ng-app="publicMain" ng-controller="publicMainController">
-	<% if(typeof message != "undefined") {	%>
+	
+	<% if(typeof message != "undefined") {%>
 	<input type="hidden" ng-model="pageError" ng-init ='setInitPageValue(
 		{"error" : "<%= message.error %>","errorType":"<%= message.errorType %>","description":"<%= message.description %>"})' />
 	<% } %>

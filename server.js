@@ -8,14 +8,14 @@ var port                = process.env.PORT || config.port;
 var faye                = require('faye');
 var mongoose            = require('mongoose');
 var passport            = require('passport');
-var flash               = require('connect-flash');
+//var flash               = require('connect-flash');
 var favicon             = require('serve-favicon');
 var http                = require('http');
 
 var morgan         		= require('morgan');
 var cookieParser    	= require('cookie-parser');
 var bodyParser     		= require('body-parser');
-var session         	= require('express-session');
+//var session         	= require('express-session');
 
 var fayeConf        	= require('./config/faye-conf.js');
 var path            	= require('path');
@@ -63,10 +63,10 @@ app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport
 //app.set("superSecret", config.sessionSecret);
-app.use(session({ secret: config.sessionSecret, cookie: {expires: new Date(Date.now() + 60 * 10000),maxAge: 60*10000 } })); // session secret
+//app.use(session({ secret: config.sessionSecret, cookie: {expires: new Date(Date.now() + 60 * 10000),maxAge: 60*10000 } })); // session secret
 app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-app.use(flash()); // use connect-flash for flash messages stored in session
+//app.use(passport.session()); // persistent login sessions
+//app.use(flash()); // use connect-flash for flash messages stored in session
 
 
 
