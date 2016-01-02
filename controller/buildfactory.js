@@ -177,11 +177,12 @@ module.exports = (function() {
 			if(err)throw err;
 			if(!proj) return callback(true,"No Project Found",null);  
 			
+			var p1 = path.parse(proj.git.url);			
 			var batchParamData = {
 				"giturl" : proj.git.url,
 				"tempdirname" : proj._id+getTimeStamp(),
 				"batchfilename" : proj.buildbatchfile,
-				"projectdirname" : proj.git.url.substring(proj.git.url.lastIndexOf("/")+1,proj.git.url.length),
+				"projectdirname" : p1.name,
 				"outputfilepath" : proj.buildlocation,
 				"dumpingbuildPath" : config.buildDumpingLocation
 			}
