@@ -36,8 +36,8 @@ module.exports = function(app, passport) {
         //res.render('index.ejs', { message: { 'error': true, 'errorType': "loginError", "description": req.flash('loginMessage') } });
 		adminTask.isEmailExist(req.params.email,function(a){
 			if(!a){
-				req.flash('forgotMessage',"No emailid found.")
-				res.json({ 'error': true, 'errorType': "forgotError", "description": req.flash('forgotMessage')});
+				req.flash = {'forgotMessage':"No emailid found."};
+				res.json({ 'error': true, 'errorType': "forgotError", "description": req.flash.forgotMessage});
 				return;
 			}else{
 				adminTask.resetPassword(req.params.email,req,function(b,user){
@@ -59,8 +59,8 @@ module.exports = function(app, passport) {
         //res.render('index.ejs', { message: { 'error': true, 'errorType': "loginError", "description": req.flash('loginMessage') } });
 		adminTask.changePassword(req.user._id,req.body.oPwd,req.body.nPwd,function(a){
 			if(!a){
-				req.flash('passwordMessage',"Incorrect password.")
-				res.json({ 'error': true, 'errorType': "passwordError", "description": req.flash('passwordMessage')});
+				req.flash = {'passwordMessage':"Incorrect password."}
+				res.json({ 'error': true, 'errorType': "passwordError", "description": req.flash.passwordMessage});
 				return;
 			}else{
 				res.json({ 'error': false, 'errorType': "", "description": "done" });
@@ -105,7 +105,7 @@ module.exports = function(app, passport) {
     // =====================================
     // show the signup form
     app.get('/signup', function(req, res) {
-        res.render('public/signup.ejs', { message: req.flash('signupMessage') });
+        res.render('public/signup.ejs', { message: req.flash.signupMessage });
     });
 
     // process the signup form

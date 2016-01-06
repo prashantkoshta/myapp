@@ -11,6 +11,14 @@ app.controller('autobuildController', function($scope,$rootScope, $state, mainSv
 	svcFaye.subscribe(chanelName, function(message){
 			var stramData = "";
 			var str = ""+message.msg.data;
+			if(message.msg.mode === "completed"){
+				$scope.builddumpid = message.msg.data.builddumpid;
+				$scope.boolBldSuccess = true;
+				return;
+			}else if(message.msg.mode === "fail"){
+				$scope.builddumpid = null;
+				return;
+			}
 		    if(message.msg.mode === 'stderr'){
 				if(str.trim() !== ""){
 					stramData =  message.msg.mode+"##"+message.msg.error+" | "+str;
@@ -48,15 +56,8 @@ app.controller('autobuildController', function($scope,$rootScope, $state, mainSv
 		$scope.resetConsole();
 		var data = {"projectname":$scope.selectedProject.projectname};
 		mainSvc.postCommon("/buildapp/gateway/buildProjectAndDeploy",data).then(
-            function (response) {
-				if(response.data){
-					$scope.builddumpid = response.data.builddumpid;
-					$scope.boolBldSuccess = true;
-				}
-				
-            },
+            function (response) {},
             function (err) {
-				$scope.builddumpid = null;
                 console.log("Error >>>", err); 
             }
         );
@@ -107,7 +108,7 @@ app.controller('autobuildController', function($scope,$rootScope, $state, mainSv
 });
 
 
-app.controller('ModalBuildInfoInstanceCtrl', function ($scope, $uibModalInstance, builddumpid, mainSvc) {
+app.controller('ModalBuildInfoInstanceCtrl', function ($scope, $uibModalInstance, builddumpid, mainSvc, $state) {
   
   $scope.buildForm = {
 	  'name' : '',
@@ -122,6 +123,7 @@ app.controller('ModalBuildInfoInstanceCtrl', function ($scope, $uibModalInstance
 	 mainSvc.postCommon("/buildapp/gateway/saveAutoBuildDetails",data).then(
 		function (response) {
 			 $uibModalInstance.close();
+			 $state.go("home");
 		},
 		function (err) {
 			console.log("Error >>>", err); 

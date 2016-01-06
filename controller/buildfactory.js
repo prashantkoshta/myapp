@@ -186,7 +186,7 @@ module.exports = (function() {
 				"outputfilepath" : proj.buildlocation,
 				"dumpingbuildPath" : config.buildDumpingLocation
 			}
-			
+			callback(false,"",{});
 			/*
 			echo %giturl%
 			echo %tempdirname%
@@ -195,7 +195,7 @@ module.exports = (function() {
 			echo %outputfilepath%
 			*/
 				var chanelName = "/"+req.user.uinkey;
-			
+				
 				buildObj.buildNow(batchParamData, chanelName, function(arg){
 				//fayeConf.pulishMessage('/channel-1', { msg: {"mode":"callback check", "error":false,"data":"I am done thanks."}});
 				if(arg.mode === "close"){
@@ -213,11 +213,13 @@ module.exports = (function() {
 							buildDump._id = arg;
 							buildDump.save(function(er1, obj) {
 								if(er1) throw er1;
-								callback(false,"",{'builddumpid':buildDump._id});
+								fayeConf.pulishMessage(chanelName, { msg: {"mode":"completed", "error":false,"data":{'builddumpid':buildDump._id}}});
+								//callback(false,"",{'builddumpid':buildDump._id});
 							});
 						});						
 					}else{
-						callback(true,"",null);
+						//callback(true,"",null);
+						fayeConf.pulishMessage(chanelName, { msg: {"mode":"fail", "error":false,"data":null}});
 					}
 					
 				}
