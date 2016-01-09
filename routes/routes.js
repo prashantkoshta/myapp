@@ -23,7 +23,6 @@ module.exports = function(app, passport) {
     });
     
     app.get('/secureview/:*', function (req, res) {
-		console.log(req.url);
         var name = req.params.name;
         res.render('private/' + req.params[0]);
     });
@@ -124,7 +123,7 @@ module.exports = function(app, passport) {
     // we will use route middleware to verify this (the isLoggedIn function)
 	
 	  app.get('/profile', AppRule.validateTokenBeforeOnPage, function(req, res) {
-		 res.render('private/profile.ejs', {"role":req.user.role,"token":res._headers.token,uinkey:req.user.uinkey,"signby":getLoginBy(req.user)});
+		 res.render('private/profile.ejs', {"fullname" :req.user.fullname ,"role":req.user.role,"token":res._headers.token,uinkey:req.user.uinkey,"signby":getLoginBy(req.user)});
       });
 	  
 	  app.get('/isAuthenticated', AppRule.validateToken, function(req, res) {

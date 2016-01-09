@@ -34,13 +34,19 @@
 		  </ul>
 	  </li>
 	  <li><a ui-sref="aboutus" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_ABOUTUS_CLICK','msg':'PRIVATE_NAV_ABOUTUS_CLICK'})">About Us</a></li>
-	  <% if( signby === "local"){ %>
-	  <li><a ui-sref="chpwd" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_CHANGEPASSWORD_CLICK','msg':'PRIVATE_NAV_CHANGEPASSWORD_CLICK'})">Change Password</a></li>
-	  <% } %>
-	  <% if( role === "admin"){ %>
-	  <li><a href="/admincontrol/gateway/admindashboard" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_ADMIN_CLICK','msg':'PRIVATE_NAV_ADMIN_CLICK'})">Admin</a></li>
-	  <% } %>
-	  <li><a href="#" ng-click="onLogout();setGA({'event':'event','eventType':'PRIVATE_NAV_LOGOUT_CLICK','msg':'PRIVATE_NAV_LOGOUT_CLICK'})">Logout</a></li>
+	  
+	  <li class="dropdown">
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><strong><%=fullname %></strong><span class="caret"></span></a>
+		<ul class="dropdown-menu">
+			  <% if( signby === "local"){ %>
+			  <li><a ui-sref="chpwd" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_CHANGEPASSWORD_CLICK','msg':'PRIVATE_NAV_CHANGEPASSWORD_CLICK'})">Change Password</a></li>
+			  <% } %>
+			  <li role="separator" class="divider"></li>
+			  <li><a href="#" ng-click="onLogout();setGA({'event':'event','eventType':'PRIVATE_NAV_LOGOUT_CLICK','msg':'PRIVATE_NAV_LOGOUT_CLICK'})">Logout</a></li>
+			  
+		  </ul>
+	  </li>
+	  
 	  
 	</ul>
   </div><!-- /.navbar-collapse -->
