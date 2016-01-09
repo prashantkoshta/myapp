@@ -60,7 +60,9 @@ module.exports = function(passport) {
 
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
-       if(!req.validnocaptcha) { return done(null, false, req.flash = {'signupMessage': errorMap.getError("0001")});} 	
+	   if(configAuth.environment === "production"){
+		   if(!req.validnocaptcha) { return done(null, false, req.flash = {'signupMessage': errorMap.getError("0001")});}
+	   }
        User.findOne({'local.email' : email},{'local.email':1,'local.password':1,'local.hash':1,'local.firstname':1,'local.middlename':1,'local.lastname':1,'role':1}, function(err, user) {
             // if there are any errors, return the error
             if (err)

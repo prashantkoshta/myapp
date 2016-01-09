@@ -1,0 +1,57 @@
+  <% include ../template/htmldoctype %>
+  <head>
+	<!-- Add Meta tag -->
+	<% include ../template/search-meta-tag %>
+	<!-- End Meta tag -->
+
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Build Tool - Singup Completed</title>
+
+	<!-- Add include css files -->
+	<% include ../template/common-css.ejs %>
+  </head>
+
+  <body ng-app="publicMain" ng-controller="publicMainController">
+	
+	<!-- start public header -->
+	<% include ./public-signup-header %>
+	<!-- end public header -->
+    <!-- start container -->
+  <div class="container" ng-controller="loginController">
+		<div class="row">
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			    <h1><span class="fa fa-sign-in"></span>Account Created Successfully</h1>
+				<hr />
+		</div>
+		
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<p>Your account has created successfully. Please click here to <a href="/#/loginview" ng-click="setGA({'event':'event','eventType':'SIGNUP_PAGE_LOGIN_CLICK','msg':'SIGNUP_PAGE_LOGIN_CLICK'})">Login</a></p>
+		</div>
+		
+		
+		</div>
+	<!-- end container -->
+    
+	<!-- start public footer -->
+	<% include ./public-footer %>
+	<!-- end public footer -->
+    
+	<!-- Inlcude JS files -->
+    <% include ../template/common-js.ejs %>
+  <script src='https://www.google.com/recaptcha/api.js'></script>
+	<!-- -->
+	<script src="/js/public-main.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/js/controller/login.ctrl.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/js/factory/validator.fctry.js?v=<%=new Date().getTime();%>"></script>
+	<script src="/js/service/public.svc.js?v=<%=new Date().getTime();%>"></script>
+
+	<!-- Add google analytic code here -->
+	<% include ../template/ganalytictrackerid %>
+	<!-- End google analytic code here -->
+
+	<!-- Add google adsense -->
+	<% include ../template/gadsense %>
+	<!-- End google adsense -->
+  </body>
+</html>
