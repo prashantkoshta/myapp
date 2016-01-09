@@ -38,10 +38,10 @@
 	  <li class="dropdown">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><strong><%=fullname %></strong><span class="caret"></span></a>
 		<ul class="dropdown-menu">
-			  <% if( signby === "local"){ %>
+			  <% if(signby === "local"){ %>
 			  <li><a ui-sref="chpwd" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_CHANGEPASSWORD_CLICK','msg':'PRIVATE_NAV_CHANGEPASSWORD_CLICK'})">Change Password</a></li>
-			  <% } %>
 			  <li role="separator" class="divider"></li>
+			  <% } %>
 			  <li><a href="#" ng-click="onLogout();setGA({'event':'event','eventType':'PRIVATE_NAV_LOGOUT_CLICK','msg':'PRIVATE_NAV_LOGOUT_CLICK'})">Logout</a></li>
 			  
 		  </ul>

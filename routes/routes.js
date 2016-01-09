@@ -150,11 +150,11 @@ module.exports = function(app, passport) {
 	  
 	  function getLoginBy(aUsr){
 		  var signfrom;
-		  if(isEmpty(aUsr.facebook)){
+		  if((aUsr.facebook !== undefined) && isEmpty(aUsr.facebook)){
 			   signfrom = "facebook"
-		  }else if(isEmpty(aUsr.google)){
+		  }else if((aUsr.google !== undefined) && isEmpty(aUsr.google)){
 			   signfrom = "google"
-		  }else if(isEmpty(aUsr.twitter)){
+		  }else if((aUsr.twitter !== undefined) && isEmpty(aUsr.twitter)){
 			   signfrom = "twitter"
 		  }else{
 			  signfrom = "local"
