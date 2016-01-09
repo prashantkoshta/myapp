@@ -176,11 +176,7 @@ module.exports = function(passport) {
 
                 // if the user is found, then log them in
                 if (user) {
-					User.findOneAndUpdate({"_id":user._id},{$set:{"sessioninfo.islogin":1,'sessioninfo.useragent':req.headers['user-agent'],'sessioninfo.ip':req.headers['x-forwarded-for'] || req.connection.remoteAddress}},{upsert:true},function(er1,obj){
-						if(er1) throw er1;
-						 return done(null, user); // user found, return that user
-					});
-                    
+						 return done(null, user); // user found, return that user                    
                 } else {
                     // if there is no user found with that facebook id, create them
 					console.log(profile);
