@@ -44,15 +44,14 @@ app.run(function ($rootScope, $templateCache, $location, $window) {
         $templateCache.removeAll();
     });
     
-    $rootScope.$on('$routeChangeSuccess', function () {
+    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){ 
     	// Google Analytic Controller
-        console.log($location.path());
-        console.log($location.url());
-        $window.ga('send', 'pageview', { page: $location.path()});
+		$window.ga('set',{page: $location.path(),title: $location.path()});
+        $window.ga('send', 'pageview');
     });
 });
 
-app.controller('publicMainController', function ($scope,$rootScope,$window,$state, $interval) {
+app.controller('publicMainController', function ($scope,$rootScope,$window,$state, $interval,$location) {
     $rootScope.pageError;
     $scope.setInitPageValue = function (obj){
         $rootScope.pageError = obj;
@@ -65,6 +64,12 @@ app.controller('publicMainController', function ($scope,$rootScope,$window,$stat
         	$window.ga('send', analyticObject.event, analyticObject.eventType,analyticObject.msg);
     }
    
-	
+    $rootScope.setGAPage = function(analyticObject){
+		if (!$window.ga) return;
+		$window.ga('set',{page: analyticObject.page,title: analyticObject.title});
+        $window.ga('send', 'pageview');
+	}
+   
+
 	
 });

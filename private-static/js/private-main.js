@@ -99,12 +99,14 @@ app.run(function ($rootScope, $templateCache, $location, $window) {
         //$templateCache.removeAll();
     });
     
-    $rootScope.$on('$routeChangeSuccess', function () {
-        $window.ga('send', 'pageview', { page: $location.path() });
+    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){ 
+    	// Google Analytic Controller
+		$window.ga('set',{page: $location.path(),title: $location.path()});
+        $window.ga('send', 'pageview');
     });
 });
 
-app.controller('privateMainController', function ($scope, $rootScope, $window ,$state, mainSvc,$templateCache) {
+app.controller('privateMainController', function ($scope, $rootScope, $window ,$state, mainSvc,$templateCache,$location) {
 	
 	$rootScope.token;
 	$rootScope.uinkey;
@@ -150,4 +152,9 @@ app.controller('privateMainController', function ($scope, $rootScope, $window ,$
 	});
 	//$state.transitionTo('home');
 	//$state.go("home");
+	$rootScope.setGAPage = function(analyticObject){
+		if (!$window.ga) return;
+		$window.ga('set',{page: analyticObject.page,title: analyticObject.title});
+        $window.ga('send', 'pageview');
+	}
 });
