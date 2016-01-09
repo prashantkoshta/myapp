@@ -7,7 +7,7 @@ app.controller('userviewController', function($scope,$rootScope,$state,mainSvc,n
 	$scope.roleList = [];
 
 	function getUserList(){
-		 mainSvc.postCommon("/buildapp/gateway/usersList",{}).then(
+		/**/ mainSvc.postCommon("/buildapp/gateway/usersList",{}).then(
             function (response) {
             	 $scope.users = response.data;
 				 $scope.tableConfigParam = new ngTableParams(
@@ -29,6 +29,7 @@ app.controller('userviewController', function($scope,$rootScope,$state,mainSvc,n
 		
 		 mainSvc.getCommon("/buildapp/gateway/allListOfProjects",{}).then(
 				function (response) {
+					
 					$scope.projectList = response.data;
 				},
 				function (err) {
@@ -76,10 +77,12 @@ app.controller('userviewController', function($scope,$rootScope,$state,mainSvc,n
 		getUserList();
 	}
 	
+	$rootScope.$on('onSaveAndClose', function() { getUserList(); });
+	
 });
 
 
-app.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, user, projectList, roleList,mainSvc) {
+app.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, user, projectList, roleList,mainSvc,$rootScope) {
 
   $scope.user = user;
   $scope.projectList = projectList;
@@ -99,6 +102,7 @@ app.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, user, p
 		function (response) {
 			 response.data;
 			 $uibModalInstance.close();
+			 $rootScope.$broadcast('onSaveAndClose');
 		},
 		function (err) {
 			console.log("Error >>>", err); 
@@ -110,3 +114,16 @@ app.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, user, p
     $uibModalInstance.dismiss('cancel');
   };
 });
+
+
+/* Filter for file type */
+app.filter("getProjectList", function(){
+	return function(projects){
+		var list = "";
+		for(var p in projects){
+			list= list+"<li>"+projects[p].projectname+"</li>";
+		}
+		return list;
+	}
+});
+

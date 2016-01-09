@@ -113,7 +113,7 @@ var userProjctRoleInfoSchema = {
 				projects : {type: 'array',"uniqueItems": true},
 				role : {
 						"type" : "string",
-						"enum" : ["admin", "user"]
+						"enum" : ["admin", "user","projectadmin"]
 					},
 				},
 	additionalProperties: false,

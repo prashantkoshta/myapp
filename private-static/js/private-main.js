@@ -1,6 +1,6 @@
 'use strict';
 // Declare app level module which depends on views, and components
-var app = angular.module('privateMain', ['ui.router','ui.bootstrap','ngTable','faye'])
+var app = angular.module('privateMain', ['ui.router','ui.bootstrap','ngTable','faye','ngSanitize'])
 .config(['$stateProvider','$urlRouterProvider', 
 
 	function ($stateProvider, $urlRouterProvider) {

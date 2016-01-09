@@ -179,6 +179,13 @@ ProjectFactory.prototype.deleteBuild = function(data,callback){
 	});
 };
 
+function getProjectInfo(arProjects,index,count, userObj, callback){
+	Projects.find({"_id":{$in:arProjects}},{"_id":1,"projectname":1},function(err,projects){
+		if(err)throw err;
+		return callback(index,count,userObj,projects);
+	}).sort({'projectname': 1});
+}
+
 /* 
 *	Get All list of Users
 */
@@ -189,15 +196,15 @@ ProjectFactory.prototype.getListOfUsers = function(data,callback){
 			var result = [];
 			var len = list.length;
 			for(var i in list){
-				Projects.find({"_id":{$in:list[i].projects}},{"_id":1,"projectname":1},function(er1,projects){
-					if(err)throw err;
-					var userJ = list[i].toJSON();
-					userJ.projects = projects;
-					result.push(userJ);
-					if(result.length===len){
+				getProjectInfo(list[i].projects,i,len,list[i].toJSON(),function(index,cnt,uobj,projects){
+					uobj.projects = projects;
+					result.push(uobj);
+					//console.log(result.length,cnt);
+					if(result.length === cnt){
+						//console.log(result);
 						return callback(false,"",result);
 					}
-				}).sort({'projectname': 1});
+				});
 			}
   		}).sort({'projectname': 1});
 };

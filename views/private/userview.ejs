@@ -9,17 +9,15 @@
 	  <div class="table-responsive">
 		<table ng-table="tableConfigParam" class="table table-condensed table-bordered table-striped">
 			<colgroup>
-			  <col width="20%" />
-			  <col width="15%" />
-			  <col width="15%" />
-			  <col width="20%" />
-			  <col width="25%" />
-			  <col width="15%" />
+			  <col width="22%" />
+			  <col width="8%" />
+			  <col width="65%" />
+			  <col width="5%" />
 			</colgroup>
 			<tr ng-repeat="row in $data" ng-form="rowForm" demo-tracked-table-row="row">
 				<td data-title="'Name'" filter="{'fullname':'text'}" sortable="'fullname'">{{row.fullname}}</td>
 				<td data-title="'Role'" filter="{'role':'text'}" sortable="'role'">{{row.role}}</td>
-				<td data-title="'Projects Access'" filter="{'projects':'text'}" sortable="'projects'">{{row.projects}}</td>
+				<td data-title="'Projects Access'" filter="{'projects':'text'}" sortable="'projects'"><ul class="td-list" ng-bind-html="row.projects | getProjectList"></ul></td>
 				<td><a href="#" ng-click="openEditInfo(row)"><span class="glyphicon glyphicon-edit"></span></a></td>
 		  </tr>
 		</table>
@@ -30,17 +28,12 @@
 
  <script type="text/ng-template" id="userDetails.html">
 	<div class="modal-header">
-		<h3 class="modal-title">User : {{user.local.firstname}}</h3>
+		<h3 class="modal-title">{{user.fullname}}</h3>
 	</div>
 	<div class="modal-body">
 		<form>
 			
-			 <div class="form-group">
-				<label class="control-label" for="fullname">Name</label>
-				<div>
-				  <input type="text" disabled class="form-control ng-pristine ng-valid ng-touched" ng-model="user.fullname" id="fullname" placeholder="Fullname" value="user.fullname">
-				</div>
-			 </div>
+			
 			 <div class="form-group">
 				<label class="control-label" for="role">Role :</label>
 				<div>				  
@@ -48,9 +41,9 @@
 				</div>
 			 </div>
 			 <div class="form-group">
-				<label class="control-label" for="multipleSelect">Projects : {{user.projects}}</label>
+				<!--label class="control-label" for="multipleSelect">Projects : {{user.projects}}</label -->
 				<div>
-					<select class="form-control ng-pristine ng-valid ng-touched" id="multipleSelect" multiple="true" ng-model="user.projects" ng-options="project.projectname+' ('+project._id+')' for project in projectList"></select>
+					<select class="form-control ng-pristine ng-valid ng-touched" id="multipleSelect" multiple="true" ng-model="user.projects" ng-options="project.projectname for project in projectList"></select>
 				    <!-- select class="form-control ng-pristine ng-valid ng-touched" name="multipleSelect" id="multipleSelectProject" ng-model="user.projects" multiple>
 					  <option ng-repeat="project in projectList" value="{{project}}">{{project}}</option>
 					</select -->	
