@@ -269,6 +269,38 @@ ProjectFactory.prototype.updateProjectAndRoleInfoByUserId = function(data,callba
 	});
 };
 
+
+ProjectFactory.prototype.saveAutoBuildDetails = function(data,user,callback){
+		BuildDump.findOne({"_id":data.builddumpid},function(er1,dmpBld){
+			if(er1) throw er1;
+			if(!dmpBld) return callback(true,"No build present.",null);
+			var arg =  {
+				"projectname" : dmpBld.projectname,
+				"builds":[
+					{
+						"buildname" : data.name,
+						"appversion" : data.appversion,
+						"buildnum" : data.buildversion,
+						"filename" : dmpBld.filename,
+						"createdby" : user.fullname,
+						"description" : data.description,
+						"build_user_id": user._id,
+						"build_userfullname": user.fullname
+					}
+				]
+			};
+			new ProjectFactory().addBuildsInProject (arg,function(arg1,arg2,arg3){
+				var savedFilePath = path.join(config.uploadFilePath,dmpBld.filename);
+				fsex.copy(dmpBld.relativepath, savedFilePath, { replace: true }, function (errFile) {
+						  if (errFile) throw errFile;
+						  buildObj.clearDumpBackup(path.parse(dmpBld.clonefolder).name);
+						  return callback(arg1,arg2,arg3);
+				});
+			});
+			
+		});
+};
+
 ProjectFactory.prototype.getAllRole = function(data,aUser,callback){
 		if(aUser.role !== 'admin'){
 			Role.find({role: { $ne: 'admin' }},{"_id":0,"role":1},function(err,roles){
