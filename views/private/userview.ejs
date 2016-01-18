@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <h1>List of Users</h1>
+    <h1>Manage Project</h1>
 	<hr/>
   </div>
   
@@ -9,16 +9,16 @@
 	  <div class="table-responsive">
 		<table ng-table="tableConfigParam" class="table table-condensed table-bordered table-striped">
 			<colgroup>
-			  <col width="22%" />
-			  <col width="8%" />
-			  <col width="65%" />
+			  <col width="15%" />	
+			  <col width="30%" />
+			  <col width="50%" />
 			  <col width="5%" />
 			</colgroup>
 			<tr ng-repeat="row in $data" ng-form="rowForm" demo-tracked-table-row="row">
-				<td data-title="'Name'" filter="{'fullname':'text'}" sortable="'fullname'">{{row.fullname}}</td>
-				<td data-title="'Role'" filter="{'role':'text'}" sortable="'role'">{{row.role}}</td>
-				<td data-title="'Projects Access'" filter="{'projects':'text'}" sortable="'projects'"><ul class="td-list" ng-bind-html="row.projects | getProjectList"></ul></td>
-				<td><a href="#" ng-click="openEditInfo(row)"><span class="glyphicon glyphicon-edit"></span></a></td>
+				<td data-title="'Project Id'" filter="{'_id':'text'}" sortable="'_id'"><span ng-hide="{{row.editable}}">{{row._id}}</span><a ui-sref="editproject({'projectid':'{{row._id}}'})" ng-show="{{row.editable}}">{{row._id}}</a></td>
+				<td data-title="'Project Name'" filter="{'projectname':'text'}" sortable="'projectname'">{{row.projectname}}</td>
+				<td data-title="'Team Member'" sortable="'projectteam'"><ul class="td-list" ng-bind-html="row.projectteam | getTeamList"></ul></td>
+				<td data-title="'Edit Team Member'"><span ng-hide="{{row.editable}}"></span><a ui-sref="editteam({'projectid':'{{row._id}}'})" ng-show="{{row.editable}}"><span class="glyphicon glyphicon-edit"></span></a></td>
 		  </tr>
 		</table>
 	  </div>
@@ -26,38 +26,6 @@
   
 </div>
 
- <script type="text/ng-template" id="userDetails.html">
-	<div class="modal-header">
-		<h3 class="modal-title">{{user.fullname}}</h3>
-	</div>
-	<div class="modal-body">
-		<form>
-			
-			
-			 <div class="form-group">
-				<label class="control-label" for="role">Role :</label>
-				<div>				  
-					<select class="form-control ng-pristine ng-valid ng-touched" id="multipleSelect" ng-model="user.role" ng-options="r for r in roleList"></select>	
-				</div>
-			 </div>
-			 <div class="form-group">
-				<!--label class="control-label" for="multipleSelect">Projects : {{user.projects}}</label -->
-				<div>
-					<select class="form-control ng-pristine ng-valid ng-touched" id="multipleSelect" multiple="true" ng-model="user.projects" ng-options="project.projectname for project in projectList"></select>
-				    <!-- select class="form-control ng-pristine ng-valid ng-touched" name="multipleSelect" id="multipleSelectProject" ng-model="user.projects" multiple>
-					  <option ng-repeat="project in projectList" value="{{project}}">{{project}}</option>
-					</select -->	
-				</div>
-			 </div>
-			 
-		</form>
-		
-	</div>
-	<div class="modal-footer">
-		<button class="btn btn-primary" type="button" ng-click="save()">Save</button>
-		<button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
-	</div>
-</script>
 
 
 

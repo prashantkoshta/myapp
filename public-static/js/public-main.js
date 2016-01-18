@@ -46,6 +46,7 @@ app.run(function ($rootScope, $templateCache, $location, $window) {
     
     $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){ 
     	// Google Analytic Controller
+		if (!$window.ga) return;
 		$window.ga('set',{page: $location.path(),title: $location.path()});
         $window.ga('send', 'pageview');
     });
@@ -61,7 +62,7 @@ app.controller('publicMainController', function ($scope,$rootScope,$window,$stat
     $rootScope.setGA = function(analyticObject){
     	//{'type':'event','eventType':'eventType','msg':''}
     	if (!$window.ga) return;
-        	$window.ga('send', analyticObject.event, analyticObject.eventType,analyticObject.msg);
+        $window.ga('send', analyticObject.event, analyticObject.eventType,analyticObject.msg);
     }
    
     $rootScope.setGAPage = function(analyticObject){

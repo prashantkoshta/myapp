@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <h1>Request Project Access</h1>
+	<hr>
+  </div>
+  <!-- div>{{data}}</div -->
+  
+  
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+	<p>Enter project id which you want to access. </p>
+  </div>
+  
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 alert alert-danger" role="alert" ng-repeat="item in errorList">
+	  <div>
+		<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+		<span class="sr-only">Error:</span>
+		{{item.msg}}
+	  </div>
+	</div>
+	
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+	<input type="text" ng-model="projectid" id="projectid" placeholder="Enter Project Id." ng-change="onChange()">
+	<button type="button" class="btn btn-primary" ng-click="onAccessSubmit($event);">Submit</button>
+  </div>
+  
+  
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <h1>Request History</h1>
+	<hr>
+  </div>
+  
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+	  <div class="table-responsive">
+		<table ng-table="tableConfigParam" class="table table-condensed table-bordered table-striped">
+			 <tr ng-repeat="item in $data">
+					<td data-title="'Project Name'" sortable="'projectname'">{{item.projectname}} ({{item.projectid}})</td>
+					<td data-title="'Owner'" sortable="'created_userfullname'">{{item.created_userfullname}}</td>
+					<td data-title="'Req. Date'" sortable="'reqdate'">{{item.reqdate | getDateFormat}}</td>
+					<td data-title="'Status'" sortable="'status'">{{item.status | getStatus}}</td>
+			  </tr>
+		</table>
+	  </div>
+   </div>
+</div>

@@ -19,17 +19,15 @@
 	  <li><a ui-sref="upload" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_UPLOAD_CLICK','msg':'PRIVATE_NAV_UPLOAD_CLICK'})">Upload</a></li>
 	  <li><a ui-sref="autobuild" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_BUILDNOW_CLICK','msg':'PRIVATE_NAV_BUILDNOW_CLICK'})">Build Now</a></li>
 	  <li class="dropdown">
-		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Manage Projects<span class="caret"></span></a>
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Project Setting<span class="caret"></span></a>
 		<ul class="dropdown-menu">
 			<li><a ui-sref="createproject" ng-click="setGA({'event':'event','eventType':'PRIVATE_NAV_CREATEPROJECT_CLICK','msg':'PRIVATE_NAV_CREATEPROJECT_CLICK'})">Create Project</a></li>
-			<li><a href="#">Add Users</a></li>
-			<li><a href="#">Change Role</a></li>
-			<% if( role === "admin"){ %>
 			<li role="separator" class="divider"></li>
-			<li><a ui-sref="userview">View Users</a></li>
+			<li><a ui-sref="userview">Manage Project</a></li>
 			<li role="separator" class="divider"></li>
-			<% } %>
-			
+			<li><a ui-sref="pendingapproval">Pending Approval</a></li>
+			<li><a ui-sref="projectaccessrequest">Request Project Access</a></li>
+			<li role="separator" class="divider"></li>
 			<li><a href="#">Genrate Reports</a></li>
 		  </ul>
 	  </li>

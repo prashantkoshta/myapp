@@ -50,78 +50,25 @@ app.controller('userviewController', function($scope,$rootScope,$state,mainSvc,n
 		  );
 	}
 	$scope.items = ['item1', 'item2', 'item3'];
-	$scope.openEditInfo = function(user){
-		var size = "lg";
-		 var modalInstance = $uibModal.open({
-		  animation: $scope.animationsEnabled,
-		  templateUrl: 'userDetails.html',
-		  controller: 'ModalInstanceCtrl',
-		  size: size,
-		  resolve: {
-			user: function () {
-			  return angular.copy(user);
-			},
-			projectList: function () {
-			  return angular.copy($scope.projectList);
-			},
-			roleList: function () {
-			  return angular.copy($scope.roleList);
-			}
-			
-		  }
-		});
-	};
+	
 	
 	
 	if($state.current.name == "userview"){
 		getUserList();
 	}
 	
-	$rootScope.$on('onSaveAndClose', function() { getUserList(); });
 	
 });
 
 
-app.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, user, projectList, roleList,mainSvc,$rootScope) {
-
-  $scope.user = user;
-  $scope.projectList = projectList;
-  $scope.roleList = roleList;
-   
-  $scope.save = function () {
-	 var tempUser = angular.copy($scope.user);
-	 var tempProjectList = [];
-	 var tempRoleList = [];
-	 for(var i in tempUser.projects){
-		 tempProjectList.push(tempUser.projects[i]._id);
-	 }
-	 delete tempUser.local;
-	 delete tempUser.fullname;
-	 tempUser.projects = tempProjectList;
-	 mainSvc.postCommon("/buildapp/gateway/updateProjectAndRoleInfoByUserId",tempUser).then(
-		function (response) {
-			 response.data;
-			 $uibModalInstance.close();
-			 $rootScope.$broadcast('onSaveAndClose');
-		},
-		function (err) {
-			console.log("Error >>>", err); 
-		}
-	);
-  };
-
-  $scope.cancel = function () {
-    $uibModalInstance.dismiss('cancel');
-  };
-});
 
 
 /* Filter for file type */
-app.filter("getProjectList", function(){
-	return function(projects){
+app.filter("getTeamList", function(){
+	return function(projectteam){
 		var list = "";
-		for(var p in projects){
-			list= list+"<li>"+projects[p].projectname+"</li>";
+		for(var p in projectteam){
+			list= list+"<li>"+projectteam[p].fullname+" ("+projectteam[p].projectrole+") </li>";
 		}
 		return list;
 	}

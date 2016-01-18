@@ -4,6 +4,8 @@ var config = require('../config/config');
 var Projects = require('../models/projects');
 var BuildInfo = require('../models/buildinfo');
 var BuildDump = require('../models/builddump');
+var ProjectTeamSchema = require('../models/projectteam');
+var AccessHistory = require('../models/accesshistory');
 var User = require('../models/user');
 var Role = require('../models/role');
 var async    = require('async');
@@ -13,7 +15,18 @@ var fsex = require('fs.extra');
 var buildObj = require('../config/build-project');
 var ProjectFactory = function(){};
 ProjectFactory.prototype.getProjectListByUserId = function(data,done){
-  		async.waterfall([
+	    if(data.role === "admin"){
+			Projects.find({},{"_id":1,"projectname":1}, function(err1, projects) {
+				if(err1) throw err1;
+				done(false,"",projects);
+			});
+		}else{
+			Projects.find({"projectteam":{$elemMatch:{"userid":data._id}}},{"_id":1,"projectname":1}, function(err1, projects) {
+				if(err1) throw err1;
+				done(false,"",projects);
+			});
+		}
+  		/*async.waterfall([
 	    function(callback){
 			User.findOne({"_id":data._id},{"projects":1},function(err, list) {
 				if(err)throw err;
@@ -31,18 +44,32 @@ ProjectFactory.prototype.getProjectListByUserId = function(data,done){
 		if(err) done(true,"Project already exist.",{});
 		done(false,"",data);
 	});
+	*/
 };
 
 
 ProjectFactory.prototype.createProject = function(data,done){
 	var newProjects = new Projects();
 	newProjects.projectname = data.projectname;
-	newProjects.git = data.git;
+	if(data.git !== null || data.git !==undefined){
+		newProjects.git = data.git;
+	}
 	newProjects.status = data.status;
 	newProjects.buildbatchfile = data.buildbatchfile;
 	newProjects.buildlocation = data.buildlocation;
 	newProjects.created_user_id = data.created_user_id;
 	newProjects.created_userfullname = data.created_userfullname;
+	
+	var member = new ProjectTeamSchema();
+	member._id = data.created_user_id;
+	member.userid = data.created_user_id;
+	member.fullname = data.created_userfullname;
+	member.allocationdate = new Date();
+	member.projectrole = "projectadmin";
+	member.active = 1;
+	
+	newProjects.projectteam = [];
+	newProjects.projectteam.push(member);
 	
 	async.waterfall([
 	    function(callback){
@@ -67,7 +94,8 @@ ProjectFactory.prototype.createProject = function(data,done){
 				if(err) throw err;
 				callback(null,id);
 			});
-		},
+		}
+		/*,
 		function(projectid,callback){
 			User.findOneAndUpdate({"_id":data.created_user_id},{$addToSet : {"projects": { $each:[projectid]}}},{upsert:true,multi:false},function(er1,users){
 				if(er1) throw er1;
@@ -78,7 +106,7 @@ ProjectFactory.prototype.createProject = function(data,done){
 				}
 				callback(null,projectid);
 			});
-		}
+		}*/
 	],function(err,data){
 		if(err) return done(err.message.error,err.message.errorType,err.message.data);
 		return done(false,"",data);
@@ -89,15 +117,6 @@ ProjectFactory.prototype.createProject = function(data,done){
 	
 	
 };
-
-ProjectFactory.prototype.deleteProject = function(req,res,callback){
-	var data = req.body
-	Projects.remove({"projectname":{$in:data.projectsname}},function(err, obj) {
-		if(err) throw err;
-		return callback(true,"",obj);
-	});
-};
-
 
 ProjectFactory.prototype.getBuildsByProjectId = function(req,res,callback){
 	var data = req.body
@@ -190,24 +209,40 @@ function getProjectInfo(arProjects,index,count, userObj, callback){
 *	Get All list of Users
 */
 ProjectFactory.prototype.getListOfUsers = function(data,callback){
-  		User.find({},{"fullname":1,"role":1,"projects":1},function(err, list) {
-  			if(err)throw err;
-  			if(!list)return callback(false,"",list);
-			var result = [];
-			var len = list.length;
-			for(var i in list){
-				getProjectInfo(list[i].projects,i,len,list[i].toJSON(),function(index,cnt,uobj,projects){
-					uobj.projects = projects;
-					result.push(uobj);
-					//console.log(result.length,cnt);
-					if(result.length === cnt){
-						//console.log(result);
-						return callback(false,"",result);
-					}
-				});
-			}
-  		}).sort({'projectname': 1});
+	// TODO 01/16 It is not working
+		if(data.role === "admin"){
+			Projects.find({},{"_id":1,"projectname":1,"projectteam":1},function(err, projects) {
+				if(err)throw err;
+				var results = [];
+				for(var i in projects){
+					var n  = projects[i].toJSON();
+					n.editable = true;
+					results.push(n); 
+				}
+				return callback(false,"",results);
+			}).sort({'projectname': 1});
+		}else{
+			Projects.find({"projectteam":{$elemMatch:{"userid":data._id}}},{"_id":1,"projectname":1,"projectteam":1},function(err,projects){
+				if(err)throw err;
+				var results = [];
+				for(var i in projects){
+					var n  = projects[i].toJSON();
+					n.editable = isEditable(projects[i],data._id);
+					results.push(n); 
+				}
+				return callback(false,"",results);
+			}).sort({'projectname': 1});
+		}
 };
+
+function isEditable(projectDoc,userid){
+	var isEdit = false;
+	for(var i in projectDoc.projectteam){
+		var o = projectDoc.projectteam[i];
+		if(o.userid === userid && o.projectrole === "projectadmin") return true;
+	}
+	return false;
+}
 
 ProjectFactory.prototype.getAllProjectList = function(data,callback){
 		Projects.find({},{"_id":1,"projectname":1},function(err,projects){
@@ -234,48 +269,214 @@ ProjectFactory.prototype.updateProjectAndRoleInfoByUserId = function(data,callba
 	});
 };
 
-ProjectFactory.prototype.getAllRole = function(data,callback){
-		Role.find({},{"_id":0,"role":1},function(err,roles){
-			if(err)throw err;
-			return callback(false,"",roles);
-		}).sort({'role': 1});
+ProjectFactory.prototype.getAllRole = function(data,aUser,callback){
+		if(aUser.role !== 'admin'){
+			Role.find({role: { $ne: 'admin' }},{"_id":0,"role":1},function(err,roles){
+				if(err)throw err;
+				return callback(false,"",roles);
+			}).sort({'role': 1});
+		}else{
+			Role.find({},{"_id":0,"role":1},function(err,roles){
+				if(err)throw err;
+				return callback(false,"",roles);
+			}).sort({'role': 1});
+		}
 };
-// Not tested yet
-ProjectFactory.prototype.editProjectInfo = function(data,callback){
-		Projects.findOneAndUpdate({"_id":data._id},{$set:{'buildlocation':data.buildlocation,'buildbatchfile':data.buildbatchfile,'status':data.status,'git.url':data.git.url,'git.username':data.git.username,'git.password':data.git.password}},function(err,project){
-			if(err)throw err;
-			if(!project) return callback(true,"No Project Found.",project);
-			return callback(false,"",data._id);
+
+ProjectFactory.prototype.raiseProjectAccess = function(data,user,done){
+		async.waterfall([
+			function(callback){
+				// Get project details
+				Projects.findOne({"_id":data.projectid}, function(err, projlist) {
+					if(err) throw err;	
+					if(!projlist) return callback(true,"No Project Record Found.",null);
+					callback(null,projlist)
+					
+				});
+			},
+			function(projlist,callback){
+				// Check if already have access as a owner or approved.
+				Projects.findOne({"_id":data.projectid, "projectteam":{$elemMatch:{"userid":user._id}}}, function(err, p) {
+					if(err) throw err;
+					if(p) return callback(true,"You already team member of this project.",null);
+					callback(null,projlist)
+				});
+				/*	
+					
+				if(projlist.created_user_id === user._id) return callback(true,"You already owner of this project.",null); 
+				callback(null,projlist)
+				*/
+			},
+			function(projlist,callback){
+				// Check is History already present.
+				AccessHistory.findOne({"projectid":data.projectid,"requserid":user._id,"status":"pending"},{"projectid":1},function(err, list) {
+					if(err)throw err;
+					if(list) return callback(new Error(true),"You have already raised access for request.",null);
+					callback(null,projlist);
+				});
+			},
+			function(proj,callback){
+				// Genarte Request key
+				var tid = genrateKey.genrateNewIndexId("reqid",function(arg){
+					callback(null,arg,proj);
+				});
+			},
+			function(key,proj,callback){
+				var  accessHistory= AccessHistory();
+				accessHistory._id = key;
+				accessHistory.projectid = proj._id;
+				accessHistory.projectname = proj.projectname,
+				accessHistory.active = 1;
+				accessHistory.created_userfullname =  proj.created_userfullname;
+				accessHistory.requserid = user._id;
+				accessHistory.reqfullname = user.fullname;
+				accessHistory.status = "pending";
+				accessHistory.reqdate = new Date();
+				accessHistory.save(function(err, obj) {
+					if(err) throw err;
+					callback(null,accessHistory._id);
+				});
+			}
+		],function(err,data){
+			if(err) return done(true,data,null);
+			done(false,"",data);			
+		});
+	
+		
+};
+
+ProjectFactory.prototype.getRequestHistory = function(user,done){
+	AccessHistory.find({"requserid":user._id},{"_id":0,"requserid":0},function(err,history){
+		if(err) throw err;
+		done(false,"",history);
+	}).sort({'reqdate': 1});
+};
+
+ProjectFactory.prototype.getReqApprovalStatusList = function(user,done){
+		async.waterfall([
+			function(callback){
+				// Get projects by user id.
+				Projects.find({"projectteam":{$elemMatch:{"userid":user._id}}},{'_id':1}, function(err,projlist) {
+					if(err) throw err;	
+					if(!projlist) return callback(new Error(true),"No Project found.",null);
+					callback(null,projlist);
+				});
+			},
+			function(projlist,callback){
+				// Get Access History by project id.
+				var arProjectId = []
+				for(var i in projlist){
+					console.log(">>>>>>>>>>",i);
+					arProjectId.push(projlist[i]._id);
+				}
+				
+				AccessHistory.find({"projectid":{$in:arProjectId},"status":"pending"},{"requserid":0},function(err,history){
+					if(err) throw err;
+					callback(null,history);
+				})
+			}
+		],function(err,data){
+			if(err) return done(true,data,null);
+			done(false,"",data);			
 		});
 };
 
-ProjectFactory.prototype.saveAutoBuildDetails = function(data,user,callback){
-		BuildDump.findOne({"_id":data.builddumpid},function(er1,dmpBld){
-			if(er1) throw er1;
-			if(!dmpBld) return callback(true,"No build present.",null);
-			var arg =  {
-				"projectname" : dmpBld.projectname,
-				"builds":[
-					{
-						"buildname" : data.name,
-						"appversion" : data.appversion,
-						"buildnum" : data.buildversion,
-						"filename" : dmpBld.filename,
-						"createdby" : user.fullname,
-						"description" : data.description,
-						"build_user_id": user._id,
-						"build_userfullname": user.fullname
-					}
-				]
-			};
-			new ProjectFactory().addBuildsInProject (arg,function(arg1,arg2,arg3){
-				var savedFilePath = path.join(config.uploadFilePath,dmpBld.filename);
-				fsex.copy(dmpBld.relativepath, savedFilePath, { replace: true }, function (errFile) {
-						  if (errFile) throw errFile;
-						  buildObj.clearDumpBackup(path.parse(dmpBld.clonefolder).name);
-						  return callback(arg1,arg2,arg3);
-				});
+ProjectFactory.prototype.updateApprovalStatus = function(data,user,done){
+	// TO DO...
+	async.waterfall([
+		function(callback){
+			// Check request id  is it present.
+			AccessHistory.findOne({"_id":data._id},function(err,history) {
+				if(err) throw err;	
+				if(!history) return callback(new Error(true),"No Request ID Found.",null);
+				callback(null,history);
 			});
-		});
+		},
+		function(history,callback){
+			// Update status
+			AccessHistory.findOneAndUpdate({"_id":data._id},{$set:{"status":data.status}},{multi:false},function(err,accessHistory){
+				if(err) throw err;
+				if(!accessHistory) return callback(new Error(true),"No Request id found",data._id);
+				if(data.status === "reject"){
+					callback(null,history,true);
+				}else{
+					callback(null,history,false);
+				}
+			});
+		},
+		function(history,boolAddProjectid,callback){
+			// Add projecid in user projects
+			if(boolAddProjectid) {
+				callback(false,"","reject");
+			}else{
+				// Add projecid in porject
+				var member = new ProjectTeamSchema();
+				member._id = history.requserid;
+				member.userid = history.requserid;
+				member.fullname = history.reqfullname;
+				member.allocationdate = new Date();
+				member.projectrole = "user";
+				member.active = 1; 
+				Projects.findOneAndUpdate({"_id":history.projectid},{$addToSet:{"projectteam":member}},{upsert:true,multi:false},function(err,users){
+					if(err) throw err;
+					if(!users) return callback(new Error(true),"No User Found",null);
+					callback(false,"","accept");
+				});
+				
+				/*User.findOneAndUpdate({"_id":history.requserid},{$addToSet:{"projects":history.projectid}},{upsert:true,multi:false},function(err,users){
+					if(err) throw err;
+					if(!users) return callback(new Error(true),"No User Found",null);
+					callback(false,"","accept");
+				});*/
+			}
+		}
+	],function(err,data){
+		if(err) return done(true,data,null);
+		done(false,"",data);			
+	});
+	
 };
+
+ProjectFactory.prototype.getProjectDetail = function(data,user,done){
+	Projects.findOne({"_id":data.projectid,"projectteam":{$elemMatch:{"userid":user._id}}},{},function(err,project){
+		if(err)throw err;
+		done(false,"",project);
+	}).sort({'projectname': 1});
+};
+
+ProjectFactory.prototype.editProjectInfo = function(data,user,done){
+	async.waterfall([
+		function(callback){
+			Projects.findOne({"_id":data._id,"projectteam":{$elemMatch:{"userid":user._id,"projectrole" : "projectadmin"}}},{},function(err,project){
+				if(err)throw err;
+				if(!project) callback(new Error(true),"You are not Authenticated to update this project details.",null);
+				callback();
+			}).sort({'projectname': 1});
+		},
+		function(callback){
+			Projects.findOneAndUpdate({"_id":data._id,"projectteam":{$elemMatch:{"userid":user._id,"projectrole" : "projectadmin"}}},
+			{$set : {"git":data.git,"buildbatchfile" :data.buildbatchfile,"buildlocation":data.buildlocation,"status":data.status}},
+			{upsert:true,multi:false},
+			function(err,project){
+				if(err)throw err;
+				if(!project) callback(new Error(true),"Unable to update at this time.",null);
+				callback(null,null);
+			});
+		}
+	],function(err,data){
+		if(err) return done(true,data,null);
+		done(false,"",data);			
+	});
+};
+
+
+ProjectFactory.prototype.deleteProject = function(data,user,done){
+	console.log(data);
+	Projects.remove({"_id": {$in:[data]},"projectteam":{$elemMatch:{"userid":user._id,"projectrole":"projectadmin"}}},function(err, obj) {
+		if(err) throw err;
+		return done(false,"",obj);
+	});
+};
+
+
 module.exports = ProjectFactory;

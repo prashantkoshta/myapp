@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <h1>Pending Approval</h1>
+	<hr>
+  </div>
+  <!-- div>{{data}}</div -->
+  
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-show="boolProjectApproval">
+	  <div class="table-responsive">
+		<table ng-table="tableConfigParam" class="table table-condensed table-bordered table-striped">
+			<tr ng-repeat="item in $data">
+				<td data-title="'Project Name'" filter="{projectname:'text'}" sortable="'projectname'">{{item.projectname}}</td>
+				<td data-title="'Requested By'" filter="{fullname:'text'}" sortable="'fullname'">{{item.reqfullname}}</td>
+				<td data-title="'Accept It?'"><a href="#" ng-click="actAcceptReject(1,item)">Accept</a></td>
+				<td data-title="'Reject It?'"><a href="#" ng-click="actAcceptReject(0,item)">Reject</a></td>
+		  </tr>
+		</table>
+	  </div>
+   </div>
+   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-hide="boolProjectApproval">
+		<p>No request is pending for approval.</p>
+   </div>
+</div>

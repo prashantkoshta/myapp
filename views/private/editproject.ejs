@@ -1,0 +1,108 @@
+<div class="row">
+
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <h1>Edit Project</h1>
+	<hr/>
+  </div>
+  
+ 	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 alert alert-danger" role="alert" ng-repeat="item in errorList">
+      <div>
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        {{item.msg}}
+      </div>
+    </div>
+    
+	 <form class="form-horizontal" role="form">
+		  <div class="form-group col-sm-8">
+		    <label class="control-label col-sm-4" for="name">Project Name</label>
+		    <div class="col-sm-8">
+		      <label>{{editPrjFrm.projectname}} ({{editPrjFrm._id}})</label>
+		    </div>
+		  </div>
+		  
+	 	   <div class="form-group col-sm-8">
+		    <label class="control-label col-sm-4" for="giturl">Git URL</label>
+		    <div class="col-sm-8">
+		      <input type="text" class="form-control" ng-model="editPrjFrm.git.url" id="giturl" placeholder="Enter git url" />
+		    </div>
+		  </div>	
+		  
+
+		   <div class="form-group col-sm-8">
+		    <label class="control-label col-sm-4" for="gitusername">Git Username</label>
+		    <div class="col-sm-8">
+		      <input type="text" class="form-control" ng-model="editPrjFrm.git.username" id="gitusername" placeholder="Enter git user name">
+		    </div>
+		  </div>	
+		  
+		  <div class="form-group col-sm-8">
+			<label class="control-label col-sm-4" for="gitpassword">Git Password</label>
+			<div class="col-sm-8">
+			  <input type="password" class="form-control" ng-model="editPrjFrm.git.password" id="gitpassword" placeholder="Enter git password">
+			</div>
+		  </div>
+
+		 <div class="form-group col-sm-8">
+			<label class="control-label col-sm-4" for="buildbatchfile">Build File Name</label>
+			<div class="col-sm-8">
+			  <input type="text" class="form-control" ng-model="editPrjFrm.buildbatchfile" id="buildbatchfile" placeholder="Enter build file name">
+			</div>
+		  </div>
+
+		 <div class="form-group col-sm-8">
+			<label class="control-label col-sm-4" for="buildlocation">Created Build Location in Project</label>
+			<div class="col-sm-8">
+			  <input type="text" class="form-control" ng-model="editPrjFrm.buildlocation" id="buildlocation" placeholder="Enter build file location in project.">
+			</div>
+		  </div>
+	  	 
+	 <div class="form-group col-sm-8"> 
+   		<div class="col-sm-offset-4 col-sm-8">
+		   <button type="button" class="btn btn-primary" ng-click="onSaveProjSetting($event);setGA({'event':'event','eventType':'CREATEPROJ_PAGE_FILE_HOME_CLICK','msg':'CREATEPROJ_PAGE_FILE_HOME_CLICK'})">Save</button>
+	       <a ui-sref="userview" ng-click="setGA({'event':'event','eventType':'CREATEPROJ_PAGE_FILE_HOME_CLICK','msg':'CREATEPROJ_PAGE_FILE_HOME_CLICK'})">Cancel</a>
+	    </div>
+	  </div>
+	</form>
+	
+	
+	
+	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		<h1>Delete Project</h1>
+		<hr/>
+	</div>
+	
+	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		<p>Do you want to delete this project?</p>
+		<p>Note: Once you delete this project. It will remove all your project information and existing user details from this project.</p>
+		<button type="button" class="btn btn-danger" ng-click="openDeletePopup()">Delete This Project</button>
+	</div>
+	
+	
+  
+</div>
+
+
+<script type="text/ng-template" id="deleteProjectPopup.html">
+	<div class="modal-header">
+		<h3 class="modal-title">Delete Project Now</h3>
+	</div>
+	<div class="modal-body">
+		<p>Are you sure to delete project: <strong>{{projectname}}</strong></p>
+		<p>Please type project name in input box to confirm deletion for this project and click on Delete Now.</p>
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 alert alert-danger" role="alert" ng-repeat="item in errorList">
+			<div>
+				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				<span class="sr-only">Error:</span>
+				{{item.msg}}
+			</div>
+		</div>
+		<input type="text" ng-model="tprojectname" placeholder="Enter your project name." ng-change="onChange()">
+	</div>
+	
+	
+	<div class="modal-footer">
+		<button class="btn btn-danger" type="button" ng-click="delete()">Delete Now</button>
+		<button class="btn btn-primary" type="button" ng-click="cancel()">Cancel</button>
+	</div>
+</script>

@@ -4,6 +4,7 @@ var fayeConf        = require('./faye-conf.js');
 var os 				= require('os');
 var spawn 			= require('child_process').spawn; 
 var Batch 			= require('../models/batch');
+var path 			= require('path');
 var BuildProject  	= function(){};
 
 
@@ -39,6 +40,15 @@ BuildProject.prototype.executeBatchFile = function(data,chanelName,batchfile,cal
 	var argString = ' '+data.giturl+' '+data.tempdirname+' '+data.batchfilename+' '+data.projectdirname+' '+data.outputfilepath+' '+data.dumpingbuildPath+'';	
 	var ls;
 	var file;
+	var projectPathStr = path.join(data.dumpingbuildPath,data.tempdirname);	
+	var param1 = projectPathStr;
+	var param2 = data.dumpingbuildPath;
+	var param3 = config.buildAppDirPath;
+	//
+	var regexPath1 = new RegExp(param1, "g");
+	var regexPath2 = new RegExp(param2, "g");
+	var regexPath3 = new RegExp(param3, "g");
+		
 	if(os.type() === "Windows_NT"){
 		file = config.batchfile.windows+'/'+batchfile+'.bat'
 		console.log(file);
@@ -50,14 +60,19 @@ BuildProject.prototype.executeBatchFile = function(data,chanelName,batchfile,cal
 		ls = spawn('bash', ['-c',''+file+argString]);
 	}
 	ls.stdout.on('data', function (data) {
-		var str = data.toString('utf8');
+		var str = ""+data.toString('utf8');
+		str = str.replace(regexPath1, "");
+		str = str.replace(regexPath2, "");
+		str = str.replace(regexPath3, "");
 		fayeConf.pulishMessage(chanelName, { msg: {"mode":"stdout", "error":false,"data":str}});
-		//callback({"mode":"stdout", "error":false,"data":str});
 	});
 
 	ls.stderr.on('data', function (data) {
-	    fayeConf.pulishMessage(chanelName, { msg: {"mode":"stderr", "error":true,"data":data.toString('utf8')}});
-		//callback({"mode":"stderr", "error":true,"data":data.toString('utf8')});
+		var str = data.toString('utf8');
+		str = str.replace(regexPath1, "");
+		str = str.replace(regexPath2, "");
+		str = str.replace(regexPath3, "");
+	    fayeConf.pulishMessage(chanelName, { msg: {"mode":"stderr", "error":true,"data":str}});
 	});
 	
 	ls.on('close', function (code) {

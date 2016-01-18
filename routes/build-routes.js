@@ -81,18 +81,12 @@ router.get('/listOfProjects',AppRule.validateToken,AppServiceAccessValidator.val
 router.post('/createProject', AppRule.validateToken,AppServiceAccessValidator.validateServiceAccess, ReqJsonValidator.createProject,function (req, res) {
 	var projFactory = new ProjectFactory();
 	req.body.created_user_id = req.user._id;
-	req.body.created_userfullname = req.user.fulname;
+	req.body.created_userfullname = req.user.fullname;
 	projFactory.createProject(req.body,function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
 
-router.post('/deleteProject', AppRule.validateToken,AppServiceAccessValidator.validateServiceAccess, function (req, res) {
-	var projFactory = new ProjectFactory();
-	projFactory.deleteProject(req, res, function(errorFlag,erroType,result){
-		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
-	});
-});
 
 router.post('/projectBuilds', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess,ReqJsonValidator.projectBuilds, function (req, res) {
 	var projFactory = new ProjectFactory();
@@ -126,7 +120,7 @@ router.post('/deleteBuild', AppRule.validateToken, AppServiceAccessValidator.val
 
 router.post('/usersList', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess,function (req, res) {
 	var projFactory = new ProjectFactory();
-	projFactory.getListOfUsers(req.body, function(errorFlag,erroType,result){
+	projFactory.getListOfUsers(req.user, function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
@@ -147,14 +141,7 @@ router.post('/updateProjectAndRoleInfoByUserId', AppRule.validateToken, AppServi
 
 router.get('/allRole', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess,function (req, res) {
 	var projFactory = new ProjectFactory();
-	projFactory.getAllRole(req.body, function(errorFlag,erroType,result){
-		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
-	});
-});
-
-router.post('/editProjectInfo', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess,ReqJsonValidator.editProjectSchema, function (req, res) {
-	var projFactory = new ProjectFactory();
-	projFactory.editProjectInfo(req.body, function(errorFlag,erroType,result){
+	projFactory.getAllRole(req.body, req.user, function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });
@@ -162,6 +149,58 @@ router.post('/editProjectInfo', AppRule.validateToken, AppServiceAccessValidator
 router.post('/saveAutoBuildDetails', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess,ReqJsonValidator.saveAutoBuildSchema, function (req, res) {
 	var projFactory = new ProjectFactory();
 	projFactory.saveAutoBuildDetails(req.body, req.user, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
+router.post('/raiseProjectAccess', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess,ReqJsonValidator.projectAccessHistorySchema, function (req, res) {
+	var projFactory = new ProjectFactory();
+	projFactory.raiseProjectAccess(req.body, req.user, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
+router.post('/getRequestHistory', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess, function (req, res) {
+	var projFactory = new ProjectFactory();
+	projFactory.getRequestHistory(req.user, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
+router.post('/getReqApprovalStatusList', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess, function (req, res) {
+	var projFactory = new ProjectFactory();
+	projFactory.getReqApprovalStatusList(req.user, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
+router.post('/updateApprovalStatus', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess, ReqJsonValidator.statusUpdateSchema, function (req, res) {
+	var projFactory = new ProjectFactory();
+	projFactory.updateApprovalStatus(req.body, req.user, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
+router.get('/getProjectDetail/:projectid', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess, function (req, res) {
+	var projFactory = new ProjectFactory();
+	var data = {
+		"projectid" : req.params.projectid
+	}
+	projFactory.getProjectDetail(data,req.user, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
+router.post('/editProjectInfo', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess, ReqJsonValidator.editProjectSchema, function (req, res) {
+	var projFactory = new ProjectFactory();
+	projFactory.editProjectInfo(req.body,req.user, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
+router.post('/deleteProject', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess, ReqJsonValidator.deleteProjectSchema, function (req, res) {
+	var projFactory = new ProjectFactory();
+	projFactory.deleteProject(req.body, req.user, function(errorFlag,erroType,result){
 		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
 	});
 });

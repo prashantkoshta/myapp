@@ -71,5 +71,31 @@ AppJSONReqInputValidator.prototype.saveAutoBuildSchema = function(req, res, next
 	}
 };
 
+AppJSONReqInputValidator.prototype.projectAccessHistorySchema = function(req, res, next) {
+	var results = schemavalidator.validateInputJSON("projectAccessHistorySchema",req.body);
+	if(results.errors.length>0){
+		res.json({ 'error': true, 'errorType': "Invalid Input", "data": results.errors});
+	}else{
+		next();
+	}
+};
+
+AppJSONReqInputValidator.prototype.statusUpdateSchema = function(req, res, next) {
+	var results = schemavalidator.validateInputJSON("statusUpdateSchema",req.body);
+	if(results.errors.length>0){
+		res.json({ 'error': true, 'errorType': "Invalid Input", "data": results.errors});
+	}else{
+		next();
+	}
+};
+
+AppJSONReqInputValidator.prototype.deleteProjectSchema = function(req, res, next) {
+	var results = schemavalidator.validateInputJSON("deleteProjectSchema",req.body);
+	if(results.errors.length>0){
+		res.json({ 'error': true, 'errorType': "Invalid Input", "data": results.errors});
+	}else{
+		next();
+	}
+};
 
 module.exports = new AppJSONReqInputValidator();

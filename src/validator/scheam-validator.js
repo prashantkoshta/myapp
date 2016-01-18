@@ -132,6 +132,39 @@ var changepasswordSchema = {
 	required: ['oPwd','nPwd']
 };
 
+var projectAccessHistorySchema = {
+	"id":"/projectAccessHistorySchema",
+	"type": "object",
+	properties: {
+				projectid : {type: 'string'}
+				},
+	additionalProperties: false,
+	required: ['projectid']
+}
+
+var statusUpdateSchema = {
+	"id":"/statusUpdateSchema",
+	"type": "object",
+	properties: {
+				_id : {type: 'string'},
+				status : {type: 'string',"enum" : ["accept", "reject"]}
+				},
+	additionalProperties: false,
+	required: ['_id','status']
+}
+
+var deleteProjectSchema = {
+	"id":"/deleteProjectSchema",
+	"type": "array",
+	"minItems": 1,
+	"maxItems": 1,
+	"items": {
+		"type" : "string"
+	},
+	"additionalProperties": false
+}
+
+
 var schemaMap = {
 	"projectBuildsSchema" : projectBuildsSchema,
 	"createProjectSchema" : createProjectSchema,
@@ -140,7 +173,10 @@ var schemaMap = {
 	"changepasswordSchema" : changepasswordSchema,
 	"publishBuildInfoSchema" : deleteBuildSchema,
 	"editProjectSchema" : editProjectSchema,
-	"saveAutoBuildSchema" : saveAutoBuildSchema
+	"saveAutoBuildSchema" : saveAutoBuildSchema,
+	"projectAccessHistorySchema" : projectAccessHistorySchema,
+	"statusUpdateSchema" : statusUpdateSchema,
+	"deleteProjectSchema" : deleteProjectSchema
 };
 v.addSchema(gitSchema, '/gitSchema');
 

@@ -1,0 +1,37 @@
+<div class="row">
+
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <h1>Update Team Access</h1>
+	<hr/>
+  </div>
+  
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+	<h3>Project Name : {{project.projectname}}</h3>
+  </div>
+  
+   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+	  <div class="table-responsive">
+		<table ng-table="tableConfigParam" class="table table-condensed table-bordered table-striped">
+			<colgroup>
+			  <col width="50%" />	
+			  <col width="50%" />
+			</colgroup>
+			<tr ng-repeat="row in $data" ng-form="rowForm" demo-tracked-table-row="row">
+				<td data-title="'Full Name'" filter="{'fullname':'text'}" sortable="'fullname'">{{row.fullname}}</td>
+				<td data-title="'Role'" filter="{'projectrole':'text'}" sortable="'projectrole'">{{row.projectrole}}</td>
+		  </tr>
+		</table>
+	  </div>
+   </div>
+    
+	
+	
+	 
+
+  
+</div>
+<div class="row">
+	 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		<a ui-sref="userview" ng-click="setGA({'event':'event','eventType':'CREATEPROJ_PAGE_FILE_HOME_CLICK','msg':'CREATEPROJ_PAGE_FILE_HOME_CLICK'})">Cancel</a>
+	</div>
+</div>

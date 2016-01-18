@@ -32,6 +32,7 @@ mongoose.connect(config.url); // connect to our database
 require('./config/passport')(passport); // pass passport for configuration
 
 //upload file path 
+config.buildAppDirPath = path.join(__dirname);
 config.uploadFilePath = path.join(__dirname, config.uploadDir);
 config.buildDumpingLocation = path.join(__dirname, config.buildDumpDir);
 console.log("uploadFilePath : ",config.uploadFilePath);
@@ -50,7 +51,11 @@ app.engine('.html', require('ejs').__express);
 app.set('views', __dirname + config.viewsDir);
 app.set('view engine', 'html');
 */
-app.use(morgan('dev')); // log every request to the console
+if (app.get('env') === 'development') {
+	app.use(morgan(':method :url :response-time')); // log every request to the console
+}else{
+	app.use(morgan(':date[web] :method :url :response-time'));
+}
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.json({ limit: '1mb' })); // get information from html forms 
 app.use(bodyParser.raw());

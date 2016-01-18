@@ -61,6 +61,36 @@ var app = angular.module('privateMain', ['ui.router','ui.bootstrap','ngTable','f
             templateUrl: "secureview/:userview",
 			controller: "userviewController",
 			resolve: { "authenticate": authenticate }
+        })
+		.state('editproject', {
+            url: '/editproject',
+            templateUrl: 'secureview/:editproject',
+            controller: 'editProjectController',
+			resolve: { "authenticate": authenticate },
+			params: {
+				projectid: null
+			}
+        })
+		.state('editteam', {
+            url: '/editteam',
+            templateUrl: 'secureview/:editteam',
+            controller: 'editTeamController',
+			resolve: { "authenticate": authenticate },
+			params: {
+				projectid: null
+			}
+        })
+		.state("pendingapproval", {
+        	url: "/pendingapproval",
+            templateUrl: "secureview/:pendingapproval",
+			controller: "pendingapprovalController",
+			resolve: { "authenticate": authenticate }
+        })
+		.state("projectaccessrequest", {
+        	url: "/projectaccessrequest",
+            templateUrl: "secureview/:projectaccessrequest",
+			controller: "projectaccessrequestController",
+			resolve: { "authenticate": authenticate }
         });
       
 	  function authenticate($state,$http,$q,$window,$rootScope,$stateParams) {
@@ -101,6 +131,7 @@ app.run(function ($rootScope, $templateCache, $location, $window) {
     
     $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){ 
     	// Google Analytic Controller
+		if (!$window.ga) return;
 		$window.ga('set',{page: $location.path(),title: $location.path()});
         $window.ga('send', 'pageview');
     });
@@ -128,7 +159,7 @@ app.controller('privateMainController', function ($scope, $rootScope, $window ,$
     $rootScope.setGA = function(analyticObject){
     	//{'type':'event','eventType':'eventType','msg':''}
     	if (!$window.ga) return;
-        	$window.ga('send', analyticObject.event, analyticObject.eventType,analyticObject.msg);
+        $window.ga('send', analyticObject.event, analyticObject.eventType,analyticObject.msg);
     }
 	
 	$scope.onLogout = function(){
