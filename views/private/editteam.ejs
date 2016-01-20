@@ -14,11 +14,14 @@
 		<table ng-table="tableConfigParam" class="table table-condensed table-bordered table-striped">
 			<colgroup>
 			  <col width="50%" />	
-			  <col width="50%" />
+			  <col width="45%" />
+			  <col width="5%" />
 			</colgroup>
 			<tr ng-repeat="row in $data" ng-form="rowForm" demo-tracked-table-row="row">
 				<td data-title="'Full Name'" filter="{'fullname':'text'}" sortable="'fullname'">{{row.fullname}}</td>
 				<td data-title="'Role'" filter="{'projectrole':'text'}" sortable="'projectrole'">{{row.projectrole}}</td>
+				<td data-title="'Edit'"><a href="#" ng-click="openEditTeamMemPopup(row)"><span class="glyphicon glyphicon-edit"></span></a></td>
+				<td data-title="'Delete'"><a href="#" ng-click="openDeleteTeamMemPopup(row)"><span class="glyphicon glyphicon-trash"></span></a></td>
 		  </tr>
 		</table>
 	  </div>
@@ -32,6 +35,53 @@
 </div>
 <div class="row">
 	 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-		<a ui-sref="userview" ng-click="setGA({'event':'event','eventType':'CREATEPROJ_PAGE_FILE_HOME_CLICK','msg':'CREATEPROJ_PAGE_FILE_HOME_CLICK'})">Cancel</a>
+		<a ui-sref="userview" ng-click="setGA({'event':'event','eventType':'CREATEPROJ_PAGE_FILE_HOME_CLICK','msg':'CREATEPROJ_PAGE_FILE_HOME_CLICK'})">Back To Manage Project</a>
 	</div>
 </div>
+
+
+<script type="text/ng-template" id="editTeamPopup.html">
+	<div class="modal-header">
+		<h3 class="modal-title">Add / Update Team Member</h3>
+	</div>
+	<div class="modal-body">
+		<p>Full Name: <strong>{{user.fullname}}</strong></p>
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 alert alert-danger" role="alert" ng-repeat="item in errorList">
+		<div>
+			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+			<span class="sr-only">Error:</span>
+			{{item.msg}}
+		</div>
+		</div>
+		
+		<select class="form-control ng-pristine ng-valid ng-touched" id="select" ng-model="selected" ng-options="role.projectrole for role in teamrole"></select>
+
+	</div>
+	
+	
+	<div class="modal-footer">
+		<button class="btn btn-primary" type="button" ng-click="update()">Update</button>
+		<button class="btn btn-link" type="button" ng-click="cancel()">Cancel</button>
+	</div>
+</script>
+
+
+<script type="text/ng-template" id="openDeleteTeamMemPopup.html">
+	<div class="modal-header">
+		<h3 class="modal-title">Delete Team Member</h3>
+	</div>
+		<div class="modal-body">
+			<p>Are you sure to delete team member <strong>{{user.fullname}}</strong> from Project <strong>{{project.projectname}} ({{project._id}})</strong>.</p>		
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 alert alert-danger" role="alert" ng-repeat="item in errorList">
+			<div>
+				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				<span class="sr-only">Error:</span>
+				{{item.msg}}
+			</div>
+			</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-danger" type="button" ng-click="delete()">Delete Access</button>
+		<button class="btn btn-link" type="button" ng-click="cancel()">Cancel</button>
+	</div>
+</script>

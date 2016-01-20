@@ -11,8 +11,8 @@
 			<colgroup>
 			  <col width="15%" />	
 			  <col width="30%" />
-			  <col width="50%" />
-			  <col width="5%" />
+			  <col width="40%" />
+			  <col width="15%" />
 			</colgroup>
 			<tr ng-repeat="row in $data" ng-form="rowForm" demo-tracked-table-row="row">
 				<td data-title="'Project Id'" filter="{'_id':'text'}" sortable="'_id'"><span ng-hide="{{row.editable}}">{{row._id}}</span><a ui-sref="editproject({'projectid':'{{row._id}}'})" ng-show="{{row.editable}}">{{row._id}}</a></td>

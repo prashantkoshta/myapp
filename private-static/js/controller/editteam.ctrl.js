@@ -34,96 +34,83 @@ app.controller('editTeamController', function($scope,$state,mainSvc,$stateParams
             }
         );
 	}
-          
-    
-    //{error:"",msg:""}
-    $scope.errorList = [];
-	
-	
-	$scope.onSaveProjSetting =  function(event){
-		var bool = doCrtFrmValiation();
-		if(!bool){
-			return;
-		}
-		var d = {
-				"_id" :  $scope.editPrjFrm._id,
-				"git" : {
-				  "url" : $scope.editPrjFrm.git.url,
-				  "username" : $scope.editPrjFrm.git.username,
-				  "password" : $scope.editPrjFrm.git.password
-				},
-				"status" : "Active",
-				"buildbatchfile" : $scope.editPrjFrm.buildbatchfile,
-				"buildlocation" : $scope.editPrjFrm.buildlocation
-				
-			};
-        mainSvc.postCommon("buildapp/gateway/editProjectInfo",d).then(
-            function (response) {
-            	if(response.error === false){
-					$state.go("userview");
-				}else{
-					$scope.errorList.push({error:"",msg:response.errorType});
-				}
-            },
-            function (err) {
-                console.log("Error >>>", err); 
-            }
-        );
-	}
-	
-	
-	function doCrtFrmValiation(){
-		$scope.errorList = []
-		if($scope.editPrjFrm.git.username.trim() === "" || $scope.editPrjFrm.git.password.trim() === "" || $scope.editPrjFrm.git.url.trim() === ""  
-			|| $scope.editPrjFrm.buildbatchfile.trim() === "" || $scope.editPrjFrm.buildlocation.trim() === "" ){
-			$scope.errorList.push({error:"",msg:"Field Should not be empty."});
-			return false;
-		}
-    	return true;
-	}
-	
+ 	
 	$scope.openDeleteTeamMemPopup = function(user){
-		 var size = "md";
+		var size = "md";
 		 var modalInstance = $uibModal.open({
 		  animation: $scope.animationsEnabled,
-		  templateUrl: 'deleteTeamPopup.html',
+		  templateUrl: 'openDeleteTeamMemPopup.html',
 		  controller: 'DelTeamModalInstanceCtrl',
 		  size: size,
 		  resolve: {
-			_id: function () {
-			  return $scope.editPrjFrm._id;
-			},
-			userid: function () {
-			  return $scope.editPrjFrm.projectname;
+			user: function () {
+			  return user;
 			},
 			onSuccess : function (){
 				return function(){
-					$state.go("userview");
+					getProjectDetails(projectid);
 				}
+			},
+			projectid : function(){
+				return projectid;
+			},
+			project : function(){
+				return $scope.project;
 			}
 			
 		  }
 		});
 	};
 	
+	$scope.openEditTeamMemPopup = function(user){
+		 var size = "md";
+		 var modalInstance = $uibModal.open({
+		  animation: $scope.animationsEnabled,
+		  templateUrl: 'editTeamPopup.html',
+		  controller: 'EditTeamModalInstanceCtrl',
+		  size: size,
+		  resolve: {
+			user: function () {
+			  return user;
+			},
+			onSuccess : function (){
+				return function(){
+					getProjectDetails(projectid);
+				}
+			},
+			projectid : function(){
+				return projectid;
+			}
+			
+		  }
+		});
+		
+	};
+	
 	
 	
 });
 
-app.controller('DelTeamModalInstanceCtrl', function ($scope, $uibModalInstance, _id, projectname,onSuccess, mainSvc,$rootScope) {
+
+app.controller('DelTeamModalInstanceCtrl', function ($scope, $uibModalInstance, user, onSuccess,projectid,project,mainSvc,$rootScope) {
 	
-  $scope.projectname = projectname;
-  $scope.tprojectname = "";
+  $scope.user = user;
   $scope.errorList = [];
+  $scope.project = project;
+  
+ 
+ 
  
   $scope.delete = function () {
-	if( ($scope.tprojectname.trim() === "" ) || ($scope.projectname.trim() !==  $scope.tprojectname.trim())){
-		$scope.errorList.push({error:"",msg:"Invalid Project name."});
-		return;
-	}
 	$scope.errorList = [];
-	var projects = [_id];
-	mainSvc.postCommon("/buildapp/gateway/deleteProject",projects).then(
+	var obj = {
+		projectid:projectid,
+		userid:user.userid,
+		projectrole : user.projectrole,
+		action: "delete"
+	};
+	
+	mainSvc.postCommon("/buildapp/gateway/updateProjectTeamMemberRole",obj).then(
 		function (response) {
 			if(!response.error){
 				$uibModalInstance.close();
@@ -137,12 +124,69 @@ app.controller('DelTeamModalInstanceCtrl', function ($scope, $uibModalInstance, 
 		}
 	);
   };
-	
-  $scope.onChange = function(){
-	  $scope.errorList = [];
-  }	  
+  
   $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
   
+});
+
+
+
+app.controller('EditTeamModalInstanceCtrl', function ($scope, $uibModalInstance, user, onSuccess,projectid,mainSvc,$rootScope) {
+	
+  $scope.user = user;
+  $scope.errorList = [];
+  
+  $scope.teamrole = [
+	{"projectrole" : "projectadmin"},
+	{"projectrole" : "user"}
+  ];
+  
+  
+  $scope.selected = null;
+  
+  function getSetDefaultValue(){
+	   for(var i in $scope.teamrole){
+		  if($scope.teamrole[i].projectrole === user.projectrole){
+			  $scope.selected = $scope.teamrole[i];
+			  return;
+		  }
+	  }
+  }
+ 
+ 
+  $scope.update = function () {
+	$scope.errorList = [];
+	
+	var obj = {
+		projectid:projectid,
+		userid:user.userid,
+		projectrole : $scope.selected.projectrole,
+		action: "update"
+	};
+	
+	mainSvc.postCommon("/buildapp/gateway/updateProjectTeamMemberRole",obj).then(
+		function (response) {
+			if(!response.error){
+				$uibModalInstance.close();
+				onSuccess();
+			}else{
+				$scope.errorList.push({error:"",msg:response.errorType});
+			}
+		},
+		function (err) {
+			console.log("Error >>>", err); 
+		}
+	);
+  };
+
+	
+  
+  $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
+  
+  getSetDefaultValue();
+
 });

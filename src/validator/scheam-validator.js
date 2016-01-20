@@ -165,6 +165,25 @@ var deleteProjectSchema = {
 }
 
 
+var updateProjectTeamMemberRoleSchema = {
+	"id": "/updateProjectTeamMemberRoleSchema",
+	"type": "object",
+	properties: {
+				projectid : {type: 'string'},
+				userid : {type: 'string'},
+				projectrole : {
+						"type" : "string",
+						"enum" : ["user","projectadmin"]
+				},
+				action : {
+						"type" : "string",
+						"enum" : ["update","delete"]
+				}
+	},
+	additionalProperties: false,
+	required: ['projectid','userid','projectrole',"action"]
+}
+
 var schemaMap = {
 	"projectBuildsSchema" : projectBuildsSchema,
 	"createProjectSchema" : createProjectSchema,
@@ -176,7 +195,8 @@ var schemaMap = {
 	"saveAutoBuildSchema" : saveAutoBuildSchema,
 	"projectAccessHistorySchema" : projectAccessHistorySchema,
 	"statusUpdateSchema" : statusUpdateSchema,
-	"deleteProjectSchema" : deleteProjectSchema
+	"deleteProjectSchema" : deleteProjectSchema,
+	"updateProjectTeamMemberRoleSchema" : updateProjectTeamMemberRoleSchema
 };
 v.addSchema(gitSchema, '/gitSchema');
 

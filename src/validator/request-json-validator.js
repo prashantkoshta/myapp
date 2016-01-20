@@ -98,4 +98,15 @@ AppJSONReqInputValidator.prototype.deleteProjectSchema = function(req, res, next
 	}
 };
 
+AppJSONReqInputValidator.prototype.updateProjectTeamMemberRoleSchema = function(req, res, next) {
+	var results = schemavalidator.validateInputJSON("updateProjectTeamMemberRoleSchema",req.body);
+	if(results.errors.length>0){
+		res.json({ 'error': true, 'errorType': "Invalid Input", "data": results.errors});
+	}else{
+		next();
+	}
+};
+
+
+
 module.exports = new AppJSONReqInputValidator();

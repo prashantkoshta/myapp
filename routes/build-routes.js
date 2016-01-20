@@ -205,5 +205,19 @@ router.post('/deleteProject', AppRule.validateToken, AppServiceAccessValidator.v
 	});
 });
 
+router.post('/updateProjectTeamMemberRole', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess, ReqJsonValidator.updateProjectTeamMemberRoleSchema, function (req, res) {
+	var projFactory = new ProjectFactory();
+	if(req.body.action === "update"){
+		projFactory.updateProjectTeamMemberRole(req.body, req.user, function(errorFlag,erroType,result){
+			res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+		});
+	}else{
+		projFactory.deleteProjectTeamMember(req.body, req.user, function(errorFlag,erroType,result){
+			res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+		});
+	}
+	
+});
+
 
 module.exports = router;
