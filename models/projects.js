@@ -8,11 +8,17 @@ var projectsSchema = mongoose.Schema({
 	projectname : String,
 	buildbatchfile : String,
 	buildlocation : String,
+	buildtype : String,
 	status : String,
 	created_user_id : String,
 	created_userfullname : String,
 	active : Number,
 	git : {
+	  url : String,
+	  username : String,
+	  password : String
+	},
+	svn : {
 	  url : String,
 	  username : String,
 	  password : String

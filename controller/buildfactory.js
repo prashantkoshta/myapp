@@ -171,20 +171,61 @@ module.exports = (function() {
 		return callback(true,"",null);
 	}
 	
+	function getRepoUrl(proj){
+		var repourl= "";
+		// https://github.com/username/repository.git
+		// For GIT https://username:password@github.com/username/repository.git
+		//console.log(proj.git, proj.svn,proj.git.length,proj.svn.length,proj.svn.url,proj.git.url);
+		if(proj.git!== undefined && proj.git!== null && proj.git.url !== undefined && proj.git.url !== null){
+			var git = proj.git;
+			var arGituri = git.url.split("//");
+			if(git.username!== undefined && git.username!== null && git.password!== undefined && git.password!== null){
+				repourl = arGituri[0]+"//"+git.username+":"+git.password+"@"+arGituri[1];
+			}else{
+				repourl = git.url;
+			}
+		}else if(proj.svn!== undefined && proj.svn!== null && proj.svn.url !== undefined && proj.svn.url !== null){
+			// For SVN
+			//svn checkout svn://github.com/prashantkoshta/Test1.git --username XXXX --password YYYY
+			var svn = proj.svn;
+			if(svn.username!== undefined  && svn.username!== null && svn.password!== undefined && svn.password!== null){
+				repourl = svn.url+" --username "+svn.username+" --password "+svn.password;
+			}else{
+				repourl = svn.url;
+			}
+		}
+		
+		//console.log("repourl :"+repourl);
+		return repourl;
+	}
+	
+	function getProNameFromRepoUrl(proj){
+		var p;
+		if(proj.git!== undefined && proj.git!== null && proj.git.url !== undefined && proj.git.url !== null){
+			p = path.parse(proj.git.url);	
+		}else if(proj.svn!== undefined && proj.svn!== null && proj.svn.url !== undefined && proj.svn.url !== null){
+			p = path.parse(proj.svn.url);
+		}
+		//console.log(p.name);
+		return p.name;
+	}
+	
 	function buildProject(req, res ,callback){
 		var jsonData = req.body;
 		Projects.findOne({"projectname" :jsonData.projectname},function(err,proj){
 			if(err)throw err;
 			if(!proj) return callback(true,"No Project Found",null);  
 			
-			var p1 = path.parse(proj.git.url);			
+				
 			var batchParamData = {
-				"giturl" : proj.git.url,
+				"url" : getRepoUrl(proj),
 				"tempdirname" : proj._id+getTimeStamp(),
+				"buildtype" : proj.buildtype,
 				"batchfilename" : proj.buildbatchfile,
-				"projectdirname" : p1.name,
+				"projectdirname" : getProNameFromRepoUrl(proj),
 				"outputfilepath" : proj.buildlocation,
-				"dumpingbuildPath" : config.buildDumpingLocation
+				"dumpingbuildPath" : config.buildDumpingLocation,
+				"repotype" : "git"
 			}
 			callback(false,"",{});
 			/*

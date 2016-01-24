@@ -5,14 +5,15 @@
 	<hr/>
   </div>
   
- 	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 alert alert-danger" role="alert" ng-repeat="item in errorList">
+   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+ 	<div class="alert alert-danger" role="alert" ng-repeat="item in errorList">
       <div>
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
         <span class="sr-only">Error:</span>
         {{item.msg}}
       </div>
     </div>
-    
+    </div>
 	 <form class="form-horizontal" role="form">
 		  <div class="form-group col-sm-8">
 		    <label class="control-label col-sm-4" for="name">Project Name</label>
@@ -21,29 +22,91 @@
 		    </div>
 		  </div>
 		  
-	 	   <div class="form-group col-sm-8">
+	 	  <div class="form-group col-sm-8">
+		    <label class="control-label col-sm-4" for="gitusername">Repository</label>
+		    <div class="col-sm-8">
+				 <label class="radio-inline">
+				  <input type="radio" name="repo" ng-model="selectedRepo" value="git">GIT
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="repo" ng-model="selectedRepo" value="svn">SVN
+				</label>
+		    </div>
+		  </div>	
+		  
+		<div ng-show="selectedRepo==='git'">
+			<div class="form-group col-sm-8">
 		    <label class="control-label col-sm-4" for="giturl">Git URL</label>
 		    <div class="col-sm-8">
 		      <input type="text" class="form-control" ng-model="editPrjFrm.git.url" id="giturl" placeholder="Enter git url" />
 		    </div>
-		  </div>	
+		  </div>
 		  
+		  <div class="form-group col-sm-8">
+				<label class="control-label col-sm-4" for="svnurl"></label>
+				<div class="col-sm-8">
+				  <label class="radio-inline"><input type="checkbox" ng-model="editPrjFrm.git.credintial" id="svnurl"> Credintial</label>
+				</div>
+			</div>
 
 		   <div class="form-group col-sm-8">
 		    <label class="control-label col-sm-4" for="gitusername">Git Username</label>
 		    <div class="col-sm-8">
-		      <input type="text" class="form-control" ng-model="editPrjFrm.git.username" id="gitusername" placeholder="Enter git user name">
+		      <input type="text" class="form-control" ng-model="editPrjFrm.git.username" id="gitusername" placeholder="Enter git user name" ng-disabled="!editPrjFrm.git.credintial">
 		    </div>
 		  </div>	
 		  
 		  <div class="form-group col-sm-8">
 			<label class="control-label col-sm-4" for="gitpassword">Git Password</label>
 			<div class="col-sm-8">
-			  <input type="password" class="form-control" ng-model="editPrjFrm.git.password" id="gitpassword" placeholder="Enter git password">
+			  <input type="password" class="form-control" ng-model="editPrjFrm.git.password" id="gitpassword" placeholder="Enter git password" ng-disabled="!editPrjFrm.git.credintial">
 			</div>
 		  </div>
+		</div>
+		
+		<div ng-show="selectedRepo==='svn'">
+			
+			  
+			<div class="form-group col-sm-8">
+				<label class="control-label col-sm-4" for="svnurl">SVN URL</label>
+				<div class="col-sm-8">
+				  <input type="text" class="form-control" ng-model="editPrjFrm.svn.url" id="svnurl" placeholder="Enter svn url" />
+				</div>
+			</div>
+			
+			<div class="form-group col-sm-8">
+				<label class="control-label col-sm-4" for="svnurl"></label>
+				<div class="col-sm-8">
+				  <label class="radio-inline"><input type="checkbox" ng-model="editPrjFrm.svn.credintial" id="svnurl"> Credintial</label>
+				</div>
+			</div>
 
+		   <div class="form-group col-sm-8">
+		    <label class="control-label col-sm-4" for="svnusername" ng-disabled="!editPrjFrm.svn.credintial">SVN Username</label>
+		    <div class="col-sm-8">
+		      <input type="text" class="form-control" ng-model="editPrjFrm.svn.username" id="svnusername" placeholder="Enter svn user name" ng-disabled="!editPrjFrm.svn.credintial">
+		    </div>
+		  </div>	
+		  
+		  <div class="form-group col-sm-8">
+			<label class="control-label col-sm-4" for="svnpassword" ng-disabled="!editPrjFrm.svn.credintial">SVN Password</label>
+			<div class="col-sm-8">
+			  <input type="password" class="form-control" ng-model="editPrjFrm.svn.password" id="svnpassword" placeholder="Enter svn password" ng-disabled="!editPrjFrm.svn.credintial">
+			</div>
+		  </div>
+		</div>
+		
+		
+		
 		 <div class="form-group col-sm-8">
+			<label class="control-label col-sm-4" for="select">Build Type</label>
+			<div class="col-sm-8">
+			  <!--input type="text" class="form-control" ng-model="editPrjFrm.buildbatchfile" id="buildbatchfile" placeholder="Enter build file name" -->
+			  <select class="form-control ng-pristine ng-valid ng-touched" id="select" ng-model="selectedBatchFile" ng-options="batch.desc for batch in batchfiles"></select>
+			</div>
+		  </div>
+		  
+		  <div class="form-group col-sm-8">
 			<label class="control-label col-sm-4" for="buildbatchfile">Build File Name</label>
 			<div class="col-sm-8">
 			  <input type="text" class="form-control" ng-model="editPrjFrm.buildbatchfile" id="buildbatchfile" placeholder="Enter build file name">

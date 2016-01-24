@@ -11,7 +11,10 @@ var app = angular.module('privateMain', ['ui.router','ui.bootstrap','ngTable','f
         	url: "/uploaddetails",
             templateUrl: "secureview/:uploaddetails",
             controller: "buildController",
-			resolve: { "authenticate": authenticate }
+			resolve: { "authenticate": authenticate },
+			params: {
+				projectid: null
+			}
         })
         .state("chpwd", {
             url: "/changepassword",

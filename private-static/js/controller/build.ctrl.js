@@ -1,10 +1,12 @@
 'use strict';
-app.controller('buildController', function($scope,$rootScope, $state, mainSvc,ngTableParams) {
+app.controller('buildController', function($scope,$rootScope, $state, mainSvc,ngTableParams,$stateParams) {
     
+	var selectedPId = $stateParams.projectid;
+	
 	$scope.tableConfigParam;
 	$scope.messageData = ""
 	$scope.projects = []
-    $scope.selectedProject;
+    $scope.selectedProject = null;
 	
     	
 	$scope.doPublish = function () {
@@ -32,7 +34,7 @@ app.controller('buildController', function($scope,$rootScope, $state, mainSvc,ng
             	 $scope.buildList= response.data.builds;
 				 $scope.tableConfigParam = new ngTableParams(
 						{
-							sorting: {builddate:"asc"}
+							sorting: {builddate:"desc"}
 						},
 						{
 							counts: [],
@@ -81,8 +83,15 @@ app.controller('buildController', function($scope,$rootScope, $state, mainSvc,ng
 		 mainSvc.getCommon("/buildapp/gateway/listOfProjects",{}).then(
             function (response) {
             	 $scope.projects = response.data;
-				 $scope.selectedProject = $scope.projects[0];
-				 $scope.getDetails();
+				 for(var p in $scope.projects){
+					 if($scope.projects[p]._id === selectedPId){
+						  $scope.selectedProject = $scope.projects[p];
+					 }
+				 }
+				 if($scope.selectedProject === null){
+					$scope.selectedProject = $scope.projects[0];
+				 }
+				 $scope.getDetails();				 
             },
             function (err) {
                 console.log("Error >>>", err); 

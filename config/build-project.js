@@ -16,9 +16,17 @@ BuildProject.prototype.buildNow = function(data,chanelName,callback) {
 	echo %projectdirname%
 	echo %outputfilepath%
 	echo %dumpingbuildPath%
+	
+	"giturl" : proj.git.url,
+	"tempdirname" : proj._id+getTimeStamp(),
+	"buildtype" : proj.buildtype,
+	"batchfilename" : proj.buildbatchfile,
+	"projectdirname" : p1.name,
+	"outputfilepath" : proj.buildlocation,
+	"dumpingbuildPath" : config.buildDumpingLocation
 	*/
 	console.log(data.batchfilename);
-	Batch.findOne({"batchfile":data.batchfilename},function(err,batch){
+	Batch.findOne({"buildtype":data.buildtype},function(err,batch){
 		if(err) throw err;
 		if(!batch)return callback(true,"No Batch File Mapping Found.",null);
 		buildProject.executeBatchFile(data,chanelName,batch.batchfile,function(data){
@@ -30,14 +38,15 @@ BuildProject.prototype.buildNow = function(data,chanelName,callback) {
 
 BuildProject.prototype.executeBatchFile = function(data,chanelName,batchfile,callback) {
 		/*  arg data
-			echo %giturl%
+			echo %url%
 			echo %tempdirname%
 			echo %batchfilename%
 			echo %projectdirname%
 			echo %outputfilepath%
 			echo %dumpingbuildPath%
+			echo %repotype%
 			*/
-	var argString = ' '+data.giturl+' '+data.tempdirname+' '+data.batchfilename+' '+data.projectdirname+' '+data.outputfilepath+' '+data.dumpingbuildPath+'';	
+	var argString = ' '+data.url+' '+data.tempdirname+' '+data.batchfilename+' '+data.projectdirname+' '+data.outputfilepath+' '+data.dumpingbuildPath+' '+data.repotype+'';	
 	var ls;
 	var file;
 	var projectPathStr = path.join(data.dumpingbuildPath,data.tempdirname);	

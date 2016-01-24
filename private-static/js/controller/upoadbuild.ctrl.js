@@ -48,7 +48,7 @@ app.controller('uploadbuildController', function($scope,$rootScope, $state,valid
 		multipartFormSvc.post('/buildapp/gateway/saveBuildInfo',$scope.uploadForm).then(
 	            function (response) {
 	            	if(response.error === false){
-	            		$state.go("home");
+	            		$state.go("home",{"projectid":response.data._id});
 	            	}else{
 	            		$scope.uploadFormErrorList.push({error:"",msg:"File size / File Type not allowed."});
 	            	}

@@ -219,5 +219,12 @@ router.post('/updateProjectTeamMemberRole', AppRule.validateToken, AppServiceAcc
 	
 });
 
+router.get('/getBatchList', AppRule.validateToken, AppServiceAccessValidator.validateServiceAccess, function (req, res) {
+	var projFactory = new ProjectFactory();
+	projFactory.getBatchList(req.user, function(errorFlag,erroType,result){
+		res.json({ 'error': errorFlag, 'errorType': erroType, "data": result});
+	});
+});
+
 
 module.exports = router;

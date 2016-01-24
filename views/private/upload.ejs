@@ -5,6 +5,7 @@
 	<hr>
   </div>
   
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
  	<div class="alert alert-danger" role="alert" ng-repeat="item in uploadFormErrorList">
       <div>
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -12,7 +13,7 @@
         {{item.msg}}
       </div>
     </div>
-    
+     </div>
 	 <form class="form-horizontal" role="form" ng-submit="submitUploadform($event)">
 		  <div class="form-group col-sm-8">
 		    <label class="control-label col-sm-4" for="projects">Select Projects :</label>

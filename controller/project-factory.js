@@ -1,5 +1,6 @@
 // load up the user model
 var path = require('path');
+var fs = require('fs');
 var config = require('../config/config');
 var Projects = require('../models/projects');
 var BuildInfo = require('../models/buildinfo');
@@ -13,6 +14,7 @@ var indexcounter    = require('../models/indexcounter');
 var genrateKey = require('../config/genratekey');
 var fsex = require('fs.extra');
 var buildObj = require('../config/build-project');
+var Batchs = require('../models/batch');
 var ProjectFactory = function(){};
 ProjectFactory.prototype.getProjectListByUserId = function(data,done){
 	    if(data.role === "admin"){
@@ -49,14 +51,22 @@ ProjectFactory.prototype.getProjectListByUserId = function(data,done){
 
 
 ProjectFactory.prototype.createProject = function(data,done){
+	console.log("Method: createProject",data);
 	var newProjects = new Projects();
 	newProjects.projectname = data.projectname;
+	
 	if(data.git !== null || data.git !==undefined){
 		newProjects.git = data.git;
 	}
+	
+	if(data.svn !== null || data.svn !==undefined){
+		newProjects.svn = data.svn;
+	}
+	
 	newProjects.status = data.status;
 	newProjects.buildbatchfile = data.buildbatchfile;
 	newProjects.buildlocation = data.buildlocation;
+	newProjects.buildtype = data.buildtype;
 	newProjects.created_user_id = data.created_user_id;
 	newProjects.created_userfullname = data.created_userfullname;
 	
@@ -174,10 +184,10 @@ ProjectFactory.prototype.addBuildsInProject = function(data,done){
 			});
 		},
 		function(arOfBuilds,callback){
-			Projects.findOneAndUpdate({"projectname":data.projectname},{$addToSet:{"builds":{$each:arOfBuilds}}},{ upsert: false },function(err, proj) {
+			Projects.findOneAndUpdate({"projectname":data.projectname},{$addToSet:{"builds":{$each:arOfBuilds}}},{upsert: false },function(err, proj) {
 				if(err) throw err;
 				if(!proj) callback(new Error(true),"No Project Found","");
-				callback(null,proj);
+				callback(null,{_id: proj._id});
 			});
 		}
 	],function(err,data){
@@ -289,15 +299,22 @@ ProjectFactory.prototype.saveAutoBuildDetails = function(data,user,callback){
 					}
 				]
 			};
-			new ProjectFactory().addBuildsInProject (arg,function(arg1,arg2,arg3){
-				var savedFilePath = path.join(config.uploadFilePath,dmpBld.filename);
-				fsex.copy(dmpBld.relativepath, savedFilePath, { replace: true }, function (errFile) {
-						  if (errFile) throw errFile;
-						  buildObj.clearDumpBackup(path.parse(dmpBld.clonefolder).name);
-						  return callback(arg1,arg2,arg3);
-				});
+			// check file is present or not
+			fs.stat(dmpBld.relativepath, function(er,stats){
+				if(er) return callback(true,"No build file present.",null);
+				if(stats.isFile()){
+					new ProjectFactory().addBuildsInProject (arg,function(arg1,arg2,arg3){
+						var savedFilePath = path.join(config.uploadFilePath,dmpBld.filename);
+						fsex.copy(dmpBld.relativepath, savedFilePath, { replace: true }, function (errFile) {
+								  if (errFile) throw errFile;
+								  buildObj.clearDumpBackup(path.parse(dmpBld.clonefolder).name);
+								  return callback(arg1,arg2,arg3);
+						});
+					});
+				}else{
+					return callback(true,"No build file present.",null);
+				}
 			});
-			
 		});
 };
 
@@ -486,8 +503,19 @@ ProjectFactory.prototype.editProjectInfo = function(data,user,done){
 			}).sort({'projectname': 1});
 		},
 		function(callback){
+			var setObj;
+			var unsetObj;
+			console.log(data);
+			console.log(data.git);
+			if(data.git != null){
+				setObj =  {"git":data.git,"buildtype":data.buildtype, "buildbatchfile" :data.buildbatchfile,"buildlocation":data.buildlocation,"status":data.status};
+				unsetObj = {"svn":""};
+			}else{
+				setObj =  {"svn":data.svn,"buildtype":data.buildtype, "buildbatchfile" :data.buildbatchfile,"buildlocation":data.buildlocation,"status":data.status};
+				unsetObj = {"git":""};
+			}
 			Projects.findOneAndUpdate({"_id":data._id,"projectteam":{$elemMatch:{"userid":user._id,"projectrole" : "projectadmin"}}},
-			{$set : {"git":data.git,"buildbatchfile" :data.buildbatchfile,"buildlocation":data.buildlocation,"status":data.status}},
+			{$set : setObj,$unset:unsetObj},
 			{upsert:true,multi:false},
 			function(err,project){
 				if(err)throw err;
@@ -556,5 +584,14 @@ ProjectFactory.prototype.deleteProjectTeamMember = function(data,user,done){
 	});
 	
 };
+
+ProjectFactory.prototype.getBatchList = function(user,done){
+	Batchs.find({},{buildtype:1,desc:1},function(err,batchList){
+		if(err)throw err;
+		done(false,"",batchList);
+	}).sort({'desc': 1});
+};
+
+
 
 module.exports = ProjectFactory;

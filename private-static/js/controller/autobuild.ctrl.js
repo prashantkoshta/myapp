@@ -109,7 +109,7 @@ app.controller('autobuildController', function($scope,$rootScope, $state, mainSv
 
 
 app.controller('ModalBuildInfoInstanceCtrl', function ($scope, $uibModalInstance, builddumpid, mainSvc, $state) {
-  
+  $scope.errorList = [];
   $scope.buildForm = {
 	  'name' : '',
 	  'description' : '',
@@ -119,11 +119,20 @@ app.controller('ModalBuildInfoInstanceCtrl', function ($scope, $uibModalInstance
   };
   
   $scope.save = function () {
+	if(!doCrtFrmValiation()){
+		return;
+	}
 	 var data = $scope.buildForm;
 	 mainSvc.postCommon("/buildapp/gateway/saveAutoBuildDetails",data).then(
 		function (response) {
-			 $uibModalInstance.close();
-			 $state.go("home");
+			if(!response.error){
+				$uibModalInstance.close();
+				$state.go("home",{"projectid":response.data._id});
+			}else{
+				// error
+				$scope.errorList.push({error:"",msg:response.errorType});
+			}
+			 
 		},
 		function (err) {
 			console.log("Error >>>", err); 
@@ -133,6 +142,20 @@ app.controller('ModalBuildInfoInstanceCtrl', function ($scope, $uibModalInstance
   $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
+  
+ function doCrtFrmValiation(){
+		$scope.errorList = [];
+		if($scope.buildForm.name.trim() === "" 
+			|| $scope.buildForm.description.trim() === "" 
+			|| $scope.buildForm.appversion.trim() === ""
+			|| $scope.buildForm.buildversion.trim() === ""){
+				$scope.errorList.push({error:"",msg:"Field Should not be empty."});
+				return false;
+		}
+    	return true;
+	}
+	
+  
 });
 
 app.directive("consoleLogger", function($compile){

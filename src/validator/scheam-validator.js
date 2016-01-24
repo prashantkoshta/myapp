@@ -43,8 +43,23 @@ var gitSchema = {
 		password : {type: 'string'}
 	},
 	additionalProperties: false,
-	required: ['url','username','password']
-}
+	required: ['url']
+};
+
+var svnSchema = {
+	"id": "/svnSchema",
+	"type": "object",
+	properties: {
+		url : {
+			type: 'string',
+			"pattern" : /(http|ftp|https|svn):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
+		},
+		username : {type: 'string'},
+		password : {type: 'string'}
+	},
+	additionalProperties: false,
+	required: ['url']
+};
 
 var createProjectSchema = {
 	"id": "/projectSchema",
@@ -52,12 +67,15 @@ var createProjectSchema = {
 	properties: {
 				projectname : {type: 'string'},
 				git : {"$ref": "/gitSchema"},
+				svn : {"$ref": "/svnSchema"},
+				buildtype : {type: 'string'},
 				buildbatchfile : {type: 'string'},
 				buildlocation : {type: 'string'},
-				status : {"enum": [ "Active" ] }	  
+				status : {"enum": [ "Active" ] }
+				
 	},
 	additionalProperties: false,
-	required: ['projectname','git','buildbatchfile','buildlocation','status']
+	required: ['projectname','buildtype','buildbatchfile','buildlocation','status']
 };
 
 var editProjectSchema = {
@@ -66,12 +84,14 @@ var editProjectSchema = {
 	properties: {
 				_id : {type: 'string'},
 				git : {"$ref": "/gitSchema"},
+				svn : {"$ref": "/svnSchema"},
+				buildtype : {type: 'string'},
 				buildbatchfile : {type: 'string'},
 				buildlocation : {type: 'string'},
 				status : {"enum": [ "Active" ] }	  
 	},
 	additionalProperties: false,
-	required: ['_id','git','buildbatchfile','buildlocation','status']
+	required: ['_id','buildtype','buildbatchfile','buildlocation','status']
 };
 
 var saveAutoBuildSchema = {
@@ -199,6 +219,7 @@ var schemaMap = {
 	"updateProjectTeamMemberRoleSchema" : updateProjectTeamMemberRoleSchema
 };
 v.addSchema(gitSchema, '/gitSchema');
+v.addSchema(svnSchema, '/svnSchema');
 
 
 
